@@ -4,6 +4,7 @@ import { Derivation } from "./components/Derivation";
 import { Formula, FormulaCard } from "./components/Formula";
 import { ConceptCheck, Exercise, ReadingCallout, SectionHeader, SourceNote } from "./components/Learning";
 import { BondingStage, DensityBonding, ElasticConstantsLab, ElasticWaveExplorer, InverseElasticLab, IonicLattice, KnowledgeMap, LennardJonesLab, LondonInteraction, MadelungChain, PauliLab, RadiiExplorer, StrainExplorer } from "./components/Figures";
+import { CrystalAtmosphere } from "./components/CrystalAtmosphere";
 import { useLiquidGlassSystem } from "./lib/liquidGlass";
 
 const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "arrow" }) => {
@@ -76,6 +77,7 @@ function App() {
 
   return (
     <>
+      <CrystalAtmosphere />
       <header className="site-header liquid-panel">
         <button className="brand" type="button" onClick={() => go("overview")} aria-label="返回章首页">
           <span className="brand-glyph" aria-hidden="true"><i/><i/><i/><i/></span>

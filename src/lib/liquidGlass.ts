@@ -14,6 +14,8 @@ const SURFACE_SELECTOR = [
   ".site-header",
   ".chapter-rail",
   ".mobile-rail-toggle",
+  ".liquid-button",
+  ".top-action",
   ".segmented",
   ".derivation-controls",
   ".search-panel"
@@ -33,17 +35,49 @@ in vec2 v_uv;
 out vec4 fragColor;
 uniform vec2 u_resolution;
 uniform vec2 u_origin;
+uniform vec2 u_viewport;
 uniform float u_dpr;
 uniform float u_theme;
+uniform float u_time;
 
 float gridLine(float coordinate, float spacing) {
   float distanceToLine = min(mod(coordinate, spacing), spacing - mod(coordinate, spacing));
   return 1.0 - smoothstep(0.0, 1.15, distanceToLine);
 }
 
+mat2 rotateField(float angle) {
+  float c = cos(angle);
+  float s = sin(angle);
+  return mat2(c, -s, s, c);
+}
+
+vec3 addCrystal(
+  vec3 base,
+  vec2 point,
+  vec2 center,
+  vec2 halfSize,
+  float angle,
+  vec3 crystalColor
+) {
+  vec2 q = rotateField(angle) * (point - center) / halfSize;
+  float distance = abs(q.x) + abs(q.y) - 1.0;
+  float body = 1.0 - smoothstep(-0.025, 0.025, distance);
+  float edge = 1.0 - smoothstep(0.012, 0.055, abs(distance));
+  float ridge = (1.0 - smoothstep(0.0, 0.028, abs(q.x))) * body;
+  float diagonal = (1.0 - smoothstep(0.0, 0.026, abs(abs(q.x) * 0.86 + q.y - 0.36))) * body;
+  float facetLight = 0.66 + step(0.0, q.x) * 0.22 - step(0.16, q.y) * 0.12;
+  vec3 facet = crystalColor * facetLight + mix(vec3(0.035), vec3(0.92), u_theme) * 0.08;
+  float bodyAlpha = mix(0.46, 0.30, u_theme);
+  base = mix(base, facet, body * bodyAlpha);
+  base += crystalColor * edge * mix(0.22, 0.12, u_theme);
+  base += mix(vec3(0.72, 0.88, 1.0), vec3(0.30, 0.42, 0.58), u_theme) * (ridge * 0.15 + diagonal * 0.09);
+  return base;
+}
+
 void main() {
   vec2 cssPixel = gl_FragCoord.xy / u_dpr;
-  vec2 globalPixel = cssPixel + vec2(u_origin.x, -u_origin.y);
+  vec2 cssSize = u_resolution / u_dpr;
+  vec2 globalPixel = vec2(cssPixel.x + u_origin.x, u_origin.y + cssSize.y - cssPixel.y);
   float grid = max(gridLine(globalPixel.x, 72.0), gridLine(globalPixel.y, 72.0));
   vec3 darkBase = vec3(0.008, 0.009, 0.011);
   vec3 lightBase = vec3(0.958, 0.960, 0.970);
@@ -52,6 +86,21 @@ void main() {
   float radial = 1.0 - smoothstep(0.0, max(u_resolution.x, u_resolution.y), length(gl_FragCoord.xy - u_resolution * 0.28));
   base += mix(vec3(0.018), vec3(0.028), u_theme) * radial;
   base = mix(base, lineColor, grid * mix(0.075, 0.10, u_theme));
+
+  float t = u_time;
+  vec2 p1 = u_viewport * vec2(0.46, 0.055) + vec2(sin(t * 0.31) * 32.0, cos(t * 0.27) * 16.0);
+  vec2 p2 = u_viewport * vec2(0.90, 0.28) + vec2(cos(t * 0.19 + 1.8) * 34.0, sin(t * 0.23) * 30.0);
+  vec2 p3 = u_viewport * vec2(0.055, 0.42) + vec2(sin(t * 0.17 + 2.4) * 24.0, cos(t * 0.21) * 40.0);
+  vec2 p4 = u_viewport * vec2(0.76, 0.61) + vec2(cos(t * 0.24 + 0.7) * 34.0, sin(t * 0.16) * 28.0);
+  vec2 p5 = u_viewport * vec2(0.18, 0.91) + vec2(sin(t * 0.22 + 1.1) * 32.0, cos(t * 0.18) * 20.0);
+  vec2 p6 = u_viewport * vec2(0.91, 0.82) + vec2(cos(t * 0.20 + 2.8) * 26.0, sin(t * 0.29) * 36.0);
+
+  base = addCrystal(base, globalPixel, p1, vec2(38.0, 82.0), -0.16 + sin(t * 0.12) * 0.08, vec3(0.25, 0.72, 0.98));
+  base = addCrystal(base, globalPixel, p2, vec2(52.0, 104.0), 0.22 + cos(t * 0.10) * 0.10, vec3(0.58, 0.42, 0.96));
+  base = addCrystal(base, globalPixel, p3, vec2(34.0, 76.0), -0.34 + sin(t * 0.14) * 0.09, vec3(0.22, 0.88, 0.76));
+  base = addCrystal(base, globalPixel, p4, vec2(29.0, 62.0), 0.12 + cos(t * 0.16) * 0.12, vec3(0.82, 0.38, 0.92));
+  base = addCrystal(base, globalPixel, p5, vec2(42.0, 88.0), -0.24 + sin(t * 0.11) * 0.11, vec3(0.28, 0.66, 1.0));
+  base = addCrystal(base, globalPixel, p6, vec2(36.0, 74.0), 0.28 + cos(t * 0.13) * 0.08, vec3(0.22, 0.82, 0.92));
   fragColor = vec4(base, 1.0);
 }`;
 
@@ -167,7 +216,7 @@ void main() {
   refracted.rgb = mix(refracted.rgb, glareColor, directional * glareMask * u_glare);
 
   float edgeAlpha = smoothstep(0.5, -1.25, distance);
-  fragColor = vec4(refracted.rgb, mix(0.78, 0.94, fresnel) * edgeAlpha);
+  fragColor = vec4(refracted.rgb, mix(0.46, 0.78, fresnel) * edgeAlpha);
 }`;
 
 type ProgramInfo = {
@@ -187,6 +236,9 @@ type RenderState = {
   radius: number;
   originX: number;
   originY: number;
+  viewportWidth: number;
+  viewportHeight: number;
+  time: number;
   light: boolean;
   glareAngle: number;
   press: number;
@@ -333,8 +385,10 @@ class StudioGlassRenderer {
     this.begin(this.background, backgroundTarget);
     this.resolution(this.background);
     gl.uniform2f(uniform(gl, this.background, "u_origin"), state.originX, state.originY);
+    gl.uniform2f(uniform(gl, this.background, "u_viewport"), state.viewportWidth, state.viewportHeight);
     gl.uniform1f(uniform(gl, this.background, "u_dpr"), state.dpr);
     gl.uniform1f(uniform(gl, this.background, "u_theme"), state.light ? 1 : 0);
+    gl.uniform1f(uniform(gl, this.background, "u_time"), state.time);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
     this.begin(this.blur, verticalTarget);
@@ -358,8 +412,8 @@ class StudioGlassRenderer {
     gl.uniform1f(uniform(gl, this.main, "u_dpr"), state.dpr);
     gl.uniform1f(uniform(gl, this.main, "u_radius"), state.radius);
     gl.uniform1f(uniform(gl, this.main, "u_refThickness"), Math.max(10, Math.min(20, state.height * 0.24)));
-    gl.uniform1f(uniform(gl, this.main, "u_refFactor"), 1.15);
-    gl.uniform1f(uniform(gl, this.main, "u_refStrength"), Math.max(16, Math.min(38, state.height * 0.5)));
+    gl.uniform1f(uniform(gl, this.main, "u_refFactor"), 1.4);
+    gl.uniform1f(uniform(gl, this.main, "u_refStrength"), Math.max(20, Math.min(44, state.height * 0.58)));
     gl.uniform1f(uniform(gl, this.main, "u_dispersion"), 8.5);
     gl.uniform1f(uniform(gl, this.main, "u_fresnel"), state.light ? 0.24 : 0.34);
     gl.uniform1f(uniform(gl, this.main, "u_glare"), state.light ? 0.16 : 0.22);
@@ -397,6 +451,100 @@ export function supportsStudioGlass() {
   return supportCache;
 }
 
+export function mountCrystalScene(canvas: HTMLCanvasElement) {
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let frame = 0;
+  let lastPaint = -Infinity;
+  let stopped = false;
+
+  if (!supportsStudioGlass()) {
+    canvas.dataset.sceneEngine = "css-fallback";
+    return () => { delete canvas.dataset.sceneEngine; };
+  }
+
+  const gl = canvas.getContext("webgl2", {
+    alpha: false,
+    antialias: false,
+    depth: false,
+    stencil: false,
+    powerPreference: "high-performance"
+  });
+  if (!gl) {
+    canvas.dataset.sceneEngine = "css-fallback";
+    return () => { delete canvas.dataset.sceneEngine; };
+  }
+
+  const scene = compileProgram(gl, BACKGROUND_SHADER);
+  const vao = gl.createVertexArray();
+  const buffer = gl.createBuffer();
+  if (!vao || !buffer) {
+    canvas.dataset.sceneEngine = "css-fallback";
+    return () => { delete canvas.dataset.sceneEngine; };
+  }
+
+  gl.bindVertexArray(vao);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  const location = gl.getAttribLocation(scene.program, "a_position");
+  gl.useProgram(scene.program);
+  gl.enableVertexAttribArray(location);
+  gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
+  canvas.dataset.sceneEngine = "webgl2-shared-scene";
+
+  const render = (timestamp: number) => {
+    frame = 0;
+    if (stopped) return;
+    if (!motion.matches && timestamp - lastPaint < 40) {
+      frame = requestAnimationFrame(render);
+      return;
+    }
+    lastPaint = timestamp;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const width = Math.max(1, Math.round(window.innerWidth * dpr));
+    const height = Math.max(1, Math.round(window.innerHeight * dpr));
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    gl.viewport(0, 0, width, height);
+    gl.useProgram(scene.program);
+    gl.bindVertexArray(vao);
+    gl.uniform2f(uniform(gl, scene, "u_resolution"), width, height);
+    gl.uniform2f(uniform(gl, scene, "u_origin"), 0, 0);
+    gl.uniform2f(uniform(gl, scene, "u_viewport"), window.innerWidth, window.innerHeight);
+    gl.uniform1f(uniform(gl, scene, "u_dpr"), dpr);
+    gl.uniform1f(uniform(gl, scene, "u_theme"), document.documentElement.dataset.theme === "light" ? 1 : 0);
+    gl.uniform1f(uniform(gl, scene, "u_time"), motion.matches ? 0 : timestamp / 1000);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.bindVertexArray(null);
+
+    if (!motion.matches) frame = requestAnimationFrame(render);
+  };
+
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(render);
+  };
+  const theme = new MutationObserver(schedule);
+  theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  window.addEventListener("resize", schedule, { passive: true });
+  motion.addEventListener("change", schedule);
+  schedule();
+
+  return () => {
+    stopped = true;
+    cancelAnimationFrame(frame);
+    theme.disconnect();
+    window.removeEventListener("resize", schedule);
+    motion.removeEventListener("change", schedule);
+    gl.deleteProgram(scene.program);
+    gl.deleteBuffer(buffer);
+    gl.deleteVertexArray(vao);
+    delete canvas.dataset.sceneEngine;
+  };
+}
+
 function createSurface(element: HTMLElement): SurfaceInstance {
   const canvas = document.createElement("canvas");
   canvas.className = "studio-glass-canvas";
@@ -409,10 +557,17 @@ function createSurface(element: HTMLElement): SurfaceInstance {
   let visible = false;
   let glareAngle = Math.PI * 0.25;
   let press = 1;
+  let lastPaint = -Infinity;
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  const render = () => {
+  const render = (timestamp: number) => {
     frame = 0;
     if (!visible || !renderer) return;
+    if (!motion.matches && timestamp - lastPaint < 40) {
+      frame = requestAnimationFrame(render);
+      return;
+    }
+    lastPaint = timestamp;
     const rect = element.getBoundingClientRect();
     if (rect.width < 2 || rect.height < 2) return;
     const maxDpr = 1.5;
@@ -428,10 +583,14 @@ function createSurface(element: HTMLElement): SurfaceInstance {
       radius,
       originX: rect.left,
       originY: rect.top,
+      viewportWidth: window.innerWidth,
+      viewportHeight: window.innerHeight,
+      time: motion.matches ? 0 : timestamp / 1000,
       light: document.documentElement.dataset.theme === "light",
       glareAngle,
       press
     });
+    if (!motion.matches) frame = requestAnimationFrame(render);
   };
 
   const schedule = () => {
@@ -443,6 +602,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
     try {
       renderer = new StudioGlassRenderer(canvas);
       element.dataset.liquidGlass = "webgl2-studio";
+      element.dataset.sceneSource = "shared-crystal-field";
       schedule();
     } catch (error) {
       console.warn("Liquid Glass Studio WebGL2 fallback:", error);
@@ -452,11 +612,14 @@ function createSurface(element: HTMLElement): SurfaceInstance {
   };
 
   const deactivate = () => {
+    cancelAnimationFrame(frame);
+    frame = 0;
     renderer?.dispose();
     renderer = null;
     canvas.width = 1;
     canvas.height = 1;
     element.dataset.liquidGlass = "frosted";
+    delete element.dataset.sceneSource;
   };
 
   const intersection = new IntersectionObserver((entries) => {
@@ -470,6 +633,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
   resize.observe(element);
   const theme = new MutationObserver(schedule);
   theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  motion.addEventListener("change", schedule);
 
   const onPointerMove = (event: PointerEvent) => {
     const rect = element.getBoundingClientRect();
@@ -480,8 +644,11 @@ function createSurface(element: HTMLElement): SurfaceInstance {
   const onPointerUp = () => { press = 1; schedule(); };
   const onContextLost = (event: Event) => {
     event.preventDefault();
+    cancelAnimationFrame(frame);
+    frame = 0;
     renderer = null;
     element.dataset.liquidGlass = "frosted";
+    delete element.dataset.sceneSource;
   };
   element.addEventListener("pointermove", onPointerMove, { passive: true });
   element.addEventListener("pointerdown", onPointerDown, { passive: true });
@@ -495,6 +662,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
       intersection.disconnect();
       resize.disconnect();
       theme.disconnect();
+      motion.removeEventListener("change", schedule);
       cancelAnimationFrame(frame);
       element.removeEventListener("pointermove", onPointerMove);
       element.removeEventListener("pointerdown", onPointerDown);
@@ -505,6 +673,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
       renderer?.dispose();
       canvas.remove();
       delete element.dataset.liquidGlass;
+      delete element.dataset.sceneSource;
     }
   };
 }

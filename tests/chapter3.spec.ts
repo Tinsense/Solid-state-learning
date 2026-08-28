@@ -67,11 +67,18 @@ test("页面在当前视口没有整体横向滚动", async ({ page }) => {
 test("任务栏使用 Studio WebGL2 玻璃且分段控件没有横向滑轨", async ({ page }, testInfo) => {
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-glass-engine", "webgl2-studio");
+  const scene = page.getByTestId("crystal-atmosphere");
+  await expect(scene).toHaveAttribute("data-scene-engine", "webgl2-shared-scene");
   const header = page.locator(".site-header");
   await expect(header).toHaveAttribute("data-liquid-glass", "webgl2-studio");
-  const canvas = header.locator(".studio-glass-canvas");
+  await expect(header).toHaveAttribute("data-scene-source", "shared-crystal-field");
+  const canvas = header.locator(":scope > .studio-glass-canvas");
   await expect(canvas).toBeVisible();
   expect(await canvas.evaluate((element: HTMLCanvasElement) => element.width * element.height)).toBeGreaterThan(1);
+
+  const primary = page.getByRole("button", { name: /开始学习/ });
+  await expect(primary).toHaveAttribute("data-liquid-glass", "webgl2-studio");
+  await expect(primary).toHaveAttribute("data-scene-source", "shared-crystal-field");
 
   const segmented = page.locator(".segmented").first();
   await segmented.scrollIntoViewIfNeeded();
