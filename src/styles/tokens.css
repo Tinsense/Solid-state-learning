@@ -16,6 +16,20 @@
   --success: #b7e5c5;
   --figure-bright: #ffffff;
   --shadow: 0 24px 80px rgba(0,0,0,.45);
+  --glass-fill: rgba(18,18,20,.52);
+  --glass-fill-soft: rgba(255,255,255,.035);
+  --glass-fill-optical: rgba(12,12,14,.34);
+  --glass-fill-hover: rgba(255,255,255,.09);
+  --glass-border: rgba(255,255,255,.16);
+  --glass-border-strong: rgba(255,255,255,.29);
+  --glass-top-edge: rgba(255,255,255,.25);
+  --glass-bottom-edge: rgba(0,0,0,.34);
+  --glass-glare: rgba(255,255,255,.78);
+  --glass-glare-hot: rgba(255,255,255,.9);
+  --glass-glare-soft: rgba(255,255,255,.28);
+  --glass-shadow: rgba(0,0,0,.22);
+  --glass-shadow-strong: rgba(0,0,0,.34);
+  --optical-grid: rgba(255,255,255,.018);
   --radius-sm: 14px;
   --radius-md: 20px;
   --radius-lg: 30px;
@@ -47,11 +61,40 @@
   --success: #17743b;
   --figure-bright: #111113;
   --shadow: 0 24px 80px rgba(0,0,0,.13);
+  --glass-fill: rgba(255,255,255,.58);
+  --glass-fill-soft: rgba(255,255,255,.34);
+  --glass-fill-optical: rgba(255,255,255,.38);
+  --glass-fill-hover: rgba(255,255,255,.68);
+  --glass-border: rgba(255,255,255,.74);
+  --glass-border-strong: rgba(255,255,255,.94);
+  --glass-top-edge: rgba(255,255,255,.96);
+  --glass-bottom-edge: rgba(0,0,0,.13);
+  --glass-glare: rgba(255,255,255,.98);
+  --glass-glare-hot: rgba(255,255,255,1);
+  --glass-glare-soft: rgba(37,41,48,.25);
+  --glass-shadow: rgba(20,26,36,.09);
+  --glass-shadow-strong: rgba(20,26,36,.16);
+  --optical-grid: rgba(15,19,26,.022);
 }
 
 * { box-sizing: border-box; }
 html { max-width: 100%; scroll-behavior: smooth; background: var(--bg); overflow-x: clip; }
-body { width: 100%; max-width: 100%; margin: 0; min-width: 320px; background: var(--bg); color: var(--text); overflow-x: clip; transition: background var(--panel) var(--ease), color var(--panel) var(--ease); }
+body {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  min-width: 320px;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 16% 4%, color-mix(in srgb, var(--text) 4%, transparent), transparent 34rem),
+    linear-gradient(var(--optical-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--optical-grid) 1px, transparent 1px);
+  background-size: auto, 72px 72px, 72px 72px;
+  background-attachment: fixed;
+  color: var(--text);
+  overflow-x: clip;
+  transition: background-color var(--panel) var(--ease), color var(--panel) var(--ease);
+}
 button, input { font: inherit; }
 button { color: inherit; }
 button, a, input { touch-action: manipulation; }

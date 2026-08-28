@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 
+test.beforeEach(async ({ page }) => {
+  page.on("pageerror", (error) => console.log("PAGE ERROR", error.message));
+});
+
 test("首页、目录和公式推导可用", async ({ page }) => {
   const errors: string[] = [];
   page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
@@ -58,4 +62,22 @@ test("页面在当前视口没有整体横向滚动", async ({ page }) => {
     console.log("Horizontal overflow offenders", offenders);
   }
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test("任务栏使用折射玻璃且分段控件没有横向滑轨", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-glass-engine", "optical");
+  const header = page.locator(".site-header");
+  await expect(header).toHaveAttribute("data-liquid-glass", "refractive");
+  expect(await header.evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("url(");
+
+  const segmented = page.locator(".segmented").first();
+  await segmented.scrollIntoViewIfNeeded();
+  const metrics = await segmented.evaluate((element) => ({
+    overflowX: getComputedStyle(element).overflowX,
+    scrollWidth: element.scrollWidth,
+    clientWidth: element.clientWidth
+  }));
+  expect(metrics.overflowX).not.toMatch(/auto|scroll/);
+  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 1);
 });

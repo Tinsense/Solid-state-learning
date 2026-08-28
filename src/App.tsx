@@ -4,6 +4,7 @@ import { Derivation } from "./components/Derivation";
 import { Formula, FormulaCard } from "./components/Formula";
 import { ConceptCheck, Exercise, ReadingCallout, SectionHeader, SourceNote } from "./components/Learning";
 import { BondingStage, DensityBonding, ElasticConstantsLab, ElasticWaveExplorer, InverseElasticLab, IonicLattice, KnowledgeMap, LennardJonesLab, LondonInteraction, MadelungChain, PauliLab, RadiiExplorer, StrainExplorer } from "./components/Figures";
+import { useLiquidGlassSystem } from "./lib/liquidGlass";
 
 const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "arrow" }) => {
   const paths = {
@@ -20,6 +21,7 @@ const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "
 const prose = (items: string[]) => <div className="prose">{items.map((text) => <p key={text}>{text}</p>)}</div>;
 
 function App() {
+  useLiquidGlassSystem();
   const [theme, setTheme] = useState<"dark" | "light">(() => (localStorage.getItem("kittel-theme") as "dark" | "light") || "dark");
   const [active, setActive] = useState("overview");
   const [railOpen, setRailOpen] = useState(false);
@@ -44,19 +46,48 @@ function App() {
 
   useEffect(() => {
     const onPointer = (event: PointerEvent) => {
-      const target = (event.target as HTMLElement).closest<HTMLElement>(".liquid-button,.liquid-panel,.top-action");
+      const target = (event.target as HTMLElement).closest<HTMLElement>("[data-liquid-glass]");
       if (!target) return;
       const rect = target.getBoundingClientRect();
-      target.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-      target.style.setProperty("--my", `${event.clientY - rect.top}px`);
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const normalX = Math.min(1, Math.max(-1, (x / rect.width - .5) * 2));
+      const normalY = Math.min(1, Math.max(-1, (y / rect.height - .5) * 2));
+      const angle = Math.atan2(y - rect.height / 2, x - rect.width / 2) * 180 / Math.PI + 90;
+      target.style.setProperty("--mx", `${x}px`);
+      target.style.setProperty("--my", `${y}px`);
+      target.style.setProperty("--light-angle", `${angle}deg`);
+      target.style.setProperty("--glass-shift-x", `${normalX * 1.15}px`);
+      target.style.setProperty("--glass-shift-y", `${normalY * 1.15}px`);
     };
+    const resetPointer = (event: PointerEvent) => {
+      const target = (event.target as HTMLElement).closest<HTMLElement>("[data-liquid-glass]");
+      const related = event.relatedTarget as Node | null;
+      if (!target || (related && target.contains(related))) return;
+      target.style.setProperty("--glass-shift-x", "0px");
+      target.style.setProperty("--glass-shift-y", "0px");
+      target.style.setProperty("--glass-press", "1");
+    };
+    const press = (event: PointerEvent) => (event.target as HTMLElement).closest<HTMLElement>("[data-liquid-glass]")?.style.setProperty("--glass-press", ".975");
+    const release = (event: PointerEvent) => (event.target as HTMLElement).closest<HTMLElement>("[data-liquid-glass]")?.style.setProperty("--glass-press", "1");
     const onKey = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); setSearchOpen(true); }
       if (event.key === "Escape") { setSearchOpen(false); setRailOpen(false); }
     };
     document.addEventListener("pointermove", onPointer);
+    document.addEventListener("pointerout", resetPointer);
+    document.addEventListener("pointerdown", press);
+    document.addEventListener("pointerup", release);
+    document.addEventListener("pointercancel", release);
     window.addEventListener("keydown", onKey);
-    return () => { document.removeEventListener("pointermove", onPointer); window.removeEventListener("keydown", onKey); };
+    return () => {
+      document.removeEventListener("pointermove", onPointer);
+      document.removeEventListener("pointerout", resetPointer);
+      document.removeEventListener("pointerdown", press);
+      document.removeEventListener("pointerup", release);
+      document.removeEventListener("pointercancel", release);
+      window.removeEventListener("keydown", onKey);
+    };
   }, []);
 
   useEffect(() => { if (searchOpen) requestAnimationFrame(() => searchRef.current?.focus()); }, [searchOpen]);
@@ -102,7 +133,7 @@ function App() {
 
       <aside className={`chapter-rail ${railOpen ? "is-open" : ""}`} id="chapter-rail" aria-label="第三章目录">
         <div className="rail-label"><span>CH.</span><strong>03</strong></div>
-        <nav>{sections.map((item) => <button key={item.id} type="button" className={active === item.id ? "is-active" : ""} onClick={() => go(item.id)}><span>{item.index}</span><span>{item.title}<small>{item.english}</small></span></button>)}</nav>
+        <nav>{sections.map((item) => <button key={item.id} type="button" className={`rail-item ${active === item.id ? "is-active" : ""}`} onClick={() => go(item.id)}><span>{item.index}</span><span>{item.title}<small>{item.english}</small></span></button>)}</nav>
         <div className="rail-footer"><span>Based on</span><strong>Kittel · 8th ed.</strong><small>pp. 47–89</small></div>
       </aside>
 
