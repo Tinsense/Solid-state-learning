@@ -1,288 +1,522 @@
 import { useEffect } from "react";
 
-type Aberration = readonly [number, number, number];
+/*
+ * WebGL2 liquid-glass renderer adapted from Charles Yin's Liquid Glass Studio.
+ * The original four-pass renderer and shader model are MIT licensed:
+ * https://github.com/iyinchao/liquid-glass-studio
+ *
+ * This version keeps the same SDF -> Gaussian blur -> Snell refraction ->
+ * RGB dispersion -> Fresnel/glare pipeline, but scopes each canvas to a UI
+ * surface and uses RGBA8 framebuffers for wider Android GPU compatibility.
+ */
 
-type LiquidGlassOptions = {
-  borderRadius?: number;
-  scale?: number;
-  edgeWidth?: number;
-  aberration?: Aberration;
-  saturation?: number;
-  fallbackFilter?: string;
-};
-
-type ResolvedOptions = Required<LiquidGlassOptions> & { width: number; height: number };
-
-type FilterRefs = {
-  svg: SVGSVGElement;
-  filter: SVGFilterElement;
-  image: SVGFEImageElement;
-  channels: SVGElement[];
-};
-
-type LiquidGlassInstance = {
-  active: boolean;
-  destroy: () => void;
-};
-
-const SVG_NS = "http://www.w3.org/2000/svg";
-const XLINK_NS = "http://www.w3.org/1999/xlink";
 const SURFACE_SELECTOR = [
   ".site-header",
   ".chapter-rail",
-  ".rail-item.is-active",
-  ".liquid-panel",
-  ".liquid-button",
-  ".top-action"
+  ".mobile-rail-toggle",
+  ".segmented",
+  ".derivation-controls",
+  ".search-panel"
 ].join(",");
 
-const mapCache = new Map<string, string>();
-let filterSequence = 0;
+const VERTEX_SHADER = `#version 300 es
+in vec2 a_position;
+out vec2 v_uv;
+void main() {
+  v_uv = (a_position + 1.0) * 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
 
-export const supportsOpticalGlass = typeof navigator !== "undefined"
-  && /Chrom(?:e|ium)\//.test(navigator.userAgent)
-  && typeof SVGFEImageElement !== "undefined";
+const BACKGROUND_SHADER = `#version 300 es
+precision highp float;
+in vec2 v_uv;
+out vec4 fragColor;
+uniform vec2 u_resolution;
+uniform vec2 u_origin;
+uniform float u_dpr;
+uniform float u_theme;
 
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-const smoothstep = (edge0: number, edge1: number, value: number) => {
-  const t = clamp((value - edge0) / (edge1 - edge0), 0, 1);
-  return t * t * (3 - 2 * t);
+float gridLine(float coordinate, float spacing) {
+  float distanceToLine = min(mod(coordinate, spacing), spacing - mod(coordinate, spacing));
+  return 1.0 - smoothstep(0.0, 1.15, distanceToLine);
+}
+
+void main() {
+  vec2 cssPixel = gl_FragCoord.xy / u_dpr;
+  vec2 globalPixel = cssPixel + vec2(u_origin.x, -u_origin.y);
+  float grid = max(gridLine(globalPixel.x, 72.0), gridLine(globalPixel.y, 72.0));
+  vec3 darkBase = vec3(0.008, 0.009, 0.011);
+  vec3 lightBase = vec3(0.958, 0.960, 0.970);
+  vec3 base = mix(darkBase, lightBase, u_theme);
+  vec3 lineColor = mix(vec3(0.11), vec3(0.72), u_theme);
+  float radial = 1.0 - smoothstep(0.0, max(u_resolution.x, u_resolution.y), length(gl_FragCoord.xy - u_resolution * 0.28));
+  base += mix(vec3(0.018), vec3(0.028), u_theme) * radial;
+  base = mix(base, lineColor, grid * mix(0.075, 0.10, u_theme));
+  fragColor = vec4(base, 1.0);
+}`;
+
+const BLUR_SHADER = `#version 300 es
+precision highp float;
+in vec2 v_uv;
+out vec4 fragColor;
+uniform sampler2D u_texture;
+uniform vec2 u_resolution;
+uniform vec2 u_direction;
+
+void main() {
+  vec2 texel = u_direction / u_resolution;
+  vec4 color = texture(u_texture, v_uv) * 0.227027;
+  color += texture(u_texture, v_uv + texel * 1.384615) * 0.316216;
+  color += texture(u_texture, v_uv - texel * 1.384615) * 0.316216;
+  color += texture(u_texture, v_uv + texel * 3.230769) * 0.070270;
+  color += texture(u_texture, v_uv - texel * 3.230769) * 0.070270;
+  fragColor = color;
+}`;
+
+const MAIN_SHADER = `#version 300 es
+precision highp float;
+#define PI 3.14159265359
+in vec2 v_uv;
+out vec4 fragColor;
+uniform sampler2D u_bg;
+uniform sampler2D u_blurredBg;
+uniform vec2 u_resolution;
+uniform float u_dpr;
+uniform float u_radius;
+uniform float u_refThickness;
+uniform float u_refFactor;
+uniform float u_refStrength;
+uniform float u_dispersion;
+uniform float u_fresnel;
+uniform float u_glare;
+uniform float u_glareAngle;
+uniform float u_theme;
+uniform float u_press;
+
+float safeAsin(float value) {
+  return asin(clamp(value, -1.0, 1.0));
+}
+
+float roundedRectSDF(vec2 point, vec2 halfSize, float radius) {
+  vec2 q = abs(point) - halfSize + radius;
+  return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - radius;
+}
+
+float glassSDF(vec2 cssPoint) {
+  vec2 cssSize = u_resolution / u_dpr;
+  vec2 halfSize = cssSize * 0.5 * u_press - vec2(1.0);
+  float radius = min(u_radius, min(halfSize.x, halfSize.y));
+  return roundedRectSDF(cssPoint - cssSize * 0.5, halfSize, radius);
+}
+
+vec2 surfaceNormal(vec2 cssPoint) {
+  float epsilon = 0.65;
+  float dx = glassSDF(cssPoint + vec2(epsilon, 0.0)) - glassSDF(cssPoint - vec2(epsilon, 0.0));
+  float dy = glassSDF(cssPoint + vec2(0.0, epsilon)) - glassSDF(cssPoint - vec2(0.0, epsilon));
+  return normalize(vec2(dx, dy) + vec2(0.00001));
+}
+
+vec4 dispersedSample(vec2 offset, float edgeBlur) {
+  vec2 rOffset = offset * (1.0 - 0.02 * u_dispersion);
+  vec2 bOffset = offset * (1.0 + 0.02 * u_dispersion);
+  vec4 sharp;
+  sharp.r = texture(u_bg, v_uv + rOffset).r;
+  sharp.g = texture(u_bg, v_uv + offset).g;
+  sharp.b = texture(u_bg, v_uv + bOffset).b;
+  sharp.a = 1.0;
+  vec4 blurred;
+  blurred.r = texture(u_blurredBg, v_uv + rOffset).r;
+  blurred.g = texture(u_blurredBg, v_uv + offset).g;
+  blurred.b = texture(u_blurredBg, v_uv + bOffset).b;
+  blurred.a = 1.0;
+  return mix(sharp, blurred, edgeBlur);
+}
+
+void main() {
+  vec2 cssPoint = gl_FragCoord.xy / u_dpr;
+  vec2 cssSize = u_resolution / u_dpr;
+  float distance = glassSDF(cssPoint);
+  if (distance > 0.5) {
+    fragColor = vec4(0.0);
+    return;
+  }
+
+  float depth = max(-distance, 0.0);
+  float ratio = clamp(1.0 - depth / u_refThickness, 0.0, 1.0);
+  float thetaI = safeAsin(ratio * ratio);
+  float thetaT = safeAsin(sin(thetaI) / u_refFactor);
+  float edgeFactor = depth < u_refThickness ? max(0.0, -tan(thetaT - thetaI)) : 0.0;
+  vec2 normal = surfaceNormal(cssPoint);
+  vec2 offset = -normal * edgeFactor * u_refStrength / cssSize;
+  float edgeBlur = smoothstep(0.0, u_refThickness * 0.85, depth);
+  vec4 refracted = dispersedSample(offset, mix(0.12, 0.72, edgeBlur));
+
+  vec3 tint = mix(vec3(0.035, 0.040, 0.050), vec3(0.995), u_theme);
+  refracted.rgb = mix(refracted.rgb, tint, mix(0.10, 0.16, u_theme));
+
+  float fresnel = pow(clamp(1.08 - depth / max(7.0, u_refThickness * 0.78), 0.0, 1.0), 5.0);
+  vec3 fresnelTint = mix(vec3(0.84, 0.88, 0.94), vec3(1.0), u_theme);
+  refracted.rgb = mix(refracted.rgb, fresnelTint, fresnel * u_fresnel * 0.42);
+
+  float normalAngle = atan(normal.y, normal.x);
+  float facing = 0.5 + 0.5 * cos(normalAngle - u_glareAngle);
+  float opposite = 0.5 + 0.5 * cos(normalAngle - u_glareAngle - PI);
+  float directional = pow(max(facing, opposite * 0.28), 4.0);
+  float glareMask = smoothstep(u_refThickness * 0.9, 0.0, depth);
+  vec3 glareColor = mix(vec3(0.74, 0.88, 1.0), vec3(1.0, 0.99, 0.97), u_theme);
+  refracted.rgb = mix(refracted.rgb, glareColor, directional * glareMask * u_glare);
+
+  float edgeAlpha = smoothstep(0.5, -1.25, distance);
+  fragColor = vec4(refracted.rgb, mix(0.78, 0.94, fresnel) * edgeAlpha);
+}`;
+
+type ProgramInfo = {
+  program: WebGLProgram;
+  uniforms: Map<string, WebGLUniformLocation | null>;
 };
 
-/** Signed distance from a point to a centered rounded rectangle. */
-function roundedRectDistance(x: number, y: number, width: number, height: number, radius: number) {
-  const px = Math.abs(x - width / 2) - (width / 2 - radius);
-  const py = Math.abs(y - height / 2) - (height / 2 - radius);
-  return Math.hypot(Math.max(px, 0), Math.max(py, 0)) + Math.min(Math.max(px, py), 0) - radius;
-}
+type Target = {
+  framebuffer: WebGLFramebuffer;
+  texture: WebGLTexture;
+};
 
-/**
- * Builds a lens-normal field rather than a painted highlight. Neutral gray
- * leaves the center untouched; RGB offsets near the rounded edge bend the
- * sampled backdrop along the surface normal.
- */
-function buildNormalMap(config: ResolvedOptions) {
-  const padding = Math.max(18, Math.ceil(Math.abs(config.scale) * .52));
-  const totalWidth = config.width + padding * 2;
-  const totalHeight = config.height + padding * 2;
-  const key = [config.width, config.height, config.borderRadius, config.scale, config.edgeWidth].join(":");
-  const cached = mapCache.get(key);
-  if (cached) return { uri: cached, padding };
+type RenderState = {
+  width: number;
+  height: number;
+  dpr: number;
+  radius: number;
+  originX: number;
+  originY: number;
+  light: boolean;
+  glareAngle: number;
+  press: number;
+};
 
-  const canvas = document.createElement("canvas");
-  canvas.width = totalWidth;
-  canvas.height = totalHeight;
-  const context = canvas.getContext("2d", { alpha: false });
-  if (!context) return { uri: "", padding };
-
-  const pixels = context.createImageData(totalWidth, totalHeight);
-  const data = pixels.data;
-  const radius = clamp(config.borderRadius, 0, Math.min(config.width, config.height) / 2);
-
-  for (let y = 0; y < totalHeight; y += 1) {
-    for (let x = 0; x < totalWidth; x += 1) {
-      const index = (y * totalWidth + x) * 4;
-      const localX = x - padding;
-      const localY = y - padding;
-      const distance = roundedRectDistance(localX, localY, config.width, config.height, radius);
-
-      let red = 128;
-      let blue = 128;
-      if (distance <= 0 && distance >= -config.edgeWidth) {
-        const dx = roundedRectDistance(localX + .75, localY, config.width, config.height, radius)
-          - roundedRectDistance(localX - .75, localY, config.width, config.height, radius);
-        const dy = roundedRectDistance(localX, localY + .75, config.width, config.height, radius)
-          - roundedRectDistance(localX, localY - .75, config.width, config.height, radius);
-        const length = Math.hypot(dx, dy) || 1;
-        const fresnel = 1 - smoothstep(0, config.edgeWidth, -distance);
-        const profile = Math.pow(fresnel, 1.55);
-        red = Math.round(clamp(128 + (dx / length) * 122 * profile, 0, 255));
-        blue = Math.round(clamp(128 + (dy / length) * 122 * profile, 0, 255));
-      }
-
-      data[index] = red;
-      data[index + 1] = 128;
-      data[index + 2] = blue;
-      data[index + 3] = 255;
+function compileProgram(gl: WebGL2RenderingContext, fragment: string): ProgramInfo {
+  const compile = (type: number, source: string) => {
+    const shader = gl.createShader(type);
+    if (!shader) throw new Error("Unable to create WebGL shader");
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      const message = gl.getShaderInfoLog(shader) || "Unknown shader compilation error";
+      gl.deleteShader(shader);
+      throw new Error(message);
     }
-  }
-
-  context.putImageData(pixels, 0, 0);
-  const uri = canvas.toDataURL("image/png");
-  if (mapCache.size >= 48) mapCache.delete(mapCache.keys().next().value as string);
-  mapCache.set(key, uri);
-  return { uri, padding };
-}
-
-function createSvgFilter(id: string): FilterRefs {
-  const svg = document.createElementNS(SVG_NS, "svg");
-  svg.setAttribute("aria-hidden", "true");
-  svg.style.cssText = "position:fixed;width:0;height:0;overflow:hidden;pointer-events:none";
-
-  const defs = document.createElementNS(SVG_NS, "defs");
-  const filter = document.createElementNS(SVG_NS, "filter");
-  filter.id = id;
-  filter.setAttribute("color-interpolation-filters", "sRGB");
-
-  const image = document.createElementNS(SVG_NS, "feImage");
-  image.setAttribute("result", "normalMap");
-  image.setAttribute("preserveAspectRatio", "none");
-  filter.append(image);
-
-  const matrices = [
-    "1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0",
-    "0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0",
-    "0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"
-  ];
-  const channels: SVGElement[] = [];
-
-  matrices.forEach((matrix, index) => {
-    const displacement = document.createElementNS(SVG_NS, "feDisplacementMap");
-    displacement.setAttribute("in", "SourceGraphic");
-    displacement.setAttribute("in2", "normalMap");
-    displacement.setAttribute("xChannelSelector", "R");
-    displacement.setAttribute("yChannelSelector", "B");
-    displacement.setAttribute("result", `displaced-${index}`);
-    filter.append(displacement);
-    channels.push(displacement);
-
-    const color = document.createElementNS(SVG_NS, "feColorMatrix");
-    color.setAttribute("in", `displaced-${index}`);
-    color.setAttribute("type", "matrix");
-    color.setAttribute("values", matrix);
-    color.setAttribute("result", `channel-${index}`);
-    filter.append(color);
-  });
-
-  const redGreen = document.createElementNS(SVG_NS, "feBlend");
-  redGreen.setAttribute("in", "channel-0");
-  redGreen.setAttribute("in2", "channel-1");
-  redGreen.setAttribute("mode", "screen");
-  redGreen.setAttribute("result", "red-green");
-  filter.append(redGreen);
-
-  const output = document.createElementNS(SVG_NS, "feBlend");
-  output.setAttribute("in", "red-green");
-  output.setAttribute("in2", "channel-2");
-  output.setAttribute("mode", "screen");
-  filter.append(output);
-
-  defs.append(filter);
-  svg.append(defs);
-  return { svg, filter, image, channels };
-}
-
-function resolveOptions(element: HTMLElement, options: LiquidGlassOptions): ResolvedOptions {
-  const rect = element.getBoundingClientRect();
-  const computedRadius = Number.parseFloat(getComputedStyle(element).borderRadius) || 18;
-  return {
-    width: Math.max(1, Math.round(rect.width)),
-    height: Math.max(1, Math.round(rect.height)),
-    borderRadius: options.borderRadius ?? computedRadius,
-    scale: options.scale ?? -64,
-    edgeWidth: options.edgeWidth ?? clamp(Math.min(rect.width, rect.height) * .22, 8, 24),
-    aberration: options.aberration ?? [0, 4, 9],
-    saturation: options.saturation ?? 1.18,
-    fallbackFilter: options.fallbackFilter ?? "blur(22px) saturate(132%)"
+    return shader;
   };
+
+  const vertex = compile(gl.VERTEX_SHADER, VERTEX_SHADER);
+  const pixel = compile(gl.FRAGMENT_SHADER, fragment);
+  const program = gl.createProgram();
+  if (!program) throw new Error("Unable to create WebGL program");
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, pixel);
+  gl.linkProgram(program);
+  gl.deleteShader(vertex);
+  gl.deleteShader(pixel);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    const message = gl.getProgramInfoLog(program) || "Unknown WebGL link error";
+    gl.deleteProgram(program);
+    throw new Error(message);
+  }
+  return { program, uniforms: new Map() };
 }
 
-function configureFilter(config: ResolvedOptions, refs: FilterRefs) {
-  const { uri, padding } = buildNormalMap(config);
-  const xPadding = Math.ceil(padding / config.width * 100);
-  const yPadding = Math.ceil(padding / config.height * 100);
-  refs.filter.setAttribute("x", `-${xPadding}%`);
-  refs.filter.setAttribute("y", `-${yPadding}%`);
-  refs.filter.setAttribute("width", `${100 + xPadding * 2}%`);
-  refs.filter.setAttribute("height", `${100 + yPadding * 2}%`);
-  refs.image.setAttribute("href", uri);
-  refs.image.setAttributeNS(XLINK_NS, "href", uri);
-  refs.channels.forEach((channel, index) => channel.setAttribute("scale", String(config.scale + config.aberration[index])));
+function uniform(gl: WebGL2RenderingContext, info: ProgramInfo, name: string) {
+  if (!info.uniforms.has(name)) info.uniforms.set(name, gl.getUniformLocation(info.program, name));
+  return info.uniforms.get(name) ?? null;
 }
 
-function surfaceOptions(element: HTMLElement): LiquidGlassOptions {
-  if (element.classList.contains("site-header")) {
-    return { scale: -46, edgeWidth: 16, aberration: [0, 3, 6], saturation: 1.16 };
+function createTarget(gl: WebGL2RenderingContext, width: number, height: number): Target {
+  const framebuffer = gl.createFramebuffer();
+  const texture = gl.createTexture();
+  if (!framebuffer || !texture) throw new Error("Unable to create WebGL framebuffer");
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+  if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
+    throw new Error("WebGL framebuffer is incomplete");
   }
-  if (element.classList.contains("chapter-rail")) {
-    return { scale: -38, edgeWidth: 21, aberration: [0, 2, 4], saturation: 1.12 };
-  }
-  if (element.classList.contains("rail-item")) {
-    return { scale: -48, edgeWidth: 11, aberration: [0, 2, 5], saturation: 1.14 };
-  }
-  if (element.classList.contains("search-panel")) {
-    return { scale: -58, edgeWidth: 20, aberration: [0, 4, 8], saturation: 1.18 };
-  }
-  if (element.classList.contains("liquid-panel")) {
-    return { scale: -54, edgeWidth: 14, aberration: [0, 3, 7], saturation: 1.16 };
-  }
-  return { scale: -70, edgeWidth: 10, aberration: [0, 5, 11], saturation: 1.2 };
+  return { framebuffer, texture };
 }
 
-function createLiquidGlass(element: HTMLElement, options: LiquidGlassOptions): LiquidGlassInstance {
-  const previous = element.style.backdropFilter;
-  const previousWebkit = element.style.getPropertyValue("-webkit-backdrop-filter");
-  let resizeFrame = 0;
-  let observer: ResizeObserver | undefined;
+class StudioGlassRenderer {
+  private gl: WebGL2RenderingContext;
+  private vao: WebGLVertexArrayObject;
+  private buffer: WebGLBuffer;
+  private background: ProgramInfo;
+  private blur: ProgramInfo;
+  private main: ProgramInfo;
+  private targets: Target[] = [];
+  private width = 1;
+  private height = 1;
 
-  if (!supportsOpticalGlass) {
-    const fallback = options.fallbackFilter ?? "blur(22px) saturate(132%)";
-    element.style.backdropFilter = fallback;
-    element.style.setProperty("-webkit-backdrop-filter", fallback);
+  constructor(private canvas: HTMLCanvasElement) {
+    const gl = canvas.getContext("webgl2", {
+      alpha: true,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      premultipliedAlpha: true,
+      powerPreference: "high-performance"
+    });
+    if (!gl) throw new Error("WebGL2 is unavailable");
+    this.gl = gl;
+    this.background = compileProgram(gl, BACKGROUND_SHADER);
+    this.blur = compileProgram(gl, BLUR_SHADER);
+    this.main = compileProgram(gl, MAIN_SHADER);
+    const vao = gl.createVertexArray();
+    const buffer = gl.createBuffer();
+    if (!vao || !buffer) throw new Error("Unable to create WebGL geometry");
+    this.vao = vao;
+    this.buffer = buffer;
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    [this.background, this.blur, this.main].forEach((info) => {
+      const location = gl.getAttribLocation(info.program, "a_position");
+      gl.useProgram(info.program);
+      gl.enableVertexAttribArray(location);
+      gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
+    });
+    gl.bindVertexArray(null);
+  }
+
+  private destroyTargets() {
+    this.targets.forEach(({ framebuffer, texture }) => {
+      this.gl.deleteFramebuffer(framebuffer);
+      this.gl.deleteTexture(texture);
+    });
+    this.targets = [];
+  }
+
+  resize(width: number, height: number) {
+    if (width === this.width && height === this.height && this.targets.length === 3) return;
+    this.width = Math.max(1, width);
+    this.height = Math.max(1, height);
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+    this.destroyTargets();
+    this.targets = Array.from({ length: 3 }, () => createTarget(this.gl, this.width, this.height));
+  }
+
+  private begin(info: ProgramInfo, target: Target | null) {
+    const gl = this.gl;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, target?.framebuffer ?? null);
+    gl.viewport(0, 0, this.width, this.height);
+    gl.useProgram(info.program);
+    gl.bindVertexArray(this.vao);
+  }
+
+  private bindTexture(info: ProgramInfo, name: string, texture: WebGLTexture, unit: number) {
+    const gl = this.gl;
+    gl.activeTexture(gl.TEXTURE0 + unit);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.uniform1i(uniform(gl, info, name), unit);
+  }
+
+  private resolution(info: ProgramInfo) {
+    this.gl.uniform2f(uniform(this.gl, info, "u_resolution"), this.width, this.height);
+  }
+
+  render(state: RenderState) {
+    const gl = this.gl;
+    const [backgroundTarget, verticalTarget, horizontalTarget] = this.targets;
+    if (!backgroundTarget || !verticalTarget || !horizontalTarget) return;
+
+    this.begin(this.background, backgroundTarget);
+    this.resolution(this.background);
+    gl.uniform2f(uniform(gl, this.background, "u_origin"), state.originX, state.originY);
+    gl.uniform1f(uniform(gl, this.background, "u_dpr"), state.dpr);
+    gl.uniform1f(uniform(gl, this.background, "u_theme"), state.light ? 1 : 0);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+    this.begin(this.blur, verticalTarget);
+    this.resolution(this.blur);
+    this.bindTexture(this.blur, "u_texture", backgroundTarget.texture, 0);
+    gl.uniform2f(uniform(gl, this.blur, "u_direction"), 0, 1);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+    this.begin(this.blur, horizontalTarget);
+    this.resolution(this.blur);
+    this.bindTexture(this.blur, "u_texture", verticalTarget.texture, 0);
+    gl.uniform2f(uniform(gl, this.blur, "u_direction"), 1, 0);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+    this.begin(this.main, null);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    this.resolution(this.main);
+    this.bindTexture(this.main, "u_bg", backgroundTarget.texture, 0);
+    this.bindTexture(this.main, "u_blurredBg", horizontalTarget.texture, 1);
+    gl.uniform1f(uniform(gl, this.main, "u_dpr"), state.dpr);
+    gl.uniform1f(uniform(gl, this.main, "u_radius"), state.radius);
+    gl.uniform1f(uniform(gl, this.main, "u_refThickness"), Math.max(10, Math.min(20, state.height * 0.24)));
+    gl.uniform1f(uniform(gl, this.main, "u_refFactor"), 1.15);
+    gl.uniform1f(uniform(gl, this.main, "u_refStrength"), Math.max(16, Math.min(38, state.height * 0.5)));
+    gl.uniform1f(uniform(gl, this.main, "u_dispersion"), 8.5);
+    gl.uniform1f(uniform(gl, this.main, "u_fresnel"), state.light ? 0.24 : 0.34);
+    gl.uniform1f(uniform(gl, this.main, "u_glare"), state.light ? 0.16 : 0.22);
+    gl.uniform1f(uniform(gl, this.main, "u_glareAngle"), state.glareAngle);
+    gl.uniform1f(uniform(gl, this.main, "u_theme"), state.light ? 1 : 0);
+    gl.uniform1f(uniform(gl, this.main, "u_press"), state.press);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.bindVertexArray(null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
+
+  dispose() {
+    const gl = this.gl;
+    this.destroyTargets();
+    [this.background, this.blur, this.main].forEach(({ program }) => gl.deleteProgram(program));
+    gl.deleteBuffer(this.buffer);
+    gl.deleteVertexArray(this.vao);
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+  }
+}
+
+type SurfaceInstance = { destroy: () => void };
+
+let supportCache: boolean | undefined;
+export function supportsStudioGlass() {
+  if (supportCache !== undefined) return supportCache;
+  try {
+    const probe = document.createElement("canvas");
+    const gl = probe.getContext("webgl2");
+    supportCache = Boolean(gl);
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
+  } catch {
+    supportCache = false;
+  }
+  return supportCache;
+}
+
+function createSurface(element: HTMLElement): SurfaceInstance {
+  const canvas = document.createElement("canvas");
+  canvas.className = "studio-glass-canvas";
+  canvas.setAttribute("aria-hidden", "true");
+  element.prepend(canvas);
+  element.dataset.liquidGlass = "frosted";
+
+  let renderer: StudioGlassRenderer | null = null;
+  let frame = 0;
+  let visible = false;
+  let glareAngle = Math.PI * 0.25;
+  let press = 1;
+
+  const render = () => {
+    frame = 0;
+    if (!visible || !renderer) return;
+    const rect = element.getBoundingClientRect();
+    if (rect.width < 2 || rect.height < 2) return;
+    const maxDpr = 1.5;
+    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+    const width = Math.max(1, Math.round(rect.width * dpr));
+    const height = Math.max(1, Math.round(rect.height * dpr));
+    const radius = Number.parseFloat(getComputedStyle(element).borderRadius) || 18;
+    renderer.resize(width, height);
+    renderer.render({
+      width: rect.width,
+      height: rect.height,
+      dpr,
+      radius,
+      originX: rect.left,
+      originY: rect.top,
+      light: document.documentElement.dataset.theme === "light",
+      glareAngle,
+      press
+    });
+  };
+
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(render);
+  };
+
+  const activate = () => {
+    if (renderer || !supportsStudioGlass()) return;
+    try {
+      renderer = new StudioGlassRenderer(canvas);
+      element.dataset.liquidGlass = "webgl2-studio";
+      schedule();
+    } catch (error) {
+      console.warn("Liquid Glass Studio WebGL2 fallback:", error);
+      renderer = null;
+      element.dataset.liquidGlass = "frosted";
+    }
+  };
+
+  const deactivate = () => {
+    renderer?.dispose();
+    renderer = null;
+    canvas.width = 1;
+    canvas.height = 1;
     element.dataset.liquidGlass = "frosted";
-    return {
-      active: false,
-      destroy: () => {
-        element.style.backdropFilter = previous;
-        element.style.setProperty("-webkit-backdrop-filter", previousWebkit);
-        delete element.dataset.liquidGlass;
-      }
-    };
-  }
-
-  const id = `optical-glass-${++filterSequence}`;
-  const refs = createSvgFilter(id);
-  document.body.append(refs.svg);
-
-  const apply = () => {
-    const config = resolveOptions(element, options);
-    if (config.width <= 1 || config.height <= 1) return;
-    configureFilter(config, refs);
-    const filterValue = `url(#${id}) saturate(${config.saturation})`;
-    element.style.backdropFilter = filterValue;
-    element.style.setProperty("-webkit-backdrop-filter", filterValue);
-    element.dataset.liquidGlass = "refractive";
   };
 
-  apply();
-  observer = new ResizeObserver(() => {
-    cancelAnimationFrame(resizeFrame);
-    resizeFrame = requestAnimationFrame(apply);
-  });
-  observer.observe(element);
+  const intersection = new IntersectionObserver((entries) => {
+    visible = Boolean(entries[0]?.isIntersecting);
+    if (visible) activate();
+    else deactivate();
+  }, { rootMargin: "80px" });
+  intersection.observe(element);
+
+  const resize = new ResizeObserver(schedule);
+  resize.observe(element);
+  const theme = new MutationObserver(schedule);
+  theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  const onPointerMove = (event: PointerEvent) => {
+    const rect = element.getBoundingClientRect();
+    glareAngle = Math.atan2(rect.height * 0.5 - (event.clientY - rect.top), event.clientX - rect.left - rect.width * 0.5);
+    schedule();
+  };
+  const onPointerDown = () => { press = 0.985; schedule(); };
+  const onPointerUp = () => { press = 1; schedule(); };
+  const onContextLost = (event: Event) => {
+    event.preventDefault();
+    renderer = null;
+    element.dataset.liquidGlass = "frosted";
+  };
+  element.addEventListener("pointermove", onPointerMove, { passive: true });
+  element.addEventListener("pointerdown", onPointerDown, { passive: true });
+  element.addEventListener("pointerup", onPointerUp, { passive: true });
+  element.addEventListener("pointercancel", onPointerUp, { passive: true });
+  canvas.addEventListener("webglcontextlost", onContextLost);
+  window.addEventListener("scroll", schedule, { passive: true });
 
   return {
-    active: true,
     destroy: () => {
-      observer?.disconnect();
-      cancelAnimationFrame(resizeFrame);
-      refs.svg.remove();
-      element.style.backdropFilter = previous;
-      element.style.setProperty("-webkit-backdrop-filter", previousWebkit);
+      intersection.disconnect();
+      resize.disconnect();
+      theme.disconnect();
+      cancelAnimationFrame(frame);
+      element.removeEventListener("pointermove", onPointerMove);
+      element.removeEventListener("pointerdown", onPointerDown);
+      element.removeEventListener("pointerup", onPointerUp);
+      element.removeEventListener("pointercancel", onPointerUp);
+      canvas.removeEventListener("webglcontextlost", onContextLost);
+      window.removeEventListener("scroll", schedule);
+      renderer?.dispose();
+      canvas.remove();
       delete element.dataset.liquidGlass;
     }
   };
 }
 
-/** Mounts optical glass on persistent and conditionally rendered controls. */
 export function useLiquidGlassSystem() {
   useEffect(() => {
-    const instances = new Map<HTMLElement, LiquidGlassInstance>();
+    const instances = new Map<HTMLElement, SurfaceInstance>();
     let scanFrame = 0;
 
     const scan = () => {
       document.querySelectorAll<HTMLElement>(SURFACE_SELECTOR).forEach((element) => {
-        if (!instances.has(element)) instances.set(element, createLiquidGlass(element, surfaceOptions(element)));
+        if (!instances.has(element)) instances.set(element, createSurface(element));
       });
       instances.forEach((instance, element) => {
         if (!element.isConnected || !element.matches(SURFACE_SELECTOR)) {
@@ -290,7 +524,7 @@ export function useLiquidGlassSystem() {
           instances.delete(element);
         }
       });
-      document.documentElement.dataset.glassEngine = supportsOpticalGlass ? "optical" : "frosted";
+      document.documentElement.dataset.glassEngine = supportsStudioGlass() ? "webgl2-studio" : "frosted";
     };
 
     const scheduleScan = () => {
@@ -300,7 +534,7 @@ export function useLiquidGlassSystem() {
 
     scan();
     const mutations = new MutationObserver(scheduleScan);
-    mutations.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
+    mutations.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       mutations.disconnect();

@@ -1,52 +1,44 @@
-/* Refractive glass: the backdrop is warped by src/lib/liquidGlass.ts. */
-:is(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active) {
-  --mx: 50%;
-  --my: 0%;
-  --light-angle: 135deg;
-  --glass-shift-x: 0px;
-  --glass-shift-y: 0px;
-  --glass-press: 1;
+/* WebGL2 glass surfaces use the four-pass Liquid Glass Studio renderer. */
+:where(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active) {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border: 1px solid var(--glass-border);
   background: var(--glass-fill);
-  box-shadow:
-    inset 0 1px 0 var(--glass-top-edge),
-    inset 0 -1px 0 var(--glass-bottom-edge),
-    0 12px 38px var(--glass-shadow);
-  backdrop-filter: blur(22px) saturate(132%);
-  -webkit-backdrop-filter: blur(22px) saturate(132%);
+  box-shadow: inset 0 1px 0 var(--glass-top-edge), inset 0 -1px 0 var(--glass-bottom-edge), 0 12px 38px var(--glass-shadow);
+  backdrop-filter: blur(20px) saturate(128%);
+  -webkit-backdrop-filter: blur(20px) saturate(128%);
 }
 
-/* Pointer-driven Fresnel rim, masked to the physical edge only. */
-:is(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active)::after {
-  content: "";
+.studio-glass-canvas {
   position: absolute;
-  z-index: 4;
+  z-index: -1;
   inset: 0;
-  padding: 1px;
+  width: 100%;
+  height: 100%;
+  display: block;
   border-radius: inherit;
   pointer-events: none;
-  background:
-    radial-gradient(120px circle at var(--mx) var(--my), var(--glass-glare-hot), transparent 58%),
-    conic-gradient(from var(--light-angle), var(--glass-glare) 0deg, transparent 72deg 216deg, var(--glass-glare-soft) 286deg, var(--glass-glare) 360deg);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  opacity: .92;
 }
 
-[data-liquid-glass="refractive"] { background: var(--glass-fill-optical); }
+[data-liquid-glass] > :not(.studio-glass-canvas) {
+  position: relative;
+  z-index: 2;
+  transform: translateZ(0);
+}
+
+[data-liquid-glass="webgl2-studio"] {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
 
 .liquid-button,
 .top-action,
 .rail-item {
-  transform: translate3d(var(--glass-shift-x), var(--glass-shift-y), 0) scale(var(--glass-press));
-  transform-origin: center;
   transition: transform var(--fast) var(--ease), background var(--fast), border-color var(--fast), box-shadow var(--fast);
-  will-change: transform;
 }
 
 .liquid-button {
@@ -64,9 +56,10 @@
 .top-action:hover {
   border-color: var(--glass-border-strong);
   background: var(--glass-fill-hover);
-  box-shadow: inset 0 1px 0 var(--glass-top-edge), inset 0 -1px 0 var(--glass-bottom-edge), 0 15px 36px var(--glass-shadow-strong);
 }
 
+.liquid-button:active,
+.top-action:active { transform: scale(.98); }
 .liquid-button:disabled { opacity: .38; cursor: not-allowed; transform: none; }
 .liquid-button.primary {
   color: var(--accent-ink);
@@ -81,5 +74,5 @@
 }
 
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
-  :is(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active) { background: var(--bg-elevated); }
+  :where(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active) { background: var(--bg-elevated); }
 }

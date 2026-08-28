@@ -8,7 +8,7 @@
 - 10 组 KaTeX 公式卡片与 progressive derivation（逐步推导）。
 - 9 个实时实验：结合图景、London、Lennard–Jones、Pauli、Madelung、NaCl 壳层、电子密度、应变、立方弹性与弹性波。
 - Concept Check、三级练习、知识图谱、进度本地保存、Dark/Light、键盘导航与 reduced-motion 支持。
-- 顶部任务栏、章节侧栏、分段控件与推导工具栏采用实时折射玻璃：Chromium 使用 Canvas 法线位移图与 SVG `feDisplacementMap`，Safari/Firefox 自动降级为稳定的 backdrop blur。
+- 顶部任务栏、章节侧栏、分段控件与推导工具栏采用 Liquid Glass Studio 同类四阶段 WebGL2 管线：SDF 玻璃形状、双向高斯模糊、Snell 折射、RGB 色散、Fresnel 反射与方向性 glare；不支持 WebGL2 时自动降级为稳定的 backdrop blur。
 
 ## 运行
 
@@ -37,7 +37,7 @@ npx playwright install chromium
 npm test
 ```
 
-测试覆盖首页、目录、渐进推导、Lennard–Jones slider、Madelung 收敛、弹性波方向/模式、Concept Check、折射滤镜、分段控件无横向滑轨和页面横向溢出，并在 1440 px 与 390 px 两种视口运行。
+测试覆盖首页、目录、渐进推导、Lennard–Jones slider、Madelung 收敛、弹性波方向/模式、Concept Check、WebGL2 玻璃画布、分段控件无横向滑轨和页面横向溢出，并在桌面 Chrome 与 Android Edge 用户代理下运行。
 
 ## 内容说明
 

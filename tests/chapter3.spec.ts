@@ -64,12 +64,14 @@ test("页面在当前视口没有整体横向滚动", async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
-test("任务栏使用折射玻璃且分段控件没有横向滑轨", async ({ page }) => {
+test("任务栏使用 Studio WebGL2 玻璃且分段控件没有横向滑轨", async ({ page }, testInfo) => {
   await page.goto("/");
-  await expect(page.locator("html")).toHaveAttribute("data-glass-engine", "optical");
+  await expect(page.locator("html")).toHaveAttribute("data-glass-engine", "webgl2-studio");
   const header = page.locator(".site-header");
-  await expect(header).toHaveAttribute("data-liquid-glass", "refractive");
-  expect(await header.evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("url(");
+  await expect(header).toHaveAttribute("data-liquid-glass", "webgl2-studio");
+  const canvas = header.locator(".studio-glass-canvas");
+  await expect(canvas).toBeVisible();
+  expect(await canvas.evaluate((element: HTMLCanvasElement) => element.width * element.height)).toBeGreaterThan(1);
 
   const segmented = page.locator(".segmented").first();
   await segmented.scrollIntoViewIfNeeded();
@@ -80,4 +82,16 @@ test("任务栏使用折射玻璃且分段控件没有横向滑轨", async ({ pa
   }));
   expect(metrics.overflowX).not.toMatch(/auto|scroll/);
   expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 1);
+
+  if (testInfo.project.name === "mobile") {
+    const menu = page.getByRole("button", { name: "章节目录" });
+    await expect(menu).toBeVisible();
+    const position = await menu.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { top: rect.top, bottomGap: window.innerHeight - rect.bottom, viewport: window.innerHeight };
+    });
+    expect(position.top).toBeGreaterThan(position.viewport * .65);
+    expect(position.bottomGap).toBeGreaterThanOrEqual(8);
+    await expect(page.getByRole("heading", { name: /从一条势能曲线/ })).toBeVisible();
+  }
 });

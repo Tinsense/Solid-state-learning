@@ -201,3 +201,56 @@ main { margin-left: 232px; }
   }
   .segmented button { width: 100%; padding: 0 8px; font-size: .68rem; }
 }
+
+/* Liquid Glass Studio canvas must remain the visible material layer. */
+[data-liquid-glass="webgl2-studio"] {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+@media (max-width: 900px) {
+  .site-header {
+    top: max(8px, env(safe-area-inset-top));
+    left: 10px;
+    right: 10px;
+    height: 64px;
+    padding: 0 9px 0 15px;
+    border-radius: 22px;
+  }
+  .header-actions { gap: 6px; }
+  .top-action { min-width: 48px; min-height: 48px; border-radius: 16px; }
+  .mobile-rail-toggle {
+    left: 50%;
+    right: auto;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    min-width: 156px;
+    min-height: 52px;
+    padding: 0 20px;
+    transform: translateX(-50%);
+    box-shadow: 0 16px 42px var(--glass-shadow-strong);
+  }
+  .mobile-rail-toggle:active { transform: translateX(-50%) scale(.98); }
+  .chapter-rail {
+    top: calc(max(8px, env(safe-area-inset-top)) + 76px);
+    bottom: calc(80px + env(safe-area-inset-bottom));
+    border-radius: 24px;
+  }
+  main { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
+  .hero {
+    min-height: calc(100dvh - 16px - env(safe-area-inset-top));
+    padding-top: 126px;
+  }
+}
+
+@media (max-width: 620px) {
+  .site-header { border-radius: 20px; }
+  .brand { gap: 10px; }
+  .brand-glyph { width: 28px; height: 28px; }
+  .hero { padding-top: 118px; }
+  .hero h1 { font-size: clamp(2.5rem, 10.8vw, 3rem); line-height: .97; }
+  .hero-lead { font-size: 1rem; line-height: 1.7; }
+  .hero-actions { margin-top: 30px; }
+}
