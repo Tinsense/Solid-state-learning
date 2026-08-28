@@ -1,0 +1,22 @@
+body, button, input {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+}
+
+h1, h2, h3, h4, p { margin-top: 0; }
+h1, h2, h3, h4 { letter-spacing: -.035em; }
+h1 { font-size: clamp(3.5rem, 7.7vw, 7.5rem); line-height: .94; font-weight: 650; }
+h2 { font-size: clamp(2.8rem, 5.8vw, 5.7rem); line-height: .98; font-weight: 650; }
+h3 { font-size: clamp(1.55rem, 2.6vw, 2.5rem); line-height: 1.08; font-weight: 620; }
+h4 { font-size: 1.16rem; line-height: 1.25; }
+p { font-size: 1.08rem; line-height: 1.78; color: var(--text-secondary); }
+strong, b { font-weight: 620; }
+small { color: var(--text-tertiary); }
+
+.overline { display: block; margin-bottom: 18px; color: var(--text-tertiary); font-size: .72rem; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; }
+.prose { width: min(100%, var(--reading)); margin: 0 auto 70px; }
+.prose p { font-size: clamp(1.08rem, 1.5vw, 1.25rem); line-height: 1.9; }
+.prose p:first-child::first-letter { float: left; margin: .08em .12em 0 0; color: var(--text); font-size: 4.1rem; line-height: .75; font-weight: 600; }
+.quiet { color: var(--text-tertiary) !important; }
+.katex { font-size: 1.04em; }
+.formula--display { min-width: 0; max-width: 100%; padding: 10px 2px; overflow-x: auto; overflow-y: hidden; contain: inline-size; }
+.formula--display .katex-display { margin: .7em 0; }
