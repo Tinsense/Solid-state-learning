@@ -190,30 +190,18 @@ void main() {
      * background positions, so the split is visible on lattice lines/atoms
      * without creating a synthetic coloured outline around empty glass.
      */
-    float dispersionPx = min(6.0, optics.x * 0.30) * refractField;
+    float dispersionPx = min(2.40, optics.x * 0.16) * refractField;
     vec2 dispersionUV = bendDir * dispersionPx * pxToUV;
 
-    vec2 uvR = clamp(baseUV + refractionUV * 1.30 + dispersionUV, vec2(0.001), vec2(0.999));
+    vec2 uvR = clamp(baseUV + refractionUV * 1.16 + dispersionUV, vec2(0.001), vec2(0.999));
     vec2 uvG = clamp(baseUV + refractionUV,                  vec2(0.001), vec2(0.999));
-    vec2 uvB = clamp(baseUV + refractionUV * 0.70 - dispersionUV, vec2(0.001), vec2(0.999));
+    vec2 uvB = clamp(baseUV + refractionUV * 0.84 - dispersionUV, vec2(0.001), vec2(0.999));
 
     vec4 sampleR = texture(u_background, uvR);
     vec4 sampleG = texture(u_background, uvG);
     vec4 sampleB = texture(u_background, uvB);
     sampledAlpha = max(sampleR.a, max(sampleG.a, sampleB.a));
-
-    /*
-     * Do NOT premultiply the separated RGB by sampledAlpha here.
-     * Alpha is applied exactly once below through refractedAlpha.
-     * Premultiplying twice was suppressing chromatic separation on the
-     * semi-transparent lattice lines / atom halos.
-     */
-    vec3 separatedRGB = vec3(sampleR.r, sampleG.g, sampleB.b);
-
-    /* Boost only the chromatic difference created by spatially-separated
-       R/G/B samples; neutral grey areas remain neutral. */
-    float neutral = dot(separatedRGB, vec3(0.299, 0.587, 0.114));
-    refracted = clamp(mix(vec3(neutral), separatedRGB, 1.85), 0.0, 1.0);
+    refracted = vec3(sampleR.r, sampleG.g, sampleB.b) * sampledAlpha;
   }
 
   /*
@@ -221,7 +209,7 @@ void main() {
    * contribute ZERO refracted alpha. Previously only RGB was alpha-gated, so
    * transparent black pixels still produced a broad grey/black optical band.
    */
-  float refractedAlpha = u_hasBackground * refractField * sampledAlpha * mix(0.58, 0.52, u_theme);
+  float refractedAlpha = u_hasBackground * refractField * sampledAlpha * mix(0.54, 0.46, u_theme);
 
   vec3 cool = vec3(0.42, 0.69, 1.00);
   vec3 warm = vec3(1.00, 0.80, 0.48);
@@ -476,11 +464,11 @@ class SharedGlassRenderer {
 
       if (element.matches(".site-header, .chapter-rail, .mobile-rail-toggle")) {
         refractionPx = 4.7;
-        refractionRange = 10;
+        refractionRange = 8.4;
         fresnelRange = 1.05;
         glareRange = 0.64;
       } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls")) {
-        refractionPx = 8.0;
+        refractionPx = 6.0;
         refractionRange = 10.3;
         fresnelRange = 1.30;
         glareRange = 0.82;

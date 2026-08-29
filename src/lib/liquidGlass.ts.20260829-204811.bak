@@ -7,7 +7,7 @@ import { useEffect } from "react";
  * Key change from the previous site implementation:
  * ONE WebGL2 context renders every visible glass surface in both themes.
  * V3.0: stronger but restrained chromatic dispersion, slightly broader thin rim,
- * v3.1 fixes light-theme transparent-background alpha and strengthens real RGB dispersion.
+ * and a shader-level mask that removes the site-header bottom optical line.
  * The shared shader renders clear refraction without DOM blur, plus a thin
  * Fresnel rim, compact directional glare and restrained chromatic dispersion.
  */
@@ -183,54 +183,43 @@ void main() {
   baseUV = clamp(baseUV, vec2(0.001), vec2(0.999));
 
   vec3 refracted = vec3(0.0);
-  float sampledAlpha = 0.0;
   if (u_hasBackground > 0.5) {
     /*
-     * Real RGB dispersion. The channels sample three genuinely different
-     * background positions, so the split is visible on lattice lines/atoms
-     * without creating a synthetic coloured outline around empty glass.
+     * Real chromatic dispersion: RGB channels sample the background at
+     * slightly different displaced positions. 3.4 px is deliberately visible.
      */
-    float dispersionPx = min(6.0, optics.x * 0.30) * refractField;
+    /*
+     * More visible RGB separation without turning the rim neon. The separation
+     * remains proportional to each surface's refraction strength.
+     */
+    float dispersionPx = min(1.45, optics.x * 0.095) * refractField;
     vec2 dispersionUV = bendDir * dispersionPx * pxToUV;
 
-    vec2 uvR = clamp(baseUV + refractionUV * 1.30 + dispersionUV, vec2(0.001), vec2(0.999));
+    vec2 uvR = clamp(baseUV + refractionUV * 1.12 + dispersionUV, vec2(0.001), vec2(0.999));
     vec2 uvG = clamp(baseUV + refractionUV,                  vec2(0.001), vec2(0.999));
-    vec2 uvB = clamp(baseUV + refractionUV * 0.70 - dispersionUV, vec2(0.001), vec2(0.999));
+    vec2 uvB = clamp(baseUV + refractionUV * 0.88 - dispersionUV, vec2(0.001), vec2(0.999));
 
     vec4 sampleR = texture(u_background, uvR);
     vec4 sampleG = texture(u_background, uvG);
     vec4 sampleB = texture(u_background, uvB);
-    sampledAlpha = max(sampleR.a, max(sampleG.a, sampleB.a));
+    refracted = vec3(sampleR.r, sampleG.g, sampleB.b);
 
-    /*
-     * Do NOT premultiply the separated RGB by sampledAlpha here.
-     * Alpha is applied exactly once below through refractedAlpha.
-     * Premultiplying twice was suppressing chromatic separation on the
-     * semi-transparent lattice lines / atom halos.
-     */
-    vec3 separatedRGB = vec3(sampleR.r, sampleG.g, sampleB.b);
-
-    /* Boost only the chromatic difference created by spatially-separated
-       R/G/B samples; neutral grey areas remain neutral. */
-    float neutral = dot(separatedRGB, vec3(0.299, 0.587, 0.114));
-    refracted = clamp(mix(vec3(neutral), separatedRGB, 1.85), 0.0, 1.0);
+    /* Transparent lattice-canvas pixels must not become a grey optical band. */
+    float sampledAlpha = max(sampleR.a, max(sampleG.a, sampleB.a));
+    refracted *= sampledAlpha;
   }
 
-  /*
-   * Critical light-theme fix: transparent regions of the lattice canvas must
-   * contribute ZERO refracted alpha. Previously only RGB was alpha-gated, so
-   * transparent black pixels still produced a broad grey/black optical band.
-   */
-  float refractedAlpha = u_hasBackground * refractField * sampledAlpha * mix(0.58, 0.52, u_theme);
+  /* Keep the refracted copy clear in light mode while preserving visible bend. */
+  float refractedAlpha = u_hasBackground * refractField * mix(0.52, 0.38, u_theme);
 
   vec3 cool = vec3(0.42, 0.69, 1.00);
   vec3 warm = vec3(1.00, 0.80, 0.48);
   vec3 rimDispersion = mix(cool, warm, clamp(0.5 + normal.x * 0.42, 0.0, 1.0));
 
   /* Small range, clean specular response. */
-  vec3 highlight = vec3(0.98) * fresnel * mix(0.108, 0.042, u_theme);
-  highlight += vec3(1.0) * glare * mix(0.43, 0.16, u_theme);
-  highlight += rimDispersion * fresnel * (0.0045 + 0.0080 * glare);
+  vec3 highlight = vec3(0.98) * fresnel * mix(0.108, 0.062, u_theme);
+  highlight += vec3(1.0) * glare * mix(0.43, 0.24, u_theme);
+  highlight += rimDispersion * fresnel * (0.0038 + 0.0065 * glare);
 
   /* Light mode has no glass body tint. Dark mode retains only a trace. */
   vec3 darkTint = vec3(0.025, 0.030, 0.038);
@@ -240,9 +229,8 @@ void main() {
   color += darkTint * darkTintStrength;
   color += highlight;
 
-  float edgeAlpha = fresnel * mix(0.034, 0.014, u_theme) + glare * mix(0.20, 0.085, u_theme);
-  float alpha = refractedAlpha + darkTintStrength * 0.45 + edgeAlpha;
-  alpha = clamp(alpha, 0.0, mix(0.78, 0.50, u_theme));
+  float alpha = refractedAlpha + darkTintStrength * 0.45 + fresnel * 0.034 + glare * 0.20;
+  alpha = clamp(alpha, 0.0, mix(0.78, 0.64, u_theme));
 
   fragColor = vec4(color, alpha);
 }`;
@@ -476,11 +464,11 @@ class SharedGlassRenderer {
 
       if (element.matches(".site-header, .chapter-rail, .mobile-rail-toggle")) {
         refractionPx = 4.7;
-        refractionRange = 10;
+        refractionRange = 8.4;
         fresnelRange = 1.05;
         glareRange = 0.64;
       } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls")) {
-        refractionPx = 8.0;
+        refractionPx = 6.0;
         refractionRange = 10.3;
         fresnelRange = 1.30;
         glareRange = 0.82;

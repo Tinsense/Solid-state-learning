@@ -1,0 +1,133 @@
+﻿/* WebGL2 glass surfaces use the four-pass Liquid Glass Studio renderer. */
+:where(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-fill);
+  box-shadow: inset 0 1px 0 var(--glass-top-edge), inset 0 -1px 0 var(--glass-bottom-edge), 0 12px 38px var(--glass-shadow);
+  backdrop-filter: blur(20px) saturate(128%);
+  -webkit-backdrop-filter: blur(20px) saturate(128%);
+}
+
+.studio-glass-canvas {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.liquid-button .icon,
+.top-action .icon {
+  position: relative;
+  z-index: 3;
+  visibility: visible;
+  opacity: 1;
+}
+
+[data-liquid-glass] > :not(.studio-glass-canvas) {
+  position: relative;
+  z-index: 2;
+  transform: translateZ(0);
+}
+
+[data-liquid-glass="webgl2-studio"] {
+  border-color: transparent !important;
+  background: color-mix(in srgb, var(--glass-fill-optical) 6%, transparent) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(6px) saturate(105%) contrast(1.01) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(105%) contrast(1.01) !important;
+}
+
+.liquid-button.primary[data-liquid-glass="webgl2-studio"] {
+  background: transparent !important;
+  border-color: var(--glass-border) !important;
+  box-shadow: none !important;
+}
+
+.liquid-button,
+.top-action,
+.rail-item {
+  transition: transform var(--fast) var(--ease), background var(--fast), border-color var(--fast), box-shadow var(--fast);
+}
+
+.liquid-button {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.liquid-button:hover,
+.top-action:hover {
+  border-color: var(--glass-border-strong);
+  background: var(--glass-fill-hover);
+}
+
+.liquid-button:active,
+.top-action:active { transform: scale(.98); }
+.liquid-button:disabled { opacity: .38; cursor: not-allowed; transform: none; }
+.liquid-button.primary {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 66%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 64%, var(--glass-border));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 10px 30px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+:root[data-theme="light"] .liquid-button.primary:not([data-liquid-glass="webgl2-studio"]) {
+  background: color-mix(in srgb, var(--accent) 82%, transparent);
+  color: var(--accent-ink);
+}
+.liquid-button.secondary { background: var(--glass-fill-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-button, .top-action, .rail-item { transform: none !important; }
+}
+
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+  :where(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active) { background: var(--bg-elevated); }
+}
+
+/* DARK STUDIO GLASS V1 */
+:root[data-theme="dark"] [data-liquid-glass="webgl2-studio"] {
+  background: rgba(5, 6, 8, 0.045) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(3px) saturate(108%) contrast(1.015) !important;
+  -webkit-backdrop-filter: blur(3px) saturate(108%) contrast(1.015) !important;
+}
+
+/* Keep the actual WebGL optical canvas above the translucent base but behind content. */
+:root[data-theme="dark"] [data-liquid-glass="webgl2-studio"] > .studio-glass-canvas {
+  opacity: 1 !important;
+  filter: saturate(1.08) contrast(1.06);
+}
+
+/* Previous CSS-only hero glare would cover the Studio shader, so disable it. */
+:root[data-theme="dark"] #overview.hero-module::before,
+:root[data-theme="dark"] #overview.hero-module::after {
+  content: none !important;
+}
+
+/* If WebGL2 is unavailable, keep a restrained optical rim fallback. */
+:root[data-theme="dark"] [data-liquid-glass="frosted"] {
+  background: rgba(12, 13, 16, 0.20) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 1px 0 0 rgba(128,176,255,.05),
+    inset -1px 0 0 rgba(255,204,128,.04),
+    0 14px 42px rgba(0,0,0,.22) !important;
+}
+
+/* Remove the header bottom divider while preserving the glass renderer. */
+.site-header {
+  border-bottom-color: transparent !important;
+}

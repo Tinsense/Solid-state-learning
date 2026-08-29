@@ -1,0 +1,96 @@
+/* WebGL2 glass surfaces use the four-pass Liquid Glass Studio renderer. */
+:where(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-fill);
+  box-shadow: inset 0 1px 0 var(--glass-top-edge), inset 0 -1px 0 var(--glass-bottom-edge), 0 12px 38px var(--glass-shadow);
+  backdrop-filter: blur(20px) saturate(128%);
+  -webkit-backdrop-filter: blur(20px) saturate(128%);
+}
+
+.studio-glass-canvas {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.liquid-button .icon,
+.top-action .icon {
+  position: relative;
+  z-index: 3;
+  visibility: visible;
+  opacity: 1;
+}
+
+[data-liquid-glass] > :not(.studio-glass-canvas) {
+  position: relative;
+  z-index: 2;
+  transform: translateZ(0);
+}
+
+[data-liquid-glass="webgl2-studio"] {
+  border-color: transparent !important;
+  background: color-mix(in srgb, var(--glass-fill-optical) 6%, transparent) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(6px) saturate(105%) contrast(1.01) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(105%) contrast(1.01) !important;
+}
+
+.liquid-button.primary[data-liquid-glass="webgl2-studio"] {
+  background: transparent !important;
+  border-color: var(--glass-border) !important;
+  box-shadow: none !important;
+}
+
+.liquid-button,
+.top-action,
+.rail-item {
+  transition: transform var(--fast) var(--ease), background var(--fast), border-color var(--fast), box-shadow var(--fast);
+}
+
+.liquid-button {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.liquid-button:hover,
+.top-action:hover {
+  border-color: var(--glass-border-strong);
+  background: var(--glass-fill-hover);
+}
+
+.liquid-button:active,
+.top-action:active { transform: scale(.98); }
+.liquid-button:disabled { opacity: .38; cursor: not-allowed; transform: none; }
+.liquid-button.primary {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 66%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 64%, var(--glass-border));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 10px 30px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+:root[data-theme="light"] .liquid-button.primary:not([data-liquid-glass="webgl2-studio"]) {
+  background: color-mix(in srgb, var(--accent) 82%, transparent);
+  color: var(--accent-ink);
+}
+.liquid-button.secondary { background: var(--glass-fill-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-button, .top-action, .rail-item { transform: none !important; }
+}
+
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+  :where(.liquid-panel, .liquid-button, .top-action, .chapter-rail, .rail-item.is-active) { background: var(--bg-elevated); }
+}

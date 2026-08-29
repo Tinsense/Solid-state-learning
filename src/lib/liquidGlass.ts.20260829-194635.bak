@@ -5,11 +5,10 @@ import { useEffect } from "react";
  * Liquid Glass Studio (MIT): https://github.com/iyinchao/liquid-glass-studio
  *
  * Key change from the previous site implementation:
- * ONE WebGL2 context renders every visible glass surface in both themes.
- * V3.0: stronger but restrained chromatic dispersion, slightly broader thin rim,
- * v3.1 fixes light-theme transparent-background alpha and strengthens real RGB dispersion.
- * The shared shader renders clear refraction without DOM blur, plus a thin
- * Fresnel rim, compact directional glare and restrained chromatic dispersion.
+ * ONE WebGL2 context renders every visible glass surface in dark mode.
+ * CSS backdrop-filter supplies the real DOM blur; this shared shader adds
+ * the Liquid Glass Studio-style rounded-rect SDF, Fresnel rim, directional
+ * glare and very subtle chromatic dispersion without exhausting WebGL contexts.
  */
 
 const SURFACE_SELECTOR = [
@@ -64,15 +63,8 @@ uniform float u_dpr;
 uniform int u_count;
 uniform vec4 u_rects[MAX_SURFACES];
 uniform float u_radii[MAX_SURFACES];
-uniform vec4 u_optics[MAX_SURFACES];
-uniform float u_flags[MAX_SURFACES];
 uniform vec2 u_pointer;
 uniform float u_time;
-
-/* Actual background-canvas sampling for visible refraction. */
-uniform sampler2D u_background;
-uniform float u_hasBackground;
-uniform float u_theme;
 
 float roundedRectSDF(vec2 p, vec2 halfSize, float radius) {
   vec2 q = abs(p) - halfSize + radius;
@@ -84,11 +76,6 @@ float surfaceSDF(vec2 cssPoint, vec4 rect, float radius) {
   vec2 halfSize = max(rect.zw * 0.5 - vec2(1.0), vec2(1.0));
   float r = min(radius, min(halfSize.x, halfSize.y));
   return roundedRectSDF(cssPoint - center, halfSize, r);
-}
-
-vec2 safeNormalize(vec2 v) {
-  float l = length(v);
-  return l > 0.0001 ? v / l : vec2(1.0, 0.0);
 }
 
 void main() {
@@ -121,128 +108,44 @@ void main() {
 
   vec4 rect = u_rects[chosen];
   float radius = u_radii[chosen];
-  vec4 optics = u_optics[chosen];
-  float surfaceFlag = u_flags[chosen];
   float depth = max(-chosenDistance, 0.0);
 
-  /* SDF normal. */
   float eps = 0.8;
   float dx = surfaceSDF(cssPoint + vec2(eps, 0.0), rect, radius)
            - surfaceSDF(cssPoint - vec2(eps, 0.0), rect, radius);
   float dy = surfaceSDF(cssPoint + vec2(0.0, eps), rect, radius)
            - surfaceSDF(cssPoint - vec2(0.0, eps), rect, radius);
-  vec2 normal = safeNormalize(vec2(dx, dy));
-
-  /*
-   * Flag 1 = site header. Suppress the bottom-facing optical rim entirely so
-   * light mode does not show a long pale divider below the top bar.
-   */
-  float opticalEdgeMask = 1.0;
-  if (surfaceFlag > 0.5 && surfaceFlag < 1.5) {
-    float bottomFacing = smoothstep(0.38, 0.82, normal.y);
-    opticalEdgeMask = 1.0 - bottomFacing;
-  }
+  vec2 normal = normalize(vec2(dx, dy) + vec2(0.00001));
 
   vec2 center = rect.xy + rect.zw * 0.5;
-  vec2 centerDir = safeNormalize(cssPoint - center);
-  vec2 bendDir = safeNormalize(mix(centerDir, normal, 0.78));
-
   float normalAngle = atan(normal.y, normal.x);
   float pointerAngle = atan(center.y - u_pointer.y, u_pointer.x - center.x);
 
-  /*
-   * Per-surface optics. The large content panels remain expressive, while the
-   * site header, chapter rail and controls use much smaller optical ranges.
-   * optics = vec4(refractionPx, refractionRangePx, fresnelRangePx, glareRangePx)
-   */
-  float fresnel = 1.0 - smoothstep(0.0, max(optics.z, 0.35), depth);
-  fresnel = pow(fresnel, 2.10) * opticalEdgeMask;
+  float fresnel = 1.0 - smoothstep(0.0, 16.0, depth);
+  fresnel = pow(fresnel, 1.55);
 
   float facing = 0.5 + 0.5 * cos(normalAngle - pointerAngle);
   float opposite = 0.5 + 0.5 * cos(normalAngle - pointerAngle - PI);
-  float directional = pow(max(facing, opposite * 0.22), 3.8);
-  float glare = directional * (1.0 - smoothstep(0.0, max(optics.w, 0.25), depth));
-  glare *= (0.97 + 0.03 * sin(u_time * 0.42 + normalAngle * 1.9 + float(chosen) * 0.41)) * opticalEdgeMask;
+  float directional = pow(max(facing, opposite * 0.20), 7.0);
+  float glare = directional * (1.0 - smoothstep(0.0, 10.0, depth));
 
-  /* Refraction is now local to the edge instead of spanning ~46 px inward. */
-  float refractField = 1.0 - smoothstep(0.8, max(optics.y, 2.0), depth);
-  refractField = pow(refractField, 1.30) * opticalEdgeMask;
+  float shimmer = 0.82 + 0.18 * sin(u_time * 0.55 + normalAngle * 2.3 + float(chosen) * 0.41);
+  glare *= shimmer;
 
-  float refractionPx = optics.x * refractField;
-  vec2 pxToUV = vec2(1.0 / max(u_viewport.x, 1.0), 1.0 / max(u_viewport.y, 1.0));
-  vec2 refractionUV = bendDir * refractionPx * pxToUV;
+  // Very subtle Liquid Glass Studio-like edge dispersion.
+  vec3 cool = vec3(0.40, 0.66, 1.00);
+  vec3 warm = vec3(1.00, 0.76, 0.40);
+  vec3 dispersion = mix(cool, warm, clamp(0.5 + normal.x * 0.42, 0.0, 1.0));
+  float chroma = fresnel * (0.018 + 0.045 * glare);
 
-  /*
-   * Canvas texture is uploaded with UNPACK_FLIP_Y_WEBGL=true,
-   * therefore gl_FragCoord-normalized UV aligns directly to the viewport.
-   */
-  vec2 baseUV = vec2(
-    gl_FragCoord.x / (u_dpr * max(u_viewport.x, 1.0)),
-    gl_FragCoord.y / (u_dpr * max(u_viewport.y, 1.0))
-  );
-  baseUV = clamp(baseUV, vec2(0.001), vec2(0.999));
+  vec3 color = vec3(0.78) * fresnel * 0.12;
+  color += vec3(1.0) * glare * 0.72;
+  color += dispersion * chroma;
 
-  vec3 refracted = vec3(0.0);
-  float sampledAlpha = 0.0;
-  if (u_hasBackground > 0.5) {
-    /*
-     * Real RGB dispersion. The channels sample three genuinely different
-     * background positions, so the split is visible on lattice lines/atoms
-     * without creating a synthetic coloured outline around empty glass.
-     */
-    float dispersionPx = min(6.0, optics.x * 0.30) * refractField;
-    vec2 dispersionUV = bendDir * dispersionPx * pxToUV;
-
-    vec2 uvR = clamp(baseUV + refractionUV * 1.30 + dispersionUV, vec2(0.001), vec2(0.999));
-    vec2 uvG = clamp(baseUV + refractionUV,                  vec2(0.001), vec2(0.999));
-    vec2 uvB = clamp(baseUV + refractionUV * 0.70 - dispersionUV, vec2(0.001), vec2(0.999));
-
-    vec4 sampleR = texture(u_background, uvR);
-    vec4 sampleG = texture(u_background, uvG);
-    vec4 sampleB = texture(u_background, uvB);
-    sampledAlpha = max(sampleR.a, max(sampleG.a, sampleB.a));
-
-    /*
-     * Do NOT premultiply the separated RGB by sampledAlpha here.
-     * Alpha is applied exactly once below through refractedAlpha.
-     * Premultiplying twice was suppressing chromatic separation on the
-     * semi-transparent lattice lines / atom halos.
-     */
-    vec3 separatedRGB = vec3(sampleR.r, sampleG.g, sampleB.b);
-
-    /* Boost only the chromatic difference created by spatially-separated
-       R/G/B samples; neutral grey areas remain neutral. */
-    float neutral = dot(separatedRGB, vec3(0.299, 0.587, 0.114));
-    refracted = clamp(mix(vec3(neutral), separatedRGB, 1.85), 0.0, 1.0);
-  }
-
-  /*
-   * Critical light-theme fix: transparent regions of the lattice canvas must
-   * contribute ZERO refracted alpha. Previously only RGB was alpha-gated, so
-   * transparent black pixels still produced a broad grey/black optical band.
-   */
-  float refractedAlpha = u_hasBackground * refractField * sampledAlpha * mix(0.58, 0.52, u_theme);
-
-  vec3 cool = vec3(0.42, 0.69, 1.00);
-  vec3 warm = vec3(1.00, 0.80, 0.48);
-  vec3 rimDispersion = mix(cool, warm, clamp(0.5 + normal.x * 0.42, 0.0, 1.0));
-
-  /* Small range, clean specular response. */
-  vec3 highlight = vec3(0.98) * fresnel * mix(0.108, 0.042, u_theme);
-  highlight += vec3(1.0) * glare * mix(0.43, 0.16, u_theme);
-  highlight += rimDispersion * fresnel * (0.0045 + 0.0080 * glare);
-
-  /* Light mode has no glass body tint. Dark mode retains only a trace. */
-  vec3 darkTint = vec3(0.025, 0.030, 0.038);
-  float darkTintStrength = (1.0 - u_theme) * 0.024;
-
-  vec3 color = refracted * refractedAlpha;
-  color += darkTint * darkTintStrength;
-  color += highlight;
-
-  float edgeAlpha = fresnel * mix(0.034, 0.014, u_theme) + glare * mix(0.20, 0.085, u_theme);
-  float alpha = refractedAlpha + darkTintStrength * 0.45 + edgeAlpha;
-  alpha = clamp(alpha, 0.0, mix(0.78, 0.50, u_theme));
+  // Keep the body almost black/transparent; the DOM's backdrop-filter does the blur.
+  float body = 0.018;
+  float alpha = body + fresnel * 0.10 + glare * 0.58;
+  alpha = clamp(alpha, 0.0, 0.78);
 
   fragColor = vec4(color, alpha);
 }`;
@@ -354,7 +257,6 @@ class SharedGlassRenderer {
   private program: ProgramInfo;
   private vao: WebGLVertexArrayObject;
   private buffer: WebGLBuffer;
-  private backgroundTexture: WebGLTexture;
   private pointerX = window.innerWidth * 0.72;
   private pointerY = window.innerHeight * 0.18;
 
@@ -385,31 +287,6 @@ class SharedGlassRenderer {
     if (!vao || !buffer) throw new Error("Unable to create shared WebGL geometry");
     this.vao = vao;
     this.buffer = buffer;
-
-    const backgroundTexture = gl.createTexture();
-    if (!backgroundTexture) throw new Error("Unable to create background texture");
-    this.backgroundTexture = backgroundTexture;
-
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-    /* 1x1 transparent fallback until the actual lattice canvas is available. */
-    gl.texImage2D(
-      gl.TEXTURE_2D,
-      0,
-      gl.RGBA,
-      1,
-      1,
-      0,
-      gl.RGBA,
-      gl.UNSIGNED_BYTE,
-      new Uint8Array([0, 0, 0, 0])
-    );
 
     gl.bindVertexArray(vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -452,8 +329,6 @@ class SharedGlassRenderer {
 
     const rectData = new Float32Array(MAX_SURFACES * 4);
     const radiusData = new Float32Array(MAX_SURFACES);
-    const opticsData = new Float32Array(MAX_SURFACES * 4);
-    const flagData = new Float32Array(MAX_SURFACES);
 
     visible.forEach(({ element, rect }, index) => {
       rectData[index * 4] = rect.left;
@@ -462,74 +337,7 @@ class SharedGlassRenderer {
       rectData[index * 4 + 3] = rect.height;
       const cssRadius = Number.parseFloat(getComputedStyle(element).borderRadius) || 18;
       radiusData[index] = Math.max(2, Math.min(cssRadius, rect.width * 0.5, rect.height * 0.5));
-
-      /*
-       * Optical hierarchy:
-       * - header / chapter rail: deliberately restrained
-       * - buttons / compact controls: modest
-       * - large teaching modules: visible but still local to the edge
-       */
-      let refractionPx = 11.2;
-      let refractionRange = 19.0;
-      let fresnelRange = 1.95;
-      let glareRange = 1.18;
-
-      if (element.matches(".site-header, .chapter-rail, .mobile-rail-toggle")) {
-        refractionPx = 4.7;
-        refractionRange = 10;
-        fresnelRange = 1.05;
-        glareRange = 0.64;
-      } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls")) {
-        refractionPx = 8.0;
-        refractionRange = 10.3;
-        fresnelRange = 1.30;
-        glareRange = 0.82;
-      } else if (element.matches(".source-note")) {
-        refractionPx = 6.9;
-        refractionRange = 11.8;
-        fresnelRange = 1.40;
-        glareRange = 0.88;
-      }
-
-      opticsData[index * 4] = refractionPx;
-      opticsData[index * 4 + 1] = refractionRange;
-      opticsData[index * 4 + 2] = fresnelRange;
-      opticsData[index * 4 + 3] = glareRange;
-      flagData[index] = element.matches(".site-header") ? 1.0 : 0.0;
     });
-
-    /*
-     * Upload the actual full-screen lattice/background canvas as a texture.
-     * This is what makes refraction real rather than a simulated bright rim.
-     */
-    const backgroundCanvas = document.querySelector<HTMLCanvasElement>(
-      "canvas.lattice-atmosphere, canvas[data-testid='lattice-atmosphere']"
-    );
-    let hasBackground = 0;
-
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, this.backgroundTexture);
-    if (
-      backgroundCanvas &&
-      backgroundCanvas !== this.canvas &&
-      backgroundCanvas.width > 1 &&
-      backgroundCanvas.height > 1
-    ) {
-      try {
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(
-          gl.TEXTURE_2D,
-          0,
-          gl.RGBA,
-          gl.RGBA,
-          gl.UNSIGNED_BYTE,
-          backgroundCanvas
-        );
-        hasBackground = 1;
-      } catch {
-        hasBackground = 0;
-      }
-    }
 
     gl.viewport(0, 0, width, height);
     gl.clearColor(0, 0, 0, 0);
@@ -541,16 +349,8 @@ class SharedGlassRenderer {
     gl.uniform1i(uniform(gl, this.program, "u_count"), visible.length);
     gl.uniform4fv(uniform(gl, this.program, "u_rects[0]"), rectData);
     gl.uniform1fv(uniform(gl, this.program, "u_radii[0]"), radiusData);
-    gl.uniform4fv(uniform(gl, this.program, "u_optics[0]"), opticsData);
-    gl.uniform1fv(uniform(gl, this.program, "u_flags[0]"), flagData);
     gl.uniform2f(uniform(gl, this.program, "u_pointer"), this.pointerX, this.pointerY);
     gl.uniform1f(uniform(gl, this.program, "u_time"), time);
-    gl.uniform1i(uniform(gl, this.program, "u_background"), 0);
-    gl.uniform1f(uniform(gl, this.program, "u_hasBackground"), hasBackground);
-    gl.uniform1f(
-      uniform(gl, this.program, "u_theme"),
-      document.documentElement.dataset.theme === "light" ? 1 : 0
-    );
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     gl.bindVertexArray(null);
   }
@@ -560,7 +360,6 @@ class SharedGlassRenderer {
     gl.deleteProgram(this.program.program);
     gl.deleteBuffer(this.buffer);
     gl.deleteVertexArray(this.vao);
-    gl.deleteTexture(this.backgroundTexture);
     this.canvas.remove();
     gl.getExtension("WEBGL_lose_context")?.loseContext();
   }
@@ -666,12 +465,12 @@ export function useLiquidGlassSystem() {
     let disposed = false;
 
     const syncElements = () => {
-      elements = Array.from(document.querySelectorAll<HTMLElement>(SURFACE_SELECTOR))
-        .filter((element) => !element.matches(".hero-lead, .hero-lead-glass"));
+      elements = Array.from(document.querySelectorAll<HTMLElement>(SURFACE_SELECTOR));
+      const dark = document.documentElement.dataset.theme === "dark";
       elements.forEach((element) => {
-        element.dataset.liquidGlass = renderer ? "shared-webgl2" : "frosted";
+        element.dataset.liquidGlass = dark && renderer ? "shared-webgl2" : "frosted";
       });
-      document.documentElement.dataset.glassEngine = renderer ? "shared-webgl2" : "frosted";
+      document.documentElement.dataset.glassEngine = dark && renderer ? "shared-webgl2" : "frosted";
     };
 
     if (supportsStudioGlass()) {
@@ -686,9 +485,10 @@ export function useLiquidGlassSystem() {
     const render = (timestamp: number) => {
       frame = 0;
       if (disposed) return;
-      if (renderer) renderer.canvas.style.display = "block";
+      const dark = document.documentElement.dataset.theme === "dark";
+      if (renderer) renderer.canvas.style.display = dark ? "block" : "none";
 
-      if (renderer) {
+      if (dark && renderer) {
         if (motion.matches || timestamp - lastPaint >= 40) {
           lastPaint = timestamp;
           renderer.render(elements, motion.matches ? 0 : timestamp / 1000);
@@ -705,7 +505,7 @@ export function useLiquidGlassSystem() {
 
     const onPointerMove = (event: PointerEvent) => {
       renderer?.setPointer(event.clientX, event.clientY);
-      if (!frame) frame = requestAnimationFrame(render);
+      if (document.documentElement.dataset.theme === "dark" && !frame) frame = requestAnimationFrame(render);
     };
 
     const mutation = new MutationObserver(schedule);
@@ -738,7 +538,3 @@ export function useLiquidGlassSystem() {
     };
   }, []);
 }
-
-
-
-

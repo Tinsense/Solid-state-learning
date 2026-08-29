@@ -107,7 +107,7 @@ function App() {
           <div className="hero-copy">
             <p className="overline">INTERACTIVE ELECTRONIC TEXTBOOK · 中文精讲</p>
             <h1>从一条势能曲线，<br/><span>听见晶体的声音。</span></h1>
-            <p className="hero-lead">结合决定平衡距离，势阱曲率决定弹性，弹性与密度共同决定声速。这是 Kittel 第三章真正贯穿始终的物理主线。</p>
+            <p className="hero-lead liquid-panel hero-lead-glass">结合决定平衡距离，势阱曲率决定弹性，弹性与密度共同决定声速。这是 Kittel 第三章真正贯穿始终的物理主线。</p>
             <div className="hero-actions"><button className="liquid-button primary hero-start-glass" type="button" onClick={() => go("binding")}><span>开始学习</span><Icon name="arrow"/></button><button className="liquid-button secondary hero-map-glass" type="button" onClick={() => go("map")}><span>先看知识地图</span></button></div>
           </div>
           <div className="hero-lattice" aria-label="三维晶格和穿过其中的弹性波抽象动画" role="img">
@@ -201,11 +201,6 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
 
 
 
