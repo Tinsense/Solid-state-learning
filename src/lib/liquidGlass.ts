@@ -42,6 +42,8 @@ const SURFACE_SELECTOR = [
   ".lab-grid",
   ".compact-lab",
   ".lj-lab",
+  ".companion-lab",
+  ".chapter-switcher",
   ".text-button"
 ].join(",");
 
@@ -738,7 +740,6 @@ export function useLiquidGlassSystem() {
     };
   }, []);
 }
-
 
 
 

@@ -2035,3 +2035,193 @@ html[data-theme="light"] .site-header::after {
   display: none !important;
 }
 
+
+/* =========================================================
+   FINAL FIX · HEADER + LONDON FIGURE
+   ========================================================= */
+
+/* Remove every CSS-generated horizontal highlight from light header */
+html[data-theme="light"] .site-header,
+html:not([data-theme="dark"]) .site-header {
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+html[data-theme="light"] .site-header::before,
+html[data-theme="light"] .site-header::after,
+html:not([data-theme="dark"]) .site-header::before,
+html:not([data-theme="dark"]) .site-header::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* r^-6 / London dispersion figure text */
+.lab-visual .london-atom text,
+.lab-visual .measure-label {
+  fill: var(--text-secondary) !important;
+}
+
+html[data-theme="light"] .lab-visual .london-atom text,
+html[data-theme="light"] .lab-visual .measure-label {
+  fill: #4f5866 !important;
+}
+
+html[data-theme="dark"] .lab-visual .london-atom text,
+html[data-theme="dark"] .lab-visual .measure-label {
+  fill: #c6ccd5 !important;
+}
+
+/* =========================================================
+   MULTI-CHAPTER READER · CHAPTERS 01 / 02 / 04 / 05
+   ========================================================= */
+
+.site-header { grid-template-columns: 230px auto minmax(120px,1fr) auto; gap: 12px; }
+.companion-header { grid-template-columns: 230px minmax(230px,1fr) auto; }
+.companion-header .header-actions { justify-self: end; }
+.companion-header .chapter-title { justify-self: auto; }
+
+.chapter-switcher {
+  display: grid;
+  grid-template-columns: repeat(5,minmax(0,1fr));
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  background: rgba(255,255,255,.10);
+}
+.chapter-switcher a {
+  min-width: 0;
+  min-height: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 5px 7px;
+  border-radius: 13px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color var(--fast),background var(--fast),transform var(--fast);
+}
+.chapter-switcher a:hover { color: var(--text); background: var(--surface); transform: translateY(-1px); }
+.chapter-switcher a.is-current { color: var(--text); background: var(--surface-strong); }
+.chapter-switcher a span { font: 600 .68rem ui-monospace,SFMono-Regular,Consolas,monospace; }
+.chapter-switcher a small { max-width: 100%; font-size: .52rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chapter-switcher.is-compact { width: 244px; grid-template-columns: repeat(5,1fr); border-radius: 15px; }
+.chapter-switcher.is-compact a { min-height: 36px; padding: 3px; border-radius: 10px; }
+.companion-rail > .chapter-switcher,.chapter-rail > .chapter-switcher { margin: -9px 3px 14px; }
+.chapter-rail > .chapter-switcher a { min-height: 34px; }
+.chapter-rail > .chapter-switcher a small { display: none; }
+
+.companion-main { min-height: 100dvh; }
+.companion-hero {
+  min-height: 100svh;
+  padding: 175px 0 70px;
+  display: grid;
+  grid-template-columns: minmax(0,1.18fr) minmax(310px,.82fr);
+  grid-template-rows: 1fr auto auto;
+  gap: 36px 55px;
+  align-items: center;
+}
+.companion-hero h1 { margin: 18px 0 35px; font-size: clamp(3.4rem,6.8vw,7.4rem); line-height: .94; letter-spacing: -.065em; }
+.companion-hero h1 span:last-child { color: var(--text-secondary); }
+.companion-hero .hero-lead { max-width: 760px; }
+.companion-hero .hero-metrics { grid-column: 1/-1; margin-top: 0; }
+.companion-hero .source-note { grid-column: 1/-1; margin-top: 0; }
+.chapter-orbit {
+  position: relative;
+  width: min(34vw,430px);
+  aspect-ratio: 1;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  animation: orbit-breathe 6s ease-in-out infinite;
+}
+.chapter-orbit::before,.chapter-orbit::after { content:""; position:absolute; inset:14%; border:1px solid var(--hairline); border-radius:50%; transform:rotate(35deg) scaleY(.42); }
+.chapter-orbit::after { transform:rotate(-35deg) scaleY(.42); }
+.chapter-orbit > span { font-size: clamp(6rem,12vw,11rem); font-weight: 200; color: var(--text); letter-spacing: -.08em; }
+.chapter-orbit > i { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--text); box-shadow:0 0 0 10px var(--surface); }
+.chapter-orbit > i:nth-of-type(1){left:8%;top:48%}.chapter-orbit > i:nth-of-type(2){right:15%;top:18%}.chapter-orbit > i:nth-of-type(3){right:7%;bottom:28%}
+.chapter-orbit > b { position:absolute; bottom:-34px; max-width:90%; color:var(--text-tertiary); font-size:.62rem; font-weight:500; letter-spacing:.13em; text-transform:uppercase; text-align:center; }
+@keyframes orbit-breathe { 50% { transform:rotate(2deg) scale(1.02); } }
+.companion-first-unit { border-top: 0; }
+
+.companion-lab {
+  width: min(100%,980px);
+  margin: 80px auto;
+  padding: 30px;
+  border: 1px solid var(--glass-border);
+  border-radius: 26px;
+  background: rgba(255,255,255,.10);
+}
+.companion-lab__head { display:flex; align-items:flex-start; justify-content:space-between; gap:22px; margin-bottom:25px; }
+.companion-lab__head h3 { margin:8px 0 0; }
+.companion-lab__grid { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(250px,.75fr); min-height:310px; border-top:1px solid var(--hairline); }
+.companion-lab__grid > svg { width:100%; height:100%; min-height:300px; padding:24px; overflow:visible; }
+.lab-readout,.lab-sliders { display:flex; flex-direction:column; justify-content:center; gap:22px; padding:34px; border-left:1px solid var(--hairline); }
+.lab-readout > p { margin:0; color:var(--text); font-size:1.2rem; }
+.lab-readout dl { margin:0; }
+.lab-readout dl div { display:flex; justify-content:space-between; gap:20px; padding:12px 0; border-top:1px solid var(--hairline); }
+.lab-readout dt { color:var(--text-tertiary); font-size:.7rem; }.lab-readout dd { margin:0; text-align:right; font: .76rem ui-monospace,monospace; }
+.lab-sliders label { display:grid; grid-template-columns:1fr auto; gap:10px; color:var(--text-secondary); font-size:.72rem; }
+.lab-sliders label span { display:contents; }.lab-sliders label b { color:var(--text); font:500 .75rem ui-monospace,monospace; }
+.lab-sliders input[type="range"] { grid-column:1/-1; width:100%; height:26px; accent-color:var(--accent); }
+.lab-sliders p { margin:0; color:var(--text-secondary); font-size:.78rem; line-height:1.7; }
+.lab-value { color:var(--text); font:500 1rem ui-monospace,SFMono-Regular,Consolas,monospace; white-space:nowrap; }
+
+.crystal-cube line,.cube-wire,.lattice-plane-line,.axis { fill:none; stroke:var(--hairline-strong); stroke-width:1; }
+.atom-halo { fill:var(--surface-strong); }.atom-core { fill:var(--text); }
+.miller-cube polygon { fill:color-mix(in srgb,var(--accent) 22%,transparent); stroke:var(--accent); stroke-width:1.5; }
+.miller-cube text,.bragg-stage text,.reciprocal-stage text,.dispersion-stage text { fill:var(--text-tertiary); font:11px ui-monospace,monospace; }
+.ray,.angle-arc,.spacing-mark,.k-vector { fill:none; stroke:var(--accent); stroke-width:1.7; }
+.spacing-mark { stroke:var(--text-tertiary); }.reciprocal-stage circle { fill:var(--text-secondary); }
+.reciprocal-stage .ewald-circle { fill:none; stroke:var(--accent); stroke-width:1.5; }
+.dispersion { fill:none; stroke-width:2; }.dispersion.acoustic { stroke:var(--accent); }.dispersion.optical { stroke:var(--text-secondary); stroke-dasharray:7 6; }
+.cursor { stroke:var(--text-tertiary); stroke-dasharray:3 5; }.legend-dot { display:inline-block; width:14px; height:2px; margin-right:7px; vertical-align:middle; background:var(--accent); }.legend-dot.optical { background:var(--text-secondary); }
+.thermal-stage circle { fill:var(--surface-strong); stroke:var(--text-tertiary); }.phonon-path { fill:none; stroke:var(--accent); stroke-width:2; stroke-dasharray:7 6; animation:dash-flow 2.8s linear infinite; }
+
+/* Root and both full-screen canvases overdraw by two pixels to avoid a
+   sub-pixel seam at the viewport edge on high-DPI mobile browsers. */
+html,body,#root { border:0; outline:0; }
+.site-header[data-liquid-glass] { z-index:100 !important; }
+.chapter-rail[data-liquid-glass] { z-index:250 !important; }
+.mobile-rail-toggle[data-liquid-glass] { z-index:260 !important; }
+.search-panel[data-liquid-glass] { z-index:501 !important; }
+
+@media (max-width:1180px) {
+  .site-header { grid-template-columns:200px auto 1fr auto; }
+  .companion-header { grid-template-columns:200px minmax(210px,1fr) auto; }
+  .site-header > .chapter-title { display:none; }
+}
+@media (max-width:900px) {
+  .site-header,.companion-header { grid-template-columns:1fr auto; }
+  .site-header > .chapter-switcher,.companion-header > .chapter-switcher { display:none; }
+  .companion-hero { min-height:auto; padding-top:130px; grid-template-columns:1fr; grid-template-rows:auto auto auto auto; }
+  .chapter-orbit { width:min(70vw,420px); margin:30px auto 50px; }
+  .companion-lab__grid { grid-template-columns:1fr; }
+  .lab-readout,.lab-sliders { border-left:0; border-top:1px solid var(--hairline); }
+}
+@media (max-width:620px) {
+  .companion-hero { width:calc(100% - 28px); padding-top:118px; gap:20px; }
+  .companion-hero h1 { font-size:clamp(2.75rem,14vw,4.2rem); line-height:.98; }
+  .companion-hero .hero-actions { width:100%; gap:10px; }
+  .companion-hero .hero-actions button { width:100%; justify-content:center; }
+  .chapter-orbit { width:min(76vw,330px); }
+  .companion-lab { margin:58px auto; padding:18px 12px; border-radius:20px; }
+  .companion-lab__head { flex-direction:column; padding:0 6px; }
+  .companion-lab__head .segmented { width:100%; }
+  .companion-lab__grid > svg { min-height:245px; padding:10px 2px; }
+  .lab-readout,.lab-sliders { padding:24px 14px; }
+  .companion-rail > .chapter-switcher,.chapter-rail > .chapter-switcher { display:grid; }
+}
+
+@media (prefers-reduced-motion:reduce) { .chapter-orbit { animation:none; } }
+

@@ -78,7 +78,7 @@
 }
 
 * { box-sizing: border-box; }
-html { max-width: 100%; scroll-behavior: smooth; background: var(--bg); overflow-x: clip; }
+html { width: 100%; min-height: 100%; max-width: 100%; margin: 0; padding: 0; scroll-behavior: smooth; background: var(--bg); overflow-x: clip; }
 body {
   width: 100%;
   max-width: 100%;
@@ -95,6 +95,7 @@ body {
   overflow-x: clip;
   transition: background-color var(--panel) var(--ease), color var(--panel) var(--ease);
 }
+#root { width: 100%; min-height: 100dvh; margin: 0; padding: 0; background: var(--bg); overflow-x: clip; }
 button, input { font: inherit; }
 button { color: inherit; }
 button, a, input { touch-action: manipulation; }

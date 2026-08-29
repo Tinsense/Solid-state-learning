@@ -6,6 +6,9 @@ import { ConceptCheck, Exercise, ReadingCallout, SectionHeader, SourceNote } fro
 import { BondingStage, DensityBonding, ElasticConstantsLab, ElasticWaveExplorer, InverseElasticLab, IonicLattice, KnowledgeMap, LennardJonesLab, LondonInteraction, MadelungChain, PauliLab, RadiiExplorer, StrainExplorer } from "./components/Figures";
 import { LatticeAtmosphere } from "./components/LatticeAtmosphere";
 import { useLiquidGlassSystem } from "./lib/liquidGlass";
+import { ChapterSwitcher } from "./components/ChapterSwitcher";
+import { CompanionChapterPage } from "./components/CompanionChapterPage";
+import { companionChapters } from "./content/companionChapters";
 
 const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "arrow" }) => {
   const paths = {
@@ -21,7 +24,7 @@ const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "
 
 const prose = (items: string[]) => <div className="prose">{items.map((text) => <p key={text}>{text}</p>)}</div>;
 
-function App() {
+function ChapterThreeApp() {
   useLiquidGlassSystem();
   const [theme, setTheme] = useState<"dark" | "light">(() => (localStorage.getItem("kittel-theme") as "dark" | "light") || "dark");
   const [active, setActive] = useState("overview");
@@ -83,6 +86,7 @@ function App() {
           <span className="brand-glyph" aria-hidden="true"><i/><i/><i/><i/></span>
           <span><strong>晶格</strong><small>KITTEL · CHAPTER 03</small></span>
         </button>
+        <ChapterSwitcher current={3} compact/>
         <div className="chapter-title"><span>03</span><p>Crystal Binding<br/>and Elastic Constants</p></div>
         <div className="header-actions">
           <button className="top-action" type="button" onClick={() => setSearchOpen(true)} aria-label="搜索知识点"><Icon name="search"/><span>搜索</span><kbd>⌘ K</kbd></button>
@@ -98,6 +102,7 @@ function App() {
 
       <aside className={`chapter-rail ${railOpen ? "is-open" : ""}`} id="chapter-rail" aria-label="第三章目录">
         <div className="rail-label"><span>CH.</span><strong>03</strong></div>
+        <ChapterSwitcher current={3}/>
         <nav>{sections.map((item) => <button key={item.id} type="button" className={`rail-item ${active === item.id ? "is-active" : ""}`} onClick={() => go(item.id)}><span>{item.index}</span><span>{item.title}<small>{item.english}</small></span></button>)}</nav>
         <div className="rail-footer"><span>Based on</span><strong>Kittel · 8th ed.</strong><small>pp. 47–89</small></div>
       </aside>
@@ -198,6 +203,14 @@ function App() {
       {searchOpen && <div className="search-overlay" role="dialog" aria-modal="true" aria-label="搜索知识点"><button className="search-backdrop" type="button" onClick={()=>setSearchOpen(false)} aria-label="关闭搜索"/><div className="search-panel liquid-panel"><div className="search-input"><Icon name="search"/><input ref={searchRef} value={query} onChange={e=>setQuery(e.target.value)} placeholder="搜索 London、Madelung、剪切应变…"/><button type="button" onClick={()=>setSearchOpen(false)}><Icon name="close"/></button></div><div className="search-results">{!query && <p>试试：<button onClick={()=>setQuery("Madelung")}>Madelung</button><button onClick={()=>setQuery("声速")}>声速</button><button onClick={()=>setQuery("剪切")}>剪切</button></p>}{query && searchResults.length===0 && <p>没有找到匹配内容。</p>}{searchResults.map(item=><button type="button" key={item.id} onClick={()=>go(item.id)}><span>{item.title}</span><small>{item.text}</small><Icon name="arrow"/></button>)}</div></div></div>}
     </>
   );
+}
+
+function App() {
+  const requested = Number(new URLSearchParams(window.location.search).get("chapter") || 3);
+  if (requested === 1 || requested === 2 || requested === 4 || requested === 5) {
+    return <CompanionChapterPage chapter={companionChapters[requested]}/>;
+  }
+  return <ChapterThreeApp/>;
 }
 
 export default App;

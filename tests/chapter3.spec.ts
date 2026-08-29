@@ -64,27 +64,24 @@ test("页面在当前视口没有整体横向滚动", async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
-test("晶格场、正文模块与任务栏使用 Studio WebGL2 玻璃", async ({ page }, testInfo) => {
+test("晶格场、正文模块与任务栏使用共享 Studio WebGL2 玻璃", async ({ page }, testInfo) => {
   await page.goto("/");
-  await expect(page.locator("html")).toHaveAttribute("data-glass-engine", "webgl2-studio");
+  await expect(page.locator("html")).toHaveAttribute("data-glass-engine", "shared-webgl2");
   const scene = page.getByTestId("lattice-atmosphere");
-  await expect(scene).toHaveAttribute("data-scene-engine", "webgl2-shared-scene");
+  await expect(scene).toBeVisible();
   const header = page.locator(".site-header");
-  await expect(header).toHaveAttribute("data-liquid-glass", "webgl2-studio");
-  await expect(header).toHaveAttribute("data-scene-source", "shared-lattice-field");
-  const canvas = header.locator(":scope > .studio-glass-canvas");
+  await expect(header).toHaveAttribute("data-liquid-glass", "shared-webgl2");
+  const canvas = page.locator(".studio-glass-shared-canvas");
   await expect(canvas).toBeVisible();
   expect(await canvas.evaluate((element: HTMLCanvasElement) => element.width * element.height)).toBeGreaterThan(1);
 
   const primary = page.getByRole("button", { name: /开始学习/ });
-  await expect(primary).toHaveAttribute("data-liquid-glass", "webgl2-studio");
-  await expect(primary).toHaveAttribute("data-scene-source", "shared-lattice-field");
+  await expect(primary).toHaveAttribute("data-liquid-glass", "shared-webgl2");
 
   const segmented = page.locator(".segmented").first();
   await segmented.scrollIntoViewIfNeeded();
   const figure = segmented.locator("xpath=ancestor::figure");
-  await expect(figure).toHaveAttribute("data-liquid-glass", "webgl2-studio");
-  await expect(figure).toHaveAttribute("data-scene-source", "shared-lattice-field");
+  await expect(figure).toHaveAttribute("data-liquid-glass", "shared-webgl2");
   expect(await figure.evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(");
   const metrics = await segmented.evaluate((element) => ({
     overflowX: getComputedStyle(element).overflowX,
@@ -105,4 +102,37 @@ test("晶格场、正文模块与任务栏使用 Studio WebGL2 玻璃", async ({
     expect(position.bottomGap).toBeGreaterThanOrEqual(8);
     await expect(page.getByRole("heading", { name: /从一条势能曲线/ })).toBeVisible();
   }
+});
+
+for (const chapter of [1, 2, 4, 5]) {
+  test(`第 ${chapter} 章可进入、推导可展开且无横向溢出`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+    await page.goto(`/?chapter=${chapter}`);
+    await expect(page.locator(".companion-hero h1")).toBeVisible();
+    await expect(page.locator(".chapter-switcher a.is-current").first()).toContainText(String(chapter).padStart(2, "0"));
+    const derivation = page.locator(".derivation").first();
+    await derivation.getByRole("button", { name: /逐步展开推导/ }).click();
+    await expect(derivation.locator(".derivation-step")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+    expect(errors).toEqual([]);
+  });
+}
+
+test("页面四边与根背景连续，没有默认白边", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
+  await page.goto("/?chapter=1");
+  const root = await page.evaluate(() => ({
+    htmlMargin: getComputedStyle(document.documentElement).margin,
+    bodyMargin: getComputedStyle(document.body).margin,
+    rootWidth: document.getElementById("root")!.getBoundingClientRect().width,
+    viewport: window.innerWidth,
+    lattice: (() => { const r = document.querySelector(".lattice-atmosphere")!.getBoundingClientRect(); return { left: r.left, top: r.top, right: r.right, bottom: r.bottom }; })()
+  }));
+  expect(root.htmlMargin).toBe("0px");
+  expect(root.bodyMargin).toBe("0px");
+  expect(Math.abs(root.rootWidth - root.viewport)).toBeLessThanOrEqual(1);
+  expect(root.lattice.left).toBeLessThanOrEqual(-1);
+  expect(root.lattice.top).toBeLessThanOrEqual(-1);
+  expect(root.lattice.right).toBeGreaterThanOrEqual(root.viewport + 1);
 });
