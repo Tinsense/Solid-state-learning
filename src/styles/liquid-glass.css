@@ -29,10 +29,10 @@
 
 [data-liquid-glass="webgl2-studio"] {
   border-color: transparent !important;
-  background: transparent !important;
+  background: color-mix(in srgb, var(--glass-fill-optical) 12%, transparent) !important;
   box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: blur(10px) saturate(110%) contrast(1.01) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(110%) contrast(1.01) !important;
 }
 
 .liquid-button,

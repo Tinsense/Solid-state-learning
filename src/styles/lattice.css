@@ -3,7 +3,7 @@
   isolation: isolate;
 }
 
-.crystal-atmosphere {
+.lattice-atmosphere {
   position: fixed;
   z-index: 0;
   inset: 0;
@@ -19,5 +19,5 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .crystal-atmosphere { will-change: auto; }
+  .lattice-atmosphere { will-change: auto; }
 }

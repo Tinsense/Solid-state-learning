@@ -205,10 +205,10 @@ main { margin-left: 232px; }
 /* Liquid Glass Studio canvas must remain the visible material layer. */
 [data-liquid-glass="webgl2-studio"] {
   border-color: transparent !important;
-  background: transparent !important;
+  background: color-mix(in srgb, var(--glass-fill-optical) 12%, transparent) !important;
   box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: blur(10px) saturate(110%) contrast(1.01) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(110%) contrast(1.01) !important;
 }
 
 @media (max-width: 900px) {
@@ -253,4 +253,117 @@ main { margin-left: 232px; }
   .hero h1 { font-size: clamp(2.5rem, 10.8vw, 3rem); line-height: .97; }
   .hero-lead { font-size: 1rem; line-height: 1.7; }
   .hero-actions { margin-top: 30px; }
+}
+
+/* Chapter modules: translucent in both themes and backed by the shared lattice scene. */
+.section-header,
+.content-section > .prose,
+.feature-figure,
+.formula-card,
+.derivation,
+.reading-callout,
+.concept-check,
+.unit-switch-panel,
+.split-explanation,
+.inverse-lab,
+.knowledge-map,
+.chapter-summary,
+.exercise-card,
+.completion-panel,
+.source-note {
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--glass-fill) 38%, transparent);
+  box-shadow: 0 14px 42px var(--glass-shadow);
+  backdrop-filter: blur(10px) saturate(110%) contrast(1.01);
+  -webkit-backdrop-filter: blur(10px) saturate(110%) contrast(1.01);
+}
+
+.section-header {
+  padding: 32px;
+  margin-bottom: 54px;
+}
+
+.content-section > .prose {
+  padding: 30px 34px;
+}
+
+.feature-figure {
+  padding: 34px;
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  overflow: hidden;
+}
+
+.derivation {
+  background: color-mix(in srgb, var(--glass-fill) 34%, transparent);
+}
+
+.derivation-step {
+  min-height: 0;
+  margin: 18px 0;
+  padding: 28px;
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--glass-fill-soft) 58%, transparent);
+  backdrop-filter: blur(10px) saturate(108%);
+  -webkit-backdrop-filter: blur(10px) saturate(108%);
+}
+
+.derivation-step + .derivation-step { border-top: 1px solid var(--glass-border); }
+.formula--step {
+  border: 1px solid var(--glass-border);
+  background: color-mix(in srgb, var(--glass-fill-soft) 64%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.reading-callout {
+  padding: 32px;
+  border-left: 1px solid var(--glass-border);
+}
+
+.source-note {
+  padding: 18px 20px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.exercise-card {
+  margin: 18px 0;
+  padding: 34px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.exercise-card:last-child { border-bottom: 1px solid var(--glass-border); }
+
+.variable-list { color: var(--text-secondary); }
+
+@media (max-width: 620px) {
+  .section-header,
+  .content-section > .prose,
+  .feature-figure,
+  .formula-card,
+  .derivation,
+  .reading-callout,
+  .concept-check,
+  .unit-switch-panel,
+  .split-explanation,
+  .inverse-lab,
+  .knowledge-map,
+  .chapter-summary,
+  .exercise-card,
+  .completion-panel,
+  .source-note {
+    border-radius: 18px;
+  }
+
+  .section-header,
+  .content-section > .prose,
+  .reading-callout,
+  .concept-check,
+  .exercise-card {
+    padding: 22px 18px;
+  }
+
+  .derivation-step { padding: 20px 16px; }
 }

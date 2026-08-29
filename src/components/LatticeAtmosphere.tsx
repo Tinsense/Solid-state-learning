@@ -1,21 +1,21 @@
 import { useEffect, useRef } from "react";
-import { mountCrystalScene } from "../lib/liquidGlass";
+import { mountLatticeScene } from "../lib/liquidGlass";
 
-export function CrystalAtmosphere() {
+export function LatticeAtmosphere() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    return mountCrystalScene(canvas);
+    return mountLatticeScene(canvas);
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="crystal-atmosphere"
+      className="lattice-atmosphere"
       aria-hidden="true"
-      data-testid="crystal-atmosphere"
+      data-testid="lattice-atmosphere"
     />
   );
 }

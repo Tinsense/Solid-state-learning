@@ -8,7 +8,7 @@
 - 10 组 KaTeX 公式卡片与 progressive derivation（逐步推导）。
 - 9 个实时实验：结合图景、London、Lennard–Jones、Pauli、Madelung、NaCl 壳层、电子密度、应变、立方弹性与弹性波。
 - Concept Check、三级练习、知识图谱、进度本地保存、Dark/Light、键盘导航与 reduced-motion 支持。
-- 动态漂浮晶体与玻璃表面共用一套 WebGL2 场景纹理和时间轴；任务栏、章节侧栏、操作按钮、分段控件与推导工具栏采用 Liquid Glass Studio 同类四阶段管线：SDF 玻璃形状、双向高斯模糊、Snell 折射、RGB 色散、Fresnel 反射与方向性 glare。晶体跨越玻璃边界时会发生连续位移与色散；不支持 WebGL2 时自动降级为稳定的 backdrop blur。
+- 黑白动态晶格点阵与全部玻璃模块共用一套 WebGL2 场景纹理和时间轴；任务栏、章节侧栏、正文、示范图、公式推导、概念检查与练习采用 Liquid Glass Studio 同类四阶段管线：SDF 玻璃形状、双向高斯模糊、Snell 折射、无彩边 Fresnel 反射与克制的方向性 glare。浏览器原生 backdrop-filter 同时采样模块下方的实际页面内容；不支持 WebGL2 时自动降级为稳定的透明模糊玻璃。
 
 ## 运行
 
@@ -37,7 +37,7 @@ npx playwright install chromium
 npm test
 ```
 
-测试覆盖首页、目录、渐进推导、Lennard–Jones slider、Madelung 收敛、弹性波方向/模式、Concept Check、共享晶体场、WebGL2 折射按钮、分段控件无横向滑轨和页面横向溢出，并在桌面 Chrome 与 Android Edge 用户代理下运行。
+测试覆盖首页、目录、渐进推导、Lennard–Jones slider、Madelung 收敛、弹性波方向/模式、Concept Check、共享晶格场、WebGL2 折射模块、分段控件无横向滑轨和页面横向溢出，并在桌面 Chrome 与 Android Edge 用户代理下运行。
 
 ## 内容说明
 

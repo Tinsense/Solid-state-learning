@@ -18,7 +18,22 @@ const SURFACE_SELECTOR = [
   ".top-action",
   ".segmented",
   ".derivation-controls",
-  ".search-panel"
+  ".search-panel",
+  ".section-header",
+  ".content-section > .prose",
+  ".feature-figure",
+  ".formula-card",
+  ".derivation",
+  ".reading-callout",
+  ".concept-check",
+  ".unit-switch-panel",
+  ".split-explanation",
+  ".inverse-lab",
+  ".knowledge-map",
+  ".chapter-summary",
+  ".exercise-card",
+  ".completion-panel",
+  ".source-note"
 ].join(",");
 
 const VERTEX_SHADER = `#version 300 es
@@ -40,67 +55,32 @@ uniform float u_dpr;
 uniform float u_theme;
 uniform float u_time;
 
-float gridLine(float coordinate, float spacing) {
-  float distanceToLine = min(mod(coordinate, spacing), spacing - mod(coordinate, spacing));
-  return 1.0 - smoothstep(0.0, 1.15, distanceToLine);
-}
-
-mat2 rotateField(float angle) {
-  float c = cos(angle);
-  float s = sin(angle);
-  return mat2(c, -s, s, c);
-}
-
-vec3 addCrystal(
-  vec3 base,
-  vec2 point,
-  vec2 center,
-  vec2 halfSize,
-  float angle,
-  vec3 crystalColor
-) {
-  vec2 q = rotateField(angle) * (point - center) / halfSize;
-  float distance = abs(q.x) + abs(q.y) - 1.0;
-  float body = 1.0 - smoothstep(-0.025, 0.025, distance);
-  float edge = 1.0 - smoothstep(0.012, 0.055, abs(distance));
-  float ridge = (1.0 - smoothstep(0.0, 0.028, abs(q.x))) * body;
-  float diagonal = (1.0 - smoothstep(0.0, 0.026, abs(abs(q.x) * 0.86 + q.y - 0.36))) * body;
-  float facetLight = 0.66 + step(0.0, q.x) * 0.22 - step(0.16, q.y) * 0.12;
-  vec3 facet = crystalColor * facetLight + mix(vec3(0.035), vec3(0.92), u_theme) * 0.08;
-  float bodyAlpha = mix(0.46, 0.30, u_theme);
-  base = mix(base, facet, body * bodyAlpha);
-  base += crystalColor * edge * mix(0.22, 0.12, u_theme);
-  base += mix(vec3(0.72, 0.88, 1.0), vec3(0.30, 0.42, 0.58), u_theme) * (ridge * 0.15 + diagonal * 0.09);
-  return base;
-}
-
 void main() {
   vec2 cssPixel = gl_FragCoord.xy / u_dpr;
   vec2 cssSize = u_resolution / u_dpr;
   vec2 globalPixel = vec2(cssPixel.x + u_origin.x, u_origin.y + cssSize.y - cssPixel.y);
-  float grid = max(gridLine(globalPixel.x, 72.0), gridLine(globalPixel.y, 72.0));
-  vec3 darkBase = vec3(0.008, 0.009, 0.011);
-  vec3 lightBase = vec3(0.958, 0.960, 0.970);
-  vec3 base = mix(darkBase, lightBase, u_theme);
-  vec3 lineColor = mix(vec3(0.11), vec3(0.72), u_theme);
-  float radial = 1.0 - smoothstep(0.0, max(u_resolution.x, u_resolution.y), length(gl_FragCoord.xy - u_resolution * 0.28));
-  base += mix(vec3(0.018), vec3(0.028), u_theme) * radial;
-  base = mix(base, lineColor, grid * mix(0.075, 0.10, u_theme));
 
+  float spacing = clamp(min(u_viewport.x, u_viewport.y) / 8.2, 64.0, 86.0);
   float t = u_time;
-  vec2 p1 = u_viewport * vec2(0.46, 0.055) + vec2(sin(t * 0.31) * 32.0, cos(t * 0.27) * 16.0);
-  vec2 p2 = u_viewport * vec2(0.90, 0.28) + vec2(cos(t * 0.19 + 1.8) * 34.0, sin(t * 0.23) * 30.0);
-  vec2 p3 = u_viewport * vec2(0.055, 0.42) + vec2(sin(t * 0.17 + 2.4) * 24.0, cos(t * 0.21) * 40.0);
-  vec2 p4 = u_viewport * vec2(0.76, 0.61) + vec2(cos(t * 0.24 + 0.7) * 34.0, sin(t * 0.16) * 28.0);
-  vec2 p5 = u_viewport * vec2(0.18, 0.91) + vec2(sin(t * 0.22 + 1.1) * 32.0, cos(t * 0.18) * 20.0);
-  vec2 p6 = u_viewport * vec2(0.91, 0.82) + vec2(cos(t * 0.20 + 2.8) * 26.0, sin(t * 0.29) * 36.0);
+  vec2 wave = vec2(
+    sin(globalPixel.y * 0.010 + t * 0.42) * 7.0,
+    cos(globalPixel.x * 0.009 - t * 0.36) * 7.0
+  );
+  vec2 latticePoint = (fract((globalPixel + wave) / spacing) - 0.5) * spacing;
+  float distanceToPoint = length(latticePoint);
+  float pulse = 0.82 + 0.18 * sin(t * 0.72 + floor(globalPixel.x / spacing) * 0.7 + floor(globalPixel.y / spacing) * 0.53);
+  float dot = 1.0 - smoothstep(1.4 * pulse, 3.0 * pulse, distanceToPoint);
+  float halo = 1.0 - smoothstep(3.0, 8.0, distanceToPoint);
 
-  base = addCrystal(base, globalPixel, p1, vec2(38.0, 82.0), -0.16 + sin(t * 0.12) * 0.08, vec3(0.25, 0.72, 0.98));
-  base = addCrystal(base, globalPixel, p2, vec2(52.0, 104.0), 0.22 + cos(t * 0.10) * 0.10, vec3(0.58, 0.42, 0.96));
-  base = addCrystal(base, globalPixel, p3, vec2(34.0, 76.0), -0.34 + sin(t * 0.14) * 0.09, vec3(0.22, 0.88, 0.76));
-  base = addCrystal(base, globalPixel, p4, vec2(29.0, 62.0), 0.12 + cos(t * 0.16) * 0.12, vec3(0.82, 0.38, 0.92));
-  base = addCrystal(base, globalPixel, p5, vec2(42.0, 88.0), -0.24 + sin(t * 0.11) * 0.11, vec3(0.28, 0.66, 1.0));
-  base = addCrystal(base, globalPixel, p6, vec2(36.0, 74.0), 0.28 + cos(t * 0.13) * 0.08, vec3(0.22, 0.82, 0.92));
+  vec3 darkBase = vec3(0.006, 0.006, 0.007);
+  vec3 lightBase = vec3(0.972, 0.974, 0.978);
+  vec3 base = mix(darkBase, lightBase, u_theme);
+  vec3 pointColor = mix(vec3(0.82), vec3(0.10), u_theme);
+  base = mix(base, pointColor, dot * mix(0.66, 0.52, u_theme));
+  base = mix(base, pointColor, halo * mix(0.018, 0.012, u_theme));
+
+  float radial = 1.0 - smoothstep(0.0, length(u_viewport) * 0.72, length(globalPixel - u_viewport * vec2(0.50, 0.42)));
+  base += mix(vec3(0.012), vec3(-0.018), u_theme) * radial;
   fragColor = vec4(base, 1.0);
 }`;
 
@@ -200,23 +180,23 @@ void main() {
   float edgeBlur = smoothstep(0.0, u_refThickness * 0.85, depth);
   vec4 refracted = dispersedSample(offset, mix(0.12, 0.72, edgeBlur));
 
-  vec3 tint = mix(vec3(0.035, 0.040, 0.050), vec3(0.995), u_theme);
-  refracted.rgb = mix(refracted.rgb, tint, mix(0.10, 0.16, u_theme));
+  vec3 tint = mix(vec3(0.030), vec3(0.985), u_theme);
+  refracted.rgb = mix(refracted.rgb, tint, 0.06);
 
   float fresnel = pow(clamp(1.08 - depth / max(7.0, u_refThickness * 0.78), 0.0, 1.0), 5.0);
-  vec3 fresnelTint = mix(vec3(0.84, 0.88, 0.94), vec3(1.0), u_theme);
-  refracted.rgb = mix(refracted.rgb, fresnelTint, fresnel * u_fresnel * 0.42);
+  vec3 fresnelTint = mix(vec3(0.88), vec3(1.0), u_theme);
+  refracted.rgb = mix(refracted.rgb, fresnelTint, fresnel * u_fresnel * 0.30);
 
   float normalAngle = atan(normal.y, normal.x);
   float facing = 0.5 + 0.5 * cos(normalAngle - u_glareAngle);
   float opposite = 0.5 + 0.5 * cos(normalAngle - u_glareAngle - PI);
   float directional = pow(max(facing, opposite * 0.28), 4.0);
   float glareMask = smoothstep(u_refThickness * 0.9, 0.0, depth);
-  vec3 glareColor = mix(vec3(0.74, 0.88, 1.0), vec3(1.0, 0.99, 0.97), u_theme);
+  vec3 glareColor = vec3(1.0);
   refracted.rgb = mix(refracted.rgb, glareColor, directional * glareMask * u_glare);
 
   float edgeAlpha = smoothstep(0.5, -1.25, distance);
-  fragColor = vec4(refracted.rgb, mix(0.46, 0.78, fresnel) * edgeAlpha);
+  fragColor = vec4(refracted.rgb, mix(0.22, 0.44, fresnel) * edgeAlpha);
 }`;
 
 type ProgramInfo = {
@@ -414,9 +394,9 @@ class StudioGlassRenderer {
     gl.uniform1f(uniform(gl, this.main, "u_refThickness"), Math.max(10, Math.min(20, state.height * 0.24)));
     gl.uniform1f(uniform(gl, this.main, "u_refFactor"), 1.4);
     gl.uniform1f(uniform(gl, this.main, "u_refStrength"), Math.max(20, Math.min(44, state.height * 0.58)));
-    gl.uniform1f(uniform(gl, this.main, "u_dispersion"), 8.5);
-    gl.uniform1f(uniform(gl, this.main, "u_fresnel"), state.light ? 0.24 : 0.34);
-    gl.uniform1f(uniform(gl, this.main, "u_glare"), state.light ? 0.16 : 0.22);
+    gl.uniform1f(uniform(gl, this.main, "u_dispersion"), 0.0);
+    gl.uniform1f(uniform(gl, this.main, "u_fresnel"), 0.10);
+    gl.uniform1f(uniform(gl, this.main, "u_glare"), 0.035);
     gl.uniform1f(uniform(gl, this.main, "u_glareAngle"), state.glareAngle);
     gl.uniform1f(uniform(gl, this.main, "u_theme"), state.light ? 1 : 0);
     gl.uniform1f(uniform(gl, this.main, "u_press"), state.press);
@@ -451,7 +431,7 @@ export function supportsStudioGlass() {
   return supportCache;
 }
 
-export function mountCrystalScene(canvas: HTMLCanvasElement) {
+export function mountLatticeScene(canvas: HTMLCanvasElement) {
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let frame = 0;
   let lastPaint = -Infinity;
@@ -500,7 +480,7 @@ export function mountCrystalScene(canvas: HTMLCanvasElement) {
     }
     lastPaint = timestamp;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     const width = Math.max(1, Math.round(window.innerWidth * dpr));
     const height = Math.max(1, Math.round(window.innerHeight * dpr));
     if (canvas.width !== width || canvas.height !== height) {
@@ -570,7 +550,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
     lastPaint = timestamp;
     const rect = element.getBoundingClientRect();
     if (rect.width < 2 || rect.height < 2) return;
-    const maxDpr = 1.5;
+    const maxDpr = rect.width * rect.height > 280_000 ? 1 : 1.35;
     const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     const width = Math.max(1, Math.round(rect.width * dpr));
     const height = Math.max(1, Math.round(rect.height * dpr));
@@ -602,7 +582,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
     try {
       renderer = new StudioGlassRenderer(canvas);
       element.dataset.liquidGlass = "webgl2-studio";
-      element.dataset.sceneSource = "shared-crystal-field";
+      element.dataset.sceneSource = "shared-lattice-field";
       schedule();
     } catch (error) {
       console.warn("Liquid Glass Studio WebGL2 fallback:", error);

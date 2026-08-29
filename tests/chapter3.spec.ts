@@ -64,24 +64,28 @@ test("页面在当前视口没有整体横向滚动", async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
-test("任务栏使用 Studio WebGL2 玻璃且分段控件没有横向滑轨", async ({ page }, testInfo) => {
+test("晶格场、正文模块与任务栏使用 Studio WebGL2 玻璃", async ({ page }, testInfo) => {
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-glass-engine", "webgl2-studio");
-  const scene = page.getByTestId("crystal-atmosphere");
+  const scene = page.getByTestId("lattice-atmosphere");
   await expect(scene).toHaveAttribute("data-scene-engine", "webgl2-shared-scene");
   const header = page.locator(".site-header");
   await expect(header).toHaveAttribute("data-liquid-glass", "webgl2-studio");
-  await expect(header).toHaveAttribute("data-scene-source", "shared-crystal-field");
+  await expect(header).toHaveAttribute("data-scene-source", "shared-lattice-field");
   const canvas = header.locator(":scope > .studio-glass-canvas");
   await expect(canvas).toBeVisible();
   expect(await canvas.evaluate((element: HTMLCanvasElement) => element.width * element.height)).toBeGreaterThan(1);
 
   const primary = page.getByRole("button", { name: /开始学习/ });
   await expect(primary).toHaveAttribute("data-liquid-glass", "webgl2-studio");
-  await expect(primary).toHaveAttribute("data-scene-source", "shared-crystal-field");
+  await expect(primary).toHaveAttribute("data-scene-source", "shared-lattice-field");
 
   const segmented = page.locator(".segmented").first();
   await segmented.scrollIntoViewIfNeeded();
+  const figure = segmented.locator("xpath=ancestor::figure");
+  await expect(figure).toHaveAttribute("data-liquid-glass", "webgl2-studio");
+  await expect(figure).toHaveAttribute("data-scene-source", "shared-lattice-field");
+  expect(await figure.evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(");
   const metrics = await segmented.evaluate((element) => ({
     overflowX: getComputedStyle(element).overflowX,
     scrollWidth: element.scrollWidth,
