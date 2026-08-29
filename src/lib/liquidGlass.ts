@@ -60,24 +60,36 @@ void main() {
   vec2 cssSize = u_resolution / u_dpr;
   vec2 globalPixel = vec2(cssPixel.x + u_origin.x, u_origin.y + cssSize.y - cssPixel.y);
 
-  float spacing = clamp(min(u_viewport.x, u_viewport.y) / 8.2, 64.0, 86.0);
+  float spacing = clamp(min(u_viewport.x, u_viewport.y) / 8.6, 58.0, 82.0);
   float t = u_time;
   vec2 wave = vec2(
-    sin(globalPixel.y * 0.010 + t * 0.42) * 7.0,
-    cos(globalPixel.x * 0.009 - t * 0.36) * 7.0
+    sin(globalPixel.y * 0.008 + t * 0.26) * 6.0,
+    cos(globalPixel.x * 0.007 - t * 0.22) * 6.0
   );
-  vec2 latticePoint = (fract((globalPixel + wave) / spacing) - 0.5) * spacing;
+  vec2 lattice = (globalPixel + wave) / spacing;
+  vec2 cell = floor(lattice);
+  vec2 latticePoint = (fract(lattice) - 0.5) * spacing;
   float distanceToPoint = length(latticePoint);
-  float pulse = 0.82 + 0.18 * sin(t * 0.72 + floor(globalPixel.x / spacing) * 0.7 + floor(globalPixel.y / spacing) * 0.53);
-  float dot = 1.0 - smoothstep(1.4 * pulse, 3.0 * pulse, distanceToPoint);
-  float halo = 1.0 - smoothstep(3.0, 8.0, distanceToPoint);
+  float ionicParity = mod(cell.x + cell.y, 2.0);
+  float pulse = 0.92 + 0.08 * sin(t * 0.48 + cell.x * 0.61 + cell.y * 0.43);
+  float ionRadius = mix(2.0, 3.7, ionicParity) * pulse;
+  float ion = 1.0 - smoothstep(ionRadius, ionRadius + 1.25, distanceToPoint);
+  float halo = 1.0 - smoothstep(ionRadius + 1.0, ionRadius + mix(4.0, 7.0, ionicParity), distanceToPoint);
+
+  float horizontalBond = 1.0 - smoothstep(0.28, 0.82, abs(latticePoint.y));
+  float verticalBond = 1.0 - smoothstep(0.28, 0.82, abs(latticePoint.x));
+  float bond = max(horizontalBond, verticalBond);
+  float bondFade = smoothstep(ionRadius + 2.0, spacing * 0.42, distanceToPoint);
+  bond *= bondFade;
 
   vec3 darkBase = vec3(0.006, 0.006, 0.007);
   vec3 lightBase = vec3(0.972, 0.974, 0.978);
   vec3 base = mix(darkBase, lightBase, u_theme);
-  vec3 pointColor = mix(vec3(0.82), vec3(0.10), u_theme);
-  base = mix(base, pointColor, dot * mix(0.66, 0.52, u_theme));
-  base = mix(base, pointColor, halo * mix(0.018, 0.012, u_theme));
+  vec3 latticeColor = mix(vec3(0.86), vec3(0.08), u_theme);
+  float ionStrength = mix(0.62, 0.88, ionicParity);
+  base = mix(base, latticeColor, bond * mix(0.095, 0.075, u_theme));
+  base = mix(base, latticeColor, halo * mix(0.035, 0.026, u_theme));
+  base = mix(base, latticeColor, ion * ionStrength);
 
   float radial = 1.0 - smoothstep(0.0, length(u_viewport) * 0.72, length(globalPixel - u_viewport * vec2(0.50, 0.42)));
   base += mix(vec3(0.012), vec3(-0.018), u_theme) * radial;
@@ -177,6 +189,8 @@ void main() {
   float edgeFactor = depth < u_refThickness ? max(0.0, -tan(thetaT - thetaI)) : 0.0;
   vec2 normal = surfaceNormal(cssPoint);
   vec2 offset = -normal * edgeFactor * u_refStrength / cssSize;
+  vec2 sampleMargin = max(min(v_uv, 1.0 - v_uv) - 2.0 / u_resolution, vec2(0.0));
+  offset = clamp(offset, -sampleMargin, sampleMargin);
   float edgeBlur = smoothstep(0.0, u_refThickness * 0.85, depth);
   vec4 refracted = dispersedSample(offset, mix(0.12, 0.72, edgeBlur));
 
@@ -196,7 +210,7 @@ void main() {
   refracted.rgb = mix(refracted.rgb, glareColor, directional * glareMask * u_glare);
 
   float edgeAlpha = smoothstep(0.5, -1.25, distance);
-  fragColor = vec4(refracted.rgb, mix(0.22, 0.44, fresnel) * edgeAlpha);
+  fragColor = vec4(refracted.rgb, edgeAlpha);
 }`;
 
 type ProgramInfo = {
@@ -529,6 +543,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
   const canvas = document.createElement("canvas");
   canvas.className = "studio-glass-canvas";
   canvas.setAttribute("aria-hidden", "true");
+  canvas.style.display = "none";
   element.prepend(canvas);
   element.dataset.liquidGlass = "frosted";
 
@@ -581,12 +596,14 @@ function createSurface(element: HTMLElement): SurfaceInstance {
     if (renderer || !supportsStudioGlass()) return;
     try {
       renderer = new StudioGlassRenderer(canvas);
+      canvas.style.removeProperty("display");
       element.dataset.liquidGlass = "webgl2-studio";
       element.dataset.sceneSource = "shared-lattice-field";
       schedule();
     } catch (error) {
       console.warn("Liquid Glass Studio WebGL2 fallback:", error);
       renderer = null;
+      canvas.style.display = "none";
       element.dataset.liquidGlass = "frosted";
     }
   };
@@ -596,6 +613,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
     frame = 0;
     renderer?.dispose();
     renderer = null;
+    canvas.style.display = "none";
     canvas.width = 1;
     canvas.height = 1;
     element.dataset.liquidGlass = "frosted";
@@ -627,6 +645,7 @@ function createSurface(element: HTMLElement): SurfaceInstance {
     cancelAnimationFrame(frame);
     frame = 0;
     renderer = null;
+    canvas.style.display = "none";
     element.dataset.liquidGlass = "frosted";
     delete element.dataset.sceneSource;
   };

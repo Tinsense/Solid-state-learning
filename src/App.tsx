@@ -16,7 +16,7 @@ const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "
     close: <path d="m6 6 12 12M18 6 6 18"/>,
     arrow: <path d="M5 12h14m-5-5 5 5-5 5"/>
   };
-  return <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">{paths[name]}</svg>;
+  return <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">{paths[name]}</svg>;
 };
 
 const prose = (items: string[]) => <div className="prose">{items.map((text) => <p key={text}>{text}</p>)}</div>;
@@ -108,7 +108,7 @@ function App() {
             <p className="overline">INTERACTIVE ELECTRONIC TEXTBOOK · 中文精讲</p>
             <h1>从一条势能曲线，<br/><span>听见晶体的声音。</span></h1>
             <p className="hero-lead">结合决定平衡距离，势阱曲率决定弹性，弹性与密度共同决定声速。这是 Kittel 第三章真正贯穿始终的物理主线。</p>
-            <div className="hero-actions"><button className="liquid-button primary" type="button" onClick={() => go("binding")}>开始学习 <Icon name="arrow"/></button><button className="text-button" type="button" onClick={() => go("map")}>先看知识地图</button></div>
+            <div className="hero-actions"><button className="liquid-button primary" type="button" onClick={() => go("binding")}><span>开始学习</span><Icon name="arrow"/></button><button className="text-button" type="button" onClick={() => go("map")}>先看知识地图</button></div>
           </div>
           <div className="hero-lattice" aria-label="三维晶格和穿过其中的弹性波抽象动画" role="img">
             <div className="lattice-plane plane-a"/><div className="lattice-plane plane-b"/><div className="lattice-plane plane-c"/>

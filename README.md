@@ -8,7 +8,7 @@
 - 10 组 KaTeX 公式卡片与 progressive derivation（逐步推导）。
 - 9 个实时实验：结合图景、London、Lennard–Jones、Pauli、Madelung、NaCl 壳层、电子密度、应变、立方弹性与弹性波。
 - Concept Check、三级练习、知识图谱、进度本地保存、Dark/Light、键盘导航与 reduced-motion 支持。
-- 黑白动态晶格点阵与全部玻璃模块共用一套 WebGL2 场景纹理和时间轴；任务栏、章节侧栏、正文、示范图、公式推导、概念检查与练习采用 Liquid Glass Studio 同类四阶段管线：SDF 玻璃形状、双向高斯模糊、Snell 折射、无彩边 Fresnel 反射与克制的方向性 glare。浏览器原生 backdrop-filter 同时采样模块下方的实际页面内容；不支持 WebGL2 时自动降级为稳定的透明模糊玻璃。
+- 黑白动态离子晶格网络以大小交替的离子节点、近邻键线和轻微波动构成，并与全部玻璃模块共用一套 WebGL2 场景纹理和时间轴；任务栏、章节侧栏、正文、示范图、公式推导、概念检查与练习采用 Liquid Glass Studio 同类四阶段管线：SDF 玻璃形状、双向高斯模糊、Snell 折射、无彩边 Fresnel 反射与克制的方向性 glare。浏览器原生 backdrop-filter 同时采样模块下方的实际页面内容；不支持 WebGL2 或上下文丢失时自动隐藏光学画布并降级为透明模糊玻璃。
 
 ## 运行
 

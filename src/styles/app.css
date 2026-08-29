@@ -205,10 +205,10 @@ main { margin-left: 232px; }
 /* Liquid Glass Studio canvas must remain the visible material layer. */
 [data-liquid-glass="webgl2-studio"] {
   border-color: transparent !important;
-  background: color-mix(in srgb, var(--glass-fill-optical) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--glass-fill-optical) 6%, transparent) !important;
   box-shadow: none !important;
-  backdrop-filter: blur(10px) saturate(110%) contrast(1.01) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(110%) contrast(1.01) !important;
+  backdrop-filter: blur(6px) saturate(105%) contrast(1.01) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(105%) contrast(1.01) !important;
 }
 
 @media (max-width: 900px) {
@@ -366,4 +366,52 @@ main { margin-left: 232px; }
   }
 
   .derivation-step { padding: 20px 16px; }
+}
+
+/* One optical density everywhere: 10% material / 90% transparency in both themes. */
+:where(
+  .site-header,
+  .chapter-rail,
+  .mobile-rail-toggle,
+  .liquid-button,
+  .top-action,
+  .rail-item.is-active,
+  .segmented,
+  .derivation-controls,
+  .search-panel,
+  .section-header,
+  .content-section > .prose,
+  .feature-figure,
+  .formula-card,
+  .derivation,
+  .derivation-step,
+  .formula--step,
+  .reading-callout,
+  .concept-check,
+  .unit-switch-panel,
+  .split-explanation,
+  .inverse-lab,
+  .knowledge-map,
+  .chapter-summary,
+  .exercise-card,
+  .completion-panel,
+  .source-note
+) {
+  background: var(--glass-fill) !important;
+}
+
+.studio-glass-canvas { opacity: .10; }
+
+[data-liquid-glass="webgl2-studio"] {
+  background: transparent !important;
+  backdrop-filter: blur(4px) saturate(104%) contrast(1.01) !important;
+  -webkit-backdrop-filter: blur(4px) saturate(104%) contrast(1.01) !important;
+}
+
+.liquid-button.primary,
+.liquid-button.primary:hover,
+.chapter-rail nav button.is-active,
+.segmented button.is-active {
+  background: var(--glass-fill) !important;
+  box-shadow: none !important;
 }

@@ -21,6 +21,14 @@
   pointer-events: none;
 }
 
+.liquid-button .icon,
+.top-action .icon {
+  position: relative;
+  z-index: 3;
+  visibility: visible;
+  opacity: 1;
+}
+
 [data-liquid-glass] > :not(.studio-glass-canvas) {
   position: relative;
   z-index: 2;
@@ -29,10 +37,16 @@
 
 [data-liquid-glass="webgl2-studio"] {
   border-color: transparent !important;
-  background: color-mix(in srgb, var(--glass-fill-optical) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--glass-fill-optical) 6%, transparent) !important;
   box-shadow: none !important;
-  backdrop-filter: blur(10px) saturate(110%) contrast(1.01) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(110%) contrast(1.01) !important;
+  backdrop-filter: blur(6px) saturate(105%) contrast(1.01) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(105%) contrast(1.01) !important;
+}
+
+.liquid-button.primary[data-liquid-glass="webgl2-studio"] {
+  background: transparent !important;
+  border-color: var(--glass-border) !important;
+  box-shadow: none !important;
 }
 
 .liquid-button,
