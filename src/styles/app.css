@@ -2442,3 +2442,27 @@ html[data-theme="light"] #overview :where(.hero-lead,.hero-lead-glass) {
   .exercise-actions { gap: 12px; }
 }
 
+/* Win over the legacy zero-frost rule loaded for shared WebGL surfaces. */
+html:root[data-theme="light"] body [data-liquid-glass="shared-webgl2"],
+html:root[data-theme="light"] body [data-liquid-glass="frosted"] {
+  background-color: rgba(255,255,255,.10) !important;
+  backdrop-filter: blur(3.5px) saturate(104%) !important;
+  -webkit-backdrop-filter: blur(3.5px) saturate(104%) !important;
+}
+
+/* Persistent chrome stays clearer than reading modules. */
+html:root[data-theme="light"] body .site-header[data-liquid-glass],
+html:root[data-theme="light"] body .mobile-rail-toggle[data-liquid-glass] {
+  background-color: rgba(255,255,255,.07) !important;
+  backdrop-filter: blur(2px) saturate(102%) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(102%) !important;
+}
+
+@media (max-width:900px) {
+  html:root[data-theme="light"] body .chapter-rail.is-open[data-liquid-glass] {
+    background-color: rgba(255,255,255,.10) !important;
+    backdrop-filter: blur(20px) saturate(108%) brightness(1.035) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(108%) brightness(1.035) !important;
+  }
+}
+

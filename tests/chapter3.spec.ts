@@ -170,6 +170,7 @@ test("手机目录打开后保持页面亮度并增强目录可读性", async ({
   test.skip(testInfo.project.name !== "mobile", "仅验证手机目录交互");
   await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
   await page.goto("/?chapter=2");
+  expect(await page.locator("#bragg .prose").evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(3.5px)");
   await page.getByRole("button", { name: "章节目录" }).click();
 
   const scrim = page.locator(".rail-scrim");
