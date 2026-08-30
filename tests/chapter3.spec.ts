@@ -165,3 +165,35 @@ test("科学互动模型通过解析值与极限检查", async ({ page }) => {
   const heat = page.locator("#debye .companion-lab").filter({ hasText: "Debye 与 Einstein 热容" });
   await expect(heat).toContainText("Debye 数值积分0.368635");
 });
+
+test("手机目录打开后保持页面亮度并增强目录可读性", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "仅验证手机目录交互");
+  await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
+  await page.goto("/?chapter=2");
+  await page.getByRole("button", { name: "章节目录" }).click();
+
+  const scrim = page.locator(".rail-scrim");
+  const rail = page.locator("#chapter-rail");
+  await expect(rail).toHaveClass(/is-open/);
+  const optics = await rail.evaluate((element) => ({
+    background: getComputedStyle(element).backgroundColor,
+    blur: getComputedStyle(element).backdropFilter,
+    color: getComputedStyle(element.querySelector<HTMLElement>(".rail-item")!).color
+  }));
+  expect(await scrim.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
+  expect(optics.background).toBe("rgba(255, 255, 255, 0.1)");
+  expect(optics.blur).toContain("blur(20px)");
+  expect(optics.color).not.toBe("rgba(0, 0, 0, 0)");
+});
+
+test("正文中的行内方程由 KaTeX 排版而非显示源码", async ({ page }) => {
+  await page.goto("/?chapter=4");
+  const prose = page.locator("#mono .prose");
+  await prose.scrollIntoViewIfNeeded();
+  await expect(prose.locator(".formula--inline .katex-html")).toHaveCount(10);
+  await expect(prose.locator("code")).toHaveCount(0);
+  expect(await prose.locator(".formula--inline").evaluateAll((items) => items.every((item) => {
+    const box = item.getBoundingClientRect();
+    return box.width > 0 && box.height > 0 && getComputedStyle(item).display === "inline";
+  }))).toBe(true);
+});

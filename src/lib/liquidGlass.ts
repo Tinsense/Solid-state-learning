@@ -670,6 +670,7 @@ export function useLiquidGlassSystem() {
     let elements: HTMLElement[] = [];
     let frame = 0;
     let lastPaint = -Infinity;
+    let scrollActiveUntil = 0;
     let disposed = false;
 
     const syncElements = () => {
@@ -696,7 +697,14 @@ export function useLiquidGlassSystem() {
       if (renderer) renderer.canvas.style.display = "block";
 
       if (renderer) {
-        if (motion.matches || timestamp - lastPaint >= 40) {
+        /*
+         * Normal animation is deliberately capped near 25 fps to limit the
+         * full-screen texture upload cost. Scrolling is different: DOM
+         * surfaces move on the compositor every frame, so their WebGL masks
+         * must be sampled every frame too or a stale horizontal slice appears.
+         */
+        const scrolling = timestamp <= scrollActiveUntil;
+        if (motion.matches || scrolling || timestamp - lastPaint >= 40) {
           lastPaint = timestamp;
           renderer.render(elements, motion.matches ? 0 : timestamp / 1000);
         }
@@ -710,6 +718,11 @@ export function useLiquidGlassSystem() {
       frame = requestAnimationFrame(render);
     };
 
+    const onScroll = () => {
+      scrollActiveUntil = performance.now() + 180;
+      if (!frame) frame = requestAnimationFrame(render);
+    };
+
     const onPointerMove = (event: PointerEvent) => {
       renderer?.setPointer(event.clientX, event.clientY);
       if (!frame) frame = requestAnimationFrame(render);
@@ -721,7 +734,9 @@ export function useLiquidGlassSystem() {
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     window.addEventListener("resize", schedule, { passive: true });
-    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.visualViewport?.addEventListener("resize", schedule, { passive: true });
+    window.visualViewport?.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     motion.addEventListener("change", schedule);
 
@@ -734,7 +749,9 @@ export function useLiquidGlassSystem() {
       mutation.disconnect();
       theme.disconnect();
       window.removeEventListener("resize", schedule);
-      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("scroll", onScroll);
+      window.visualViewport?.removeEventListener("resize", schedule);
+      window.visualViewport?.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointerMove);
       motion.removeEventListener("change", schedule);
       elements.forEach((element) => {
@@ -745,5 +762,4 @@ export function useLiquidGlassSystem() {
     };
   }, []);
 }
-
 
