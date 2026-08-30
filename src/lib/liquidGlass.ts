@@ -43,6 +43,11 @@ const SURFACE_SELECTOR = [
   ".compact-lab",
   ".lj-lab",
   ".companion-lab",
+  ".learning-contract",
+  ".reasoning-chain",
+  ".worked-example",
+  ".pitfall-card",
+  ".symbol-card",
   ".chapter-switcher",
   ".text-button"
 ].join(",");
@@ -740,6 +745,5 @@ export function useLiquidGlassSystem() {
     };
   }, []);
 }
-
 
 

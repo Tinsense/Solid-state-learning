@@ -11,7 +11,7 @@ export type CompanionUnit = {
     question: string;
     choices: { label: string; correct?: boolean; feedback: string }[];
   };
-  figure?: "crystal" | "miller" | "bragg" | "reciprocal" | "mono-phonon" | "diatomic" | "heat-capacity" | "thermal";
+  figure?: "crystal" | "miller" | "bragg" | "reciprocal" | "structure-factor" | "mono-phonon" | "diatomic" | "planck" | "dos" | "heat-capacity" | "thermal";
 };
 
 export type CompanionChapter = {
@@ -43,7 +43,7 @@ const chapter1: CompanionChapter = {
     unit("00", "overview", "章概览", "Overview", "为什么一个无限晶体可以由有限信息完全指定？", "Kittel 8e, Chapter 1, pp. 1–3", [
       "理想晶体是一个在三维空间周期重复的原子阵列。我们先抽去原子种类，只保留平移点，得到 Bravais 格子；再把每个格点上附着的一组原子称为基元。格子 + 基元，才是实际晶体结构。",
       "这一分解非常重要：格子回答“怎样重复”，基元回答“重复什么”。同一个 fcc 格子配上不同基元，可以得到金属 Cu、NaCl、金刚石或闪锌矿等完全不同的晶体。",
-    ], { figure: "crystal" }),
+    ]),
     unit("01", "lattice", "平移格子与原胞", "Lattice & primitive cell", "什么样的平移能让晶体与自身完全重合？", "Kittel 8e, Chapter 1, pp. 3–6", [
       "任意格点之间的允许平移写成 T=u₁a₁+u₂a₂+u₃a₃，其中 uᵢ 为整数，aᵢ 是一组原始平移矢量。选择并不唯一，但由它们张成的平行六面体必须恰含一个格点。",
       "原胞体积是三个原始矢量的标量三重积。它是格子的几何不变量：换一组合法原始矢量，形状可以改变，体积不变。Wigner–Seitz 原胞则由“离某格点最近的空间区域”构成，完整显示局域对称性。",
@@ -107,7 +107,7 @@ const chapter2: CompanionChapter = {
     unit("00", "overview", "章概览", "Overview", "为什么晶体只在少数角度产生强衍射？", "Kittel 8e, Chapter 2, pp. 23–25", [
       "X 射线、电子或中子照射周期晶体时，每个散射中心都发出次级波。绝大多数方向上相位彼此抵消；只有当相邻晶面贡献的程差是整波长时，振幅同相累加并形成尖锐峰。",
       "倒格子不是抽象装饰，而是把“所有允许相位条件”编码为格点。一次弹性衍射就是散射矢量恰好落到一个倒格点。",
-    ], { figure: "bragg" }),
+    ]),
     unit("01", "bragg", "Bragg 定律", "Bragg law", "2d sinθ=nλ 从哪里来？", "Kittel 8e, Chapter 2, pp. 25–27", [
       "考虑间距为 d 的平行晶面。上下两层反射波的额外路程由入射段和出射段各贡献 d sinθ，总程差为 2d sinθ。相长干涉要求它等于整数个波长。",
       "θ 是入射束与晶面的夹角，而实验衍射仪常报告入射束与衍射束之间的 2θ。n 阶反射也可等价看成间距 d/n 的晶面族的一阶反射。",
@@ -141,6 +141,7 @@ const chapter2: CompanionChapter = {
       "对同种原子的 bcc，S=f[1+exp(−iπ(h+k+l))]，因此 h+k+l 为奇数时系统消光。对 fcc，只有 h、k、l 全奇或全偶时允许。原子形状还通过 form factor f(G) 使高角峰逐渐变弱。",
     ], {
       formula: { latex: "S_{\\mathbf G}=\\sum_j f_j e^{-i\\mathbf G\\cdot\\mathbf r_j},\\qquad I_{\\mathbf G}\\propto|S_{\\mathbf G}|^2", meaning: "结构因子把基元的种类与相对位置转化为每个衍射峰的振幅和系统消光。", variables: ["fⱼ：原子散射因子", "rⱼ：基元位置", "I_G：积分强度的核心因子"] },
+      figure: "structure-factor",
       check: { id: "bcc-extinction", question: "单原子 bcc 晶体的 (111) 反射是否允许？", choices: [
         { label: "允许", feedback: "先检查 h+k+l 的奇偶性。" },
         { label: "系统消光", correct: true, feedback: "1+1+1=3 为奇数，角点与体心贡献相差 π，振幅抵消。" },
@@ -171,7 +172,7 @@ const chapter4: CompanionChapter = {
     unit("00", "overview", "章概览", "Overview", "为什么周期边界会让振动频率形成能带？", "Kittel 8e, Chapter 4, pp. 89–91", [
       "在平衡位置附近，把总势能展开到位移的二次项，就得到一组线性耦合振子。平移对称使平面波成为本征解，但原子离散性让频率不再与波矢成严格直线关系，并产生有限的第一 Brillouin 区。",
       "每个波矢 K 对应若干极化分支。单原子基元只有声学支；每个原胞含多个原子时，还会出现原胞内部反相运动的光学支。",
-    ], { figure: "mono-phonon" }),
+    ]),
     unit("01", "mono", "单原子链色散", "Monatomic chain", "最近邻弹簧如何产生正弦色散？", "Kittel 8e, Chapter 4, pp. 91–94", [
       "质量 M 的原子以间距 a 排列，最近邻力常数为 C。第 s 个原子的恢复力来自左右两根弹簧，运动方程是 M ü_s=C(u_{s+1}+u_{s−1}−2u_s)。",
       "代入行波 u_s=u exp[i(sKa−ωt)]，相邻位移只差相位 e^{±iKa}。离散二阶差分因此变成 2cosKa−2，得到周期性的正弦色散。K 与 K+2π/a 描述同一组格点位移，所以只需保留第一布里渊区。",
@@ -238,12 +239,13 @@ const chapter5: CompanionChapter = {
     unit("00", "overview", "章概览", "Overview", "为什么经典理论在低温完全失效？", "Kittel 8e, Chapter 5, pp. 105–108", [
       "经典能量均分认为每个谐振自由度都贡献 k_BT，给出 Dulong–Petit 极限 3Nk_B。但量子化后，高频模在 k_BT≪ħω 时几乎不能被激发，因此低温热容必须下降。",
       "真正的计算分两步：先用 Bose–Einstein 分布求每个频率模的平均能量，再用态密度 D(ω) 数清各频率区间有多少模式。",
-    ], { figure: "heat-capacity" }),
+    ]),
     unit("01", "planck", "Planck 分布与声子热容", "Planck distribution", "单个量子谐振模如何储存热能？", "Kittel 8e, Chapter 5, pp. 108–111", [
       "声子数不守恒，化学势为零。频率 ω 的模在温度 T 下平均占据数是 n̄=[exp(ħω/k_BT)−1]⁻¹。零点能不依赖温度，因此不贡献定容热容。",
       "对一个模求 U_ω=ħωn̄ 的温度导数，得到一个在低温指数冻结、在高温趋于 k_B 的热容函数。晶体热容就是对所有模求和。",
     ], {
       formula: { latex: "\\bar n(\\omega)=\\frac1{e^{\\hbar\\omega/k_BT}-1},\\qquad C_V=\\frac{\\partial}{\\partial T}\\sum_{\\mathbf K,s}\\hbar\\omega_{\\mathbf K s}\\bar n", meaning: "Bose–Einstein 占据决定每个声子模的热能；对温度求导得到晶格热容。", variables: ["n̄：平均声子数", "ω_Ks：声子色散"] },
+      figure: "planck",
       derivations: [{ id: "planck-mode", title: "单一声子模的热容", result: "C_\\omega=k_Bx^2\\frac{e^x}{(e^x-1)^2},\\qquad x=\\frac{\\hbar\\omega}{k_BT}", meaning: "量子谐振模从低温冻结平滑过渡到经典 k_B 极限。", variables: ["x：模能量与热能之比"], steps: [
         { title: "写平均热能", explanation: "去掉与温度无关的零点能，只保留热激发部分。", latex: "U_\\omega=\\hbar\\omega\\bar n=\\frac{\\hbar\\omega}{e^x-1}" },
         { title: "处理温度变量", explanation: "x=ħω/(k_BT)，因此 dx/dT=−x/T。", latex: "\\frac{dx}{dT}=-\\frac{x}{T}" },
@@ -256,6 +258,7 @@ const chapter5: CompanionChapter = {
       "更精确地把一条纵支和两条横支分别计入，可写 D(ω)=Vω²/(2π²)(v_L⁻³+2v_T⁻³)。Debye 模型用一个等效声速把它们合并，并选择截止频率保证总模数恰为 3N。",
     ], {
       formula: { latex: "D(\\omega)=\\frac{V\\omega^2}{2\\pi^2}\\left(\\frac1{v_L^3}+\\frac2{v_T^3}\\right),\\qquad \\int_0^{\\omega_D}D(\\omega)d\\omega=3N", meaning: "三维 K 空间球壳计数给出 ω² 态密度；Debye 截止保证自由度总数正确。", variables: ["v_L、v_T：纵/横声速", "ω_D：Debye 截止频率"] },
+      figure: "dos",
       derivations: [{ id: "debye-dos", title: "从 K 空间计数到 Debye 态密度", result: "D(\\omega)=\\frac{3V\\omega^2}{2\\pi^2v^3}", meaning: "在各向同性、三极化共用声速的近似下，态密度随频率平方增长。", variables: ["V：晶体体积", "v：Debye 平均声速"], steps: [
         { title: "确定单态体积", explanation: "周期边界条件使每个允许 K 点在三维 K 空间占据 (2π)³/V。", latex: "\\Delta V_K=\\frac{(2\\pi)^3}{V}" },
         { title: "数球内状态", explanation: "半径 K 的球体积乘三种极化，再除以单态体积。", latex: "N(K)=3\\frac{(4\\pi K^3/3)}{(2\\pi)^3/V}=\\frac{VK^3}{2\\pi^2}" },

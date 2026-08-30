@@ -136,3 +136,32 @@ test("页面四边与根背景连续，没有默认白边", async ({ page }) => 
   expect(root.lattice.top).toBeLessThanOrEqual(-1);
   expect(root.lattice.right).toBeGreaterThanOrEqual(root.viewport + 1);
 });
+
+test("科学互动模型通过解析值与极限检查", async ({ page }) => {
+  await page.goto("/?chapter=1");
+  const miller = page.locator(".companion-lab").filter({ hasText: "Miller 晶面构造器" });
+  await expect(miller).toContainText("d=2.828 Å");
+  await expect(miller).toContainText("z 截距∞");
+  expect((await miller.locator(".miller-cube polygon").getAttribute("points"))?.split(" ").length).toBeGreaterThanOrEqual(4);
+
+  await page.goto("/?chapter=2");
+  const ewald = page.locator(".companion-lab").filter({ hasText: "倒空间衍射几何" });
+  const geometry = await ewald.evaluate((element) => {
+    const circle = element.querySelector<SVGCircleElement>("[data-testid=ewald-circle]")!;
+    const origin = element.querySelector<SVGGElement>("[data-h='0'][data-k='0'] circle")!;
+    const cx=Number(circle.getAttribute("cx")),cy=Number(circle.getAttribute("cy")),r=Number(circle.getAttribute("r"));
+    const ox=Number(origin.getAttribute("cx")),oy=Number(origin.getAttribute("cy"));
+    return Math.abs(Math.hypot(ox-cx,oy-cy)-r);
+  });
+  expect(geometry).toBeLessThan(1e-8);
+  const factor = page.locator(".companion-lab").filter({ hasText: "结构因子与系统消光" });
+  await expect(factor).toContainText("|S/f|=2.000");
+  await factor.locator("input[type=range]").nth(2).evaluate((element:HTMLInputElement)=>{Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value")!.set!.call(element,"1");element.dispatchEvent(new Event("input",{bubbles:true}))});
+  await expect(factor).toContainText("|S/f|=0.000");
+
+  await page.goto("/?chapter=5");
+  const planck = page.locator(".companion-lab").filter({ hasText: "单一声子模的热占据" });
+  await expect(planck).toContainText("平均占据 n̄0.08943");
+  const heat = page.locator("#debye .companion-lab").filter({ hasText: "Debye 与 Einstein 热容" });
+  await expect(heat).toContainText("Debye 数值积分0.368635");
+});
