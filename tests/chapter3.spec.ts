@@ -160,6 +160,25 @@ test("手机正文安全边距充足且目录章节条不随纵向滚动错位",
   expect(await switcher.evaluate(element => getComputedStyle(element).touchAction)).toBe("pan-x");
 });
 
+test("手机各章首模块与固定顶栏保持真实间距", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "仅验证手机固定栏避让");
+  for (const chapter of [1, 3]) {
+    await page.goto(chapter === 3 ? "/" : `/?chapter=${chapter}`);
+    const geometry = await page.evaluate(() => {
+      const header = document.querySelector(".site-header")!.getBoundingClientRect();
+      const hero = document.querySelector("#overview.hero-module, .companion-hero.hero-module")!.getBoundingClientRect();
+      return { headerBottom: header.bottom, heroTop: hero.top, gap: hero.top - header.bottom };
+    });
+    expect(geometry.gap).toBeGreaterThanOrEqual(10);
+    await page.getByRole("button", { name: /开始学习/ }).click();
+    await page.waitForTimeout(500);
+    const firstHeading = page.locator(chapter === 3 ? "#binding .section-header" : "#lattice .section-header");
+    const headingTop = await firstHeading.evaluate(element => element.getBoundingClientRect().top);
+    const headerBottom = await page.locator(".site-header").evaluate(element => element.getBoundingClientRect().bottom);
+    expect(headingTop).toBeGreaterThanOrEqual(headerBottom + 12);
+  }
+});
+
 test("页面四边与根背景连续，没有默认白边", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
   await page.goto("/?chapter=1");

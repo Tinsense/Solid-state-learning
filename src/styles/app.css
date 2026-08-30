@@ -2284,6 +2284,26 @@ html,body,#root { border:0; outline:0; }
   .chapter-rail > .chapter-switcher { position:sticky; top:0; z-index:3; width:100%; margin:-9px 0 14px; }
   .chapter-rail > nav { overscroll-behavior-y:contain; touch-action:pan-y; }
 }
+
+/* Mobile fixed-header clearance: the glass surface itself starts below the
+   header, rather than merely pushing its text below an overlapping header. */
+@media (max-width:620px) {
+  main .section-shell { width:calc(100% - 48px); scroll-margin-top:94px; }
+  #overview.hero-module,
+  .companion-hero.hero-module {
+    margin-top:82px;
+  }
+  #overview.hero-module { padding-top:43px; }
+  .companion-hero.hero-module { padding-top:40px; }
+  .content-section { padding-top:56px; scroll-margin-top:88px; }
+}
+
+@media (max-width:900px) and (max-height:500px) {
+  #overview.hero-module,
+  .companion-hero.hero-module { margin-top:78px; }
+  #overview.hero-module,
+  .companion-hero.hero-module { padding-top:28px; }
+}
 @media (prefers-reduced-motion:reduce) {
   ::view-transition-old(root),::view-transition-new(root) { animation:none; }
   .hero-spectrum-bar { transition:none; }
