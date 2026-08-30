@@ -2231,6 +2231,64 @@ html,body,#root { border:0; outline:0; }
 
 @media (prefers-reduced-motion:reduce) { .chapter-orbit { animation:none; } }
 
+/* Content-specific chapter covers. Chapter changes stay in this document so
+   fixed mobile controls keep the viewport as their positioning context. */
+::view-transition-old(root) { animation:chapter-fade-out 120ms ease-in both; }
+::view-transition-new(root) { animation:chapter-fade-in 200ms ease-out both; }
+@keyframes chapter-fade-out { to { opacity:.18; } }
+@keyframes chapter-fade-in { from { opacity:.18; } }
+.chapter-hero-visual {
+  width:min(35vw,450px); min-width:0; justify-self:center; align-self:center;
+  padding:18px 20px 16px; border:1px solid var(--glass-border); border-radius:26px;
+  background:rgba(255,255,255,.10); overflow:hidden;
+}
+.chapter-hero-visual > .overline { display:block; margin:0 0 4px; }
+.chapter-hero-visual svg { display:block; width:100%; aspect-ratio:300/260; overflow:visible; }
+.chapter-hero-visual > p { min-height:2.8em; margin:10px 2px 0; color:var(--text-secondary); font-size:.72rem; line-height:1.55; }
+.chapter-hero-visual svg text { fill:var(--text-tertiary); font:11px ui-monospace,SFMono-Regular,Consolas,monospace; }
+.hero-cell-lines path,.hero-equilibrium,.hero-axis { fill:none; stroke:var(--hairline-strong); stroke-width:1; }
+.hero-atom circle:first-child { fill:var(--surface-strong); stroke:var(--glass-border); }
+.hero-atom circle:nth-child(2),.hero-atom.is-secondary circle { fill:var(--text); }
+.hero-atom.is-secondary circle { opacity:.45; }
+.hero-vector,.hero-wave,.hero-dos { fill:none; stroke:var(--accent); stroke-width:1.7; }
+.hero-ewald { fill:none; stroke:var(--accent); stroke-width:1.5; }
+.hero-reciprocal-dot { fill:var(--text-tertiary); }.hero-reciprocal-hit { fill:var(--accent); filter:drop-shadow(0 0 7px color-mix(in srgb,var(--accent) 65%,transparent)); }
+.hero-spring { stroke:var(--hairline-strong); stroke-width:2; stroke-dasharray:3 3; }
+.hero-motion { stroke:var(--accent); stroke-width:2; }
+.hero-spectrum-bar { fill:var(--text-secondary); opacity:.66; transition:y 180ms ease,height 180ms ease; }
+.hero-dos { stroke-dasharray:6 5; }
+.hero-visual-controls { margin:0 auto; }
+.hero-visual-controls button { min-height:44px; }
+.hero-visual-slider { display:grid; grid-template-columns:1fr auto; gap:5px 12px; color:var(--text-secondary); font-size:.72rem; }
+.hero-visual-slider b { color:var(--text); font:500 .72rem ui-monospace,monospace; }
+.hero-visual-slider input { grid-column:1/-1; width:100%; min-height:30px; accent-color:var(--accent); }
+
+/* The mobile chapter number strip owns horizontal gestures only. */
+.chapter-rail > .chapter-switcher {
+  flex:0 0 auto; min-height:46px; max-height:46px; overflow:hidden;
+  touch-action:pan-x; overscroll-behavior:contain; transform:translateZ(0);
+}
+.chapter-rail > .chapter-switcher a:hover { transform:none; }
+
+@media (max-width:900px) {
+  .chapter-hero-visual { width:min(76vw,400px); margin:22px auto 36px; }
+}
+@media (max-width:620px) {
+  .companion-main .section-shell,.companion-hero { width:calc(100% - 48px); }
+  .companion-hero-copy { padding-inline:2px; }
+  .companion-hero .overline { font-size:.52rem; letter-spacing:.13em; line-height:1.55; }
+  .companion-hero h1 { font-size:clamp(2.2rem,10.45vw,2.85rem); line-height:1.02; }
+  .chapter-hero-visual { width:100%; margin:12px auto 24px; padding:16px; border-radius:20px; }
+  .chapter-hero-visual svg { max-height:310px; }
+  .chapter-rail { overscroll-behavior:contain; }
+  .chapter-rail > .chapter-switcher { position:sticky; top:0; z-index:3; width:100%; margin:-9px 0 14px; }
+  .chapter-rail > nav { overscroll-behavior-y:contain; touch-action:pan-y; }
+}
+@media (prefers-reduced-motion:reduce) {
+  ::view-transition-old(root),::view-transition-new(root) { animation:none; }
+  .hero-spectrum-bar { transition:none; }
+}
+
 /* =========================================================
    DEEP COURSEWORK · scientific reasoning and model contracts
    ========================================================= */

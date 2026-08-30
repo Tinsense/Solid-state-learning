@@ -119,6 +119,47 @@ for (const chapter of [1, 2, 4, 5]) {
   });
 }
 
+test("章节封面使用课程内容驱动的互动图而非静态编号", async ({ page }) => {
+  const expected = new Map([[1, "选择立方格子"], [2, "晶体转角"], [4, "声学支"], [5, "约化温度"]]);
+  for (const [chapter, control] of expected) {
+    await page.goto(`/?chapter=${chapter}`);
+    const visual = page.getByTestId(`chapter-hero-${chapter}`);
+    await expect(visual).toBeVisible();
+    await expect(visual.getByLabel(control, { exact: false }).or(visual.getByRole("button", { name: control, exact: false }))).toBeVisible();
+    await expect(visual).not.toContainText(String(chapter).padStart(2, "0"));
+  }
+});
+
+test("章节切换保留同一文档并支持浏览器历史", async ({ page }) => {
+  await page.goto("/?chapter=1");
+  await page.evaluate(() => ((window as typeof window & { __routeMarker?: string }).__routeMarker = "alive"));
+  if (await page.getByRole("button", { name: "章节目录" }).isVisible()) {
+    await page.getByRole("button", { name: "章节目录" }).click();
+    await page.locator("#chapter-rail > .chapter-switcher a").filter({ hasText: "02" }).click();
+  } else {
+    await page.locator(".site-header .chapter-switcher a").filter({ hasText: "02" }).click();
+  }
+  await expect(page).toHaveURL(/chapter=2/);
+  await expect(page.getByTestId("chapter-hero-2")).toBeVisible();
+  expect(await page.evaluate(() => (window as typeof window & { __routeMarker?: string }).__routeMarker)).toBe("alive");
+  await page.goBack();
+  await expect(page.getByTestId("chapter-hero-1")).toBeVisible();
+});
+
+test("手机正文安全边距充足且目录章节条不随纵向滚动错位", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile", "仅验证手机布局");
+  await page.goto("/?chapter=1");
+  const left = await page.locator(".companion-hero-copy").evaluate(element => element.getBoundingClientRect().left);
+  expect(left).toBeGreaterThanOrEqual(24);
+  await page.getByRole("button", { name: "章节目录" }).click();
+  const switcher = page.locator("#chapter-rail > .chapter-switcher");
+  const before = await switcher.evaluate(element => element.getBoundingClientRect().top);
+  await page.locator("#chapter-rail > nav:not(.chapter-switcher)").evaluate(element => { element.scrollTop = 260; element.dispatchEvent(new Event("scroll")); });
+  const after = await switcher.evaluate(element => element.getBoundingClientRect().top);
+  expect(Math.abs(after - before)).toBeLessThanOrEqual(1);
+  expect(await switcher.evaluate(element => getComputedStyle(element).touchAction)).toBe("pan-x");
+});
+
 test("页面四边与根背景连续，没有默认白边", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
   await page.goto("/?chapter=1");

@@ -1,4 +1,5 @@
 ﻿import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment } from "react";
 import { derivations, exercises, sectionCopy, sections } from "./content/chapter3";
 import { Derivation } from "./components/Derivation";
 import { Formula, FormulaCard } from "./components/Formula";
@@ -9,6 +10,7 @@ import { useLiquidGlassSystem } from "./lib/liquidGlass";
 import { ChapterSwitcher } from "./components/ChapterSwitcher";
 import { CompanionChapterPage } from "./components/CompanionChapterPage";
 import { companionChapters } from "./content/companionChapters";
+import { CHAPTER_CHANGE_EVENT, readChapter } from "./lib/chapterNavigation";
 
 const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "arrow" }) => {
   const paths = {
@@ -206,11 +208,18 @@ function ChapterThreeApp() {
 }
 
 function App() {
-  const requested = Number(new URLSearchParams(window.location.search).get("chapter") || 3);
+  const [requested, setRequested] = useState(readChapter);
+  const [routeKey, setRouteKey] = useState(0);
+  useEffect(() => {
+    const update = () => { setRequested(readChapter()); setRouteKey(value => value + 1); window.scrollTo({ top: 0, behavior: "smooth" }); };
+    window.addEventListener("popstate", update);
+    window.addEventListener(CHAPTER_CHANGE_EVENT, update);
+    return () => { window.removeEventListener("popstate", update); window.removeEventListener(CHAPTER_CHANGE_EVENT, update); };
+  }, []);
   if (requested === 1 || requested === 2 || requested === 4 || requested === 5) {
-    return <CompanionChapterPage chapter={companionChapters[requested]}/>;
+    return <Fragment key={`${requested}-${routeKey}`}><CompanionChapterPage chapter={companionChapters[requested]}/></Fragment>;
   }
-  return <ChapterThreeApp/>;
+  return <Fragment key={`3-${routeKey}`}><ChapterThreeApp/></Fragment>;
 }
 
 export default App;

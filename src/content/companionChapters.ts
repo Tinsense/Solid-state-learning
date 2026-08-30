@@ -38,7 +38,7 @@ const chapter1: CompanionChapter = {
   pages: "pp. 1–22",
   hero: "先学会描述重复，\n再读懂真实晶体。",
   lead: "晶体学的核心不是背结构名称，而是把“无限多原子”压缩成三件事：平移对称、Bravais 格子与基元。它们共同决定晶胞、晶面、配位和后续的衍射规律。",
-  metrics: ["06 主题单元", "04 渐进推导", "02 交互实验"],
+  metrics: ["06 主题单元", "04 渐进推导", "03 交互实验"],
   units: [
     unit("00", "overview", "章概览", "Overview", "为什么一个无限晶体可以由有限信息完全指定？", "Kittel 8e, Chapter 1, pp. 1–3", [
       "理想晶体是一个在三维空间周期重复的原子阵列。我们先抽去原子种类，只保留平移点，得到 Bravais 格子；再把每个格点上附着的一组原子称为基元。格子 + 基元，才是实际晶体结构。",
@@ -61,6 +61,7 @@ const chapter1: CompanionChapter = {
       "以常规立方晶胞边长 $a$ 表示：sc、bcc、fcc 每胞格点数分别为 1、2、4；配位数为 6、8、12；最近邻距分别为 $a$、$\\sqrt3a/2$、$a/\\sqrt2$。fcc 与 hcp 的理想硬球堆积率相同，均约为 0.740，但堆垛序列不同。",
     ], {
       formula: { latex: "\\eta_{\\rm sc}=\\frac{\\pi}{6},\\quad \\eta_{\\rm bcc}=\\frac{\\sqrt3\\pi}{8},\\quad \\eta_{\\rm fcc}=\\frac{\\pi}{3\\sqrt2}", meaning: "把晶胞内等效硬球总体积除以晶胞体积，得到三种立方格子的堆积率。", variables: ["η：packing fraction", "a：常规立方晶胞边长"] },
+      figure: "crystal",
       derivations: [{ id: "fcc-packing", title: "fcc 堆积率为何是 0.740？", result: "\\eta_{\\rm fcc}=\\frac{4(4\\pi r^3/3)}{a^3}=\\frac{\\pi}{3\\sqrt2}", meaning: "fcc 最近邻沿面对角线接触，几何约束把原子半径与晶格常数联系起来。", variables: ["r：硬球半径", "a：晶格常数"], steps: [
         { title: "数清等效原子", explanation: "8 个角原子各贡献 1/8，6 个面心原子各贡献 1/2。", latex: "N=8\\times\\frac18+6\\times\\frac12=4" },
         { title: "找到接触方向", explanation: "面对角线上依次经过角—面心—角，正好容纳四个半径。", latex: "4r=\\sqrt2a\\quad\\Rightarrow\\quad r=\\frac{a}{2\\sqrt2}" },
@@ -102,7 +103,7 @@ const chapter2: CompanionChapter = {
   pages: "pp. 23–46",
   hero: "把晶体放进波矢空间，\n衍射条件就变成几何。",
   lead: "实空间的周期排列会把散射只允许在一组离散倒格矢上发生。Bragg 定律、Laue 方程、Ewald 球和结构因子，其实是同一个相干叠加条件的不同语言。",
-  metrics: ["06 主题单元", "04 渐进推导", "02 交互实验"],
+  metrics: ["06 主题单元", "04 渐进推导", "04 交互实验"],
   units: [
     unit("00", "overview", "章概览", "Overview", "为什么晶体只在少数角度产生强衍射？", "Kittel 8e, Chapter 2, pp. 23–25", [
       "X 射线、电子或中子照射周期晶体时，每个散射中心都发出次级波。绝大多数方向上相位彼此抵消；只有当相邻晶面贡献的程差是整波长时，振幅同相累加并形成尖锐峰。",
@@ -167,7 +168,7 @@ const chapter4: CompanionChapter = {
   pages: "pp. 89–104",
   hero: "把 N 个耦合原子，\n变成彼此独立的正常模。",
   lead: "晶格振动的关键不是追踪每个原子，而是寻找整个晶体共同振动的本征模式。色散关系给出频率、波矢和群速度；量子化以后，每个正常模的能量量子就是声子。",
-  metrics: ["06 主题单元", "05 渐进推导", "02 交互实验"],
+  metrics: ["06 主题单元", "05 渐进推导", "03 交互实验"],
   units: [
     unit("00", "overview", "章概览", "Overview", "为什么周期边界会让振动频率形成能带？", "Kittel 8e, Chapter 4, pp. 89–91", [
       "在平衡位置附近，把总势能展开到位移的二次项，就得到一组线性耦合振子。平移对称使平面波成为本征解，但原子离散性让频率不再与波矢成严格直线关系，并产生有限的第一 Brillouin 区。",
@@ -234,7 +235,7 @@ const chapter5: CompanionChapter = {
   pages: "pp. 105–130",
   hero: "数清每个声子模，\n就能解释晶体的热。",
   lead: "热容由“有多少振动模能被温度激发”决定，热导则还要问“这些模能走多远”。Debye 模型、非谐性和 Umklapp 过程把微观声子谱连接到宏观热学。",
-  metrics: ["06 主题单元", "05 渐进推导", "02 交互实验"],
+  metrics: ["06 主题单元", "05 渐进推导", "05 交互实验"],
   units: [
     unit("00", "overview", "章概览", "Overview", "为什么经典理论在低温完全失效？", "Kittel 8e, Chapter 5, pp. 105–108", [
       "经典能量均分认为每个谐振自由度都贡献 $k_BT$，给出 Dulong–Petit 极限 $3Nk_B$。但量子化后，高频模在 $k_BT\\ll\\hbar\\omega$ 时几乎不能被激发，因此低温热容必须下降。",
