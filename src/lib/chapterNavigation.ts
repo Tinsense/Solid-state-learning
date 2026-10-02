@@ -1,4 +1,5 @@
 export const CHAPTER_CHANGE_EVENT = "kittel:chapter-change";
+export const sectionScrollBehavior = ():ScrollBehavior => window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
 export function chapterHref(chapter: number) {
   const url = new URL(window.location.href);

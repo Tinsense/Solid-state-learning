@@ -8,6 +8,13 @@ select option { background:#f1f2f4; color:#161719; }
 .atlas-grid { display:grid; gap:18px; grid-template-columns:repeat(2,minmax(0,1fr)); }
 .atlas-card { padding:24px; min-width:0; border-radius:24px; }
 .atlas-caption { display:flex; justify-content:space-between; gap:12px; font-size:12px; margin-bottom:20px; color:var(--text-secondary); }
+.atlas-caption { flex-wrap:wrap; align-items:center; }
+.atlas-zoom { padding:8px 12px; min-height:36px; border-radius:14px; font-size:12px; }
+.atlas-image { min-width:0; }
+.atlas-image.is-zoomed { overflow:auto; max-height:320px; scrollbar-width:none; overscroll-behavior:contain; }
+.atlas-image.is-zoomed::-webkit-scrollbar { display:none; }
+.atlas-image.is-zoomed img { max-width:none; max-height:none; margin:0; }
+.atlas-pan-hint { font-size:12px; line-height:1.7; color:var(--text-secondary); margin:0 0 16px; }
 .atlas-card img { display:block; max-width:100%; width:auto; height:auto; max-height:240px; object-fit:contain; margin:auto; }
 [data-theme="dark"] .atlas-card img { filter:invert(1); }
 .chapter-select { display:grid; gap:8px; width:100%; }

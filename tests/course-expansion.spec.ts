@@ -74,6 +74,12 @@ for(let chapter=1;chapter<=6;chapter++)test("第 "+chapter+" 章公式索引在�
   const image=page.locator(".atlas-card img").first();
   await expect(image).toBeVisible();
   await expect.poll(()=>image.evaluate((element:HTMLImageElement)=>element.naturalWidth)).toBeGreaterThan(0);
+  const zoom=page.locator(".atlas-card").first().getByRole("button",{name:/放大查看式/});
+  await zoom.click();
+  await expect(zoom).toHaveAttribute("aria-expanded","true");
+  expect(await page.locator(".atlas-image").first().evaluate(element=>getComputedStyle(element).overflowX)).toBe("auto");
+  await zoom.click();
+  await expect(zoom).toHaveAttribute("aria-expanded","false");
   for(const theme of ["light","dark"]){
    await page.evaluate(theme=>{document.documentElement.dataset.theme=theme;},theme);
    expect(await image.evaluate(element=>getComputedStyle(element).filter)).toBe(theme==="dark"?"invert(1)":"none");

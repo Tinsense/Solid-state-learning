@@ -17,6 +17,7 @@ const SURFACE_SELECTOR = [
   ".chapter-rail",
   ".mobile-rail-toggle",
   ".hero-module",
+  ".chapter-hero-visual",
   ".liquid-panel",
   ".liquid-button",
   ".top-action",
@@ -107,14 +108,17 @@ void main() {
   int chosen = -1;
   float chosenDistance = 1e6;
   float bestScore = 1e6;
+  float chosenPriority = -1.0;
 
   for (int i = 0; i < MAX_SURFACES; i++) {
     if (i >= u_count) break;
     float d = surfaceSDF(cssPoint, u_rects[i], u_radii[i]);
     if (d <= 0.75) {
       float score = abs(d);
-      if (score < bestScore) {
+      float priority = u_flags[i];
+      if (priority > chosenPriority || (priority == chosenPriority && score < bestScore)) {
         bestScore = score;
+        chosenPriority = priority;
         chosenDistance = d;
         chosen = i;
       }
@@ -509,7 +513,7 @@ class SharedGlassRenderer {
       opticsData[index * 4 + 1] = refractionRange;
       opticsData[index * 4 + 2] = fresnelRange;
       opticsData[index * 4 + 3] = glareRange;
-      flagData[index] = element.matches(".site-header") ? 1.0 : 0.0;
+      flagData[index] = element.matches(".search-panel") ? 4 : element.matches(".mobile-rail-toggle") ? 3 : element.matches(".chapter-rail") ? 2 : element.matches(".site-header") ? 1 : 0;
     });
 
     /*
@@ -678,14 +682,20 @@ export function useLiquidGlassSystem() {
     let frame = 0;
     let lastPaint = -Infinity;
     let scrollActiveUntil = 0;
+    let scrollTimer = 0;
     let disposed = false;
 
     const syncElements = () => {
-      elements = Array.from(document.querySelectorAll<HTMLElement>(SURFACE_SELECTOR))
+      const candidates = Array.from(document.querySelectorAll<HTMLElement>(SURFACE_SELECTOR))
         .filter((element) => !element.matches(".hero-lead, .hero-lead-glass"));
-      elements.forEach((element) => {
+      const roots = new Set(candidates.filter(element=>!element.matches(".section-header,.source-note,.text-button")));
+      candidates.forEach((element) => {
         element.dataset.liquidGlass = renderer ? "shared-webgl2" : "frosted";
+        let parent=element.parentElement;
+        while(parent&&!roots.has(parent))parent=parent.parentElement;
+        element.dataset.glassLayer=!roots.has(element)?"plain":parent?"embedded":"surface";
       });
+      elements=candidates.filter(element=>element.dataset.glassLayer==="surface");
       document.documentElement.dataset.glassEngine = renderer ? "shared-webgl2" : "frosted";
     };
 
@@ -711,7 +721,7 @@ export function useLiquidGlassSystem() {
          * must be sampled every frame too or a stale horizontal slice appears.
          */
         const scrolling = timestamp <= scrollActiveUntil;
-        if (motion.matches || scrolling || timestamp - lastPaint >= 40) {
+        if (renderer.canvas.style.visibility!=="hidden" && (motion.matches || scrolling || timestamp - lastPaint >= 40)) {
           lastPaint = timestamp;
           renderer.render(elements, motion.matches ? 0 : timestamp / 1000);
         }
@@ -727,7 +737,16 @@ export function useLiquidGlassSystem() {
 
     const onScroll = () => {
       scrollActiveUntil = performance.now() + 180;
-      if (!frame) frame = requestAnimationFrame(render);
+      // Compositor scrolling can advance before JS receives its new geometry.
+      // Native DOM glass stays attached; suppress stale fixed-canvas lens rims.
+      if(renderer)renderer.canvas.style.visibility="hidden";
+      window.clearTimeout(scrollTimer);
+      scrollTimer=window.setTimeout(()=>{
+        if(disposed)return;
+        renderer?.render(elements,motion.matches?0:performance.now()/1000);
+        if(renderer)renderer.canvas.style.visibility="visible";
+        if(!frame)frame=requestAnimationFrame(render);
+      },140);
     };
 
     const onPointerMove = (event: PointerEvent) => {
@@ -741,7 +760,7 @@ export function useLiquidGlassSystem() {
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     window.addEventListener("resize", schedule, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true, capture: true });
     window.visualViewport?.addEventListener("resize", schedule, { passive: true });
     window.visualViewport?.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("pointermove", onPointerMove, { passive: true });
@@ -753,16 +772,18 @@ export function useLiquidGlassSystem() {
     return () => {
       disposed = true;
       cancelAnimationFrame(frame);
+      window.clearTimeout(scrollTimer);
       mutation.disconnect();
       theme.disconnect();
       window.removeEventListener("resize", schedule);
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onScroll, true);
       window.visualViewport?.removeEventListener("resize", schedule);
       window.visualViewport?.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointerMove);
       motion.removeEventListener("change", schedule);
       elements.forEach((element) => {
         delete element.dataset.liquidGlass;
+        delete element.dataset.glassLayer;
       });
       renderer?.dispose();
       delete document.documentElement.dataset.glassEngine;

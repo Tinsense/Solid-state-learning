@@ -8,10 +8,11 @@ import { BondingStage, DensityBonding, ElasticConstantsLab, ElasticWaveExplorer,
 import { LatticeAtmosphere } from "./components/LatticeAtmosphere";
 import { useLiquidGlassSystem } from "./lib/liquidGlass";
 import { ChapterSwitcher } from "./components/ChapterSwitcher";
-import { CHAPTER_CHANGE_EVENT, readChapter } from "./lib/chapterNavigation";
+import { CHAPTER_CHANGE_EVENT, readChapter, sectionScrollBehavior } from "./lib/chapterNavigation";
 import { EquationAtlas } from "./components/EquationAtlas";
 import { ScientificDeepDive } from "./components/ScientificLearning";
 import { chapterEnhancements } from "./content/chapterEnhancements";
+import { useChapterDrawer } from "./lib/chapterDrawer";
 const CompanionRoute=lazy(()=>import("./components/CompanionRoute"));
 
 const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "arrow" }) => {
@@ -33,6 +34,7 @@ function ChapterThreeApp() {
   const [theme, setTheme] = useState<"dark" | "light">(() => (localStorage.getItem("kittel-theme") as "dark" | "light") || "dark");
   const [active, setActive] = useState("overview");
   const [railOpen, setRailOpen] = useState(false);
+  useChapterDrawer(railOpen,setRailOpen);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [completed, setCompleted] = useState<Set<string>>(() => new Set(JSON.parse(localStorage.getItem("kittel-progress") || "[]")));
@@ -67,10 +69,10 @@ function ChapterThreeApp() {
     const next = new Set(previous); next.add(id); localStorage.setItem("kittel-progress", JSON.stringify([...next])); return next;
   });
   const progress = Math.round(completed.size / 6 * 100);
-  const go = (id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }); setRailOpen(false); setSearchOpen(false); };
+  const go = (id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: sectionScrollBehavior(), block: "start" }); setRailOpen(false); setSearchOpen(false); };
   const openDerivation = (key: "wave100" | "wave110" | "wave111") => {
     window.dispatchEvent(new CustomEvent("open-derivation", { detail: key }));
-    setTimeout(() => document.getElementById(`derivation-${key}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 20);
+    setTimeout(() => document.getElementById(`derivation-${key}`)?.scrollIntoView({ behavior: sectionScrollBehavior(), block: "center" }), 20);
   };
 
   const searchResults = useMemo(() => {
@@ -105,7 +107,7 @@ function ChapterThreeApp() {
       {railOpen && <button className="rail-scrim" type="button" aria-label="关闭目录" onClick={() => setRailOpen(false)}/>} 
 
       <aside className={`chapter-rail ${railOpen ? "is-open" : ""}`} id="chapter-rail" aria-label="第三章目录">
-        <div className="rail-label"><span>CH.</span><strong>03</strong></div>
+        <div className="rail-label"><span>CH.</span><strong>03</strong><button className="drawer-close" type="button" aria-label="关闭章节目录" onClick={()=>setRailOpen(false)}>×</button></div>
         <ChapterSwitcher current={3}/>
         <nav>{sections.map((item) => <button key={item.id} type="button" className={`rail-item ${active === item.id ? "is-active" : ""}`} onClick={() => go(item.id)}><span>{item.index}</span><span>{item.title}<small>{item.english}</small></span></button>)}</nav>
         <div className="rail-footer"><span>Based on</span><strong>Kittel · 8th ed.</strong><small>pp. 47–89</small></div>
@@ -214,7 +216,7 @@ function App() {
   const [requested, setRequested] = useState(readChapter);
   const [routeKey, setRouteKey] = useState(0);
   useEffect(() => {
-    const update = () => { setRequested(readChapter()); setRouteKey(value => value + 1); window.scrollTo({ top: 0, behavior: "smooth" }); };
+    const update = () => { setRequested(readChapter()); setRouteKey(value => value + 1); window.scrollTo({ top: 0, behavior: "instant" }); };
     window.addEventListener("popstate", update);
     window.addEventListener(CHAPTER_CHANGE_EVENT, update);
     return () => { window.removeEventListener("popstate", update); window.removeEventListener(CHAPTER_CHANGE_EVENT, update); };

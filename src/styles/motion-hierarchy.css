@@ -1,0 +1,47 @@
+/* One optical surface per reading/experiment unit, not a card inside a card. */
+html:root body [data-liquid-glass][data-glass-layer][data-glass-layer="embedded"],
+html:root body [data-liquid-glass][data-glass-layer][data-glass-layer="plain"] {
+ background:transparent !important; background-image:none !important;
+ border-color:transparent !important; box-shadow:none !important;
+ backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+ isolation:auto; z-index:auto;
+}
+html:root body [data-glass-layer="embedded"]:is(.liquid-button,.top-action,.rail-item,.segmented) {
+ border-color:var(--hairline) !important;
+ background:rgba(128,128,128,.06) !important;
+}
+html:root body .rail-item[data-glass-layer="embedded"] { border-color:transparent !important; background:transparent !important; }
+html:root body .rail-item.is-active[data-glass-layer="embedded"] { color:var(--text); background:rgba(128,128,128,.10) !important; }
+html:root body .liquid-button.primary[data-glass-layer="embedded"] { background:rgba(88,154,214,.10) !important; border-color:rgba(88,154,214,.18) !important; }
+.section-header { padding:12px 4px; border-radius:0 !important; }
+.source-note { padding:20px 4px; border-radius:0 !important; }
+.derivation .formula-card { padding-inline:0; }
+.derivation .formula--step { background:transparent; border:0; padding:16px 0; backdrop-filter:none; -webkit-backdrop-filter:none; animation:study-step-appear 160ms ease-out; }
+.derivation-controls { position:static; margin-top:24px; border-top:1px solid var(--hairline) !important; }
+.liquid-button,.top-action,.rail-item,.chapter-switcher a { transition:color 140ms ease,background-color 140ms ease,border-color 140ms ease; }
+html:root body [data-glass-layer="embedded"]:is(.liquid-button,.top-action,.rail-item,.segmented,.chapter-switcher),
+.chapter-switcher a { transform:none !important; }
+.drawer-close { display:none; }
+@keyframes study-step-appear { from {opacity:.35} to {opacity:1} }
+@media(max-width:900px){
+ .chapter-rail { display:none; transform:none !important; transition:none; left:12px; right:12px; width:auto; padding:20px; }
+ .chapter-rail.is-open { display:flex; animation:study-step-appear 120ms ease-out; }
+ .chapter-rail > nav { flex:1 1 auto; min-height:0; padding:4px 0; overflow-y:auto; overscroll-behavior:contain; touch-action:pan-y; }
+ .chapter-rail .rail-label { padding:0 0 18px; align-items:center; }
+ .drawer-close { display:inline-flex; align-items:center; justify-content:center; margin-left:auto; min-width:44px; min-height:44px; border:1px solid var(--hairline); border-radius:var(--study-control-radius,16px); background:rgba(128,128,128,.06); font-size:20px; cursor:pointer; }
+ .chapter-rail .chapter-picker { margin:0 0 16px; }
+ .chapter-rail .chapter-switcher { display:grid; margin-bottom:14px; }
+ .chapter-rail .chapter-select span { letter-spacing:.1em; }
+ .chapter-rail .rail-footer { flex:none; padding:14px 0 0; margin-top:12px; }
+ .chapter-rail .rail-item { min-height:60px; font-size:14px; }
+ .chapter-rail .rail-item > span:first-child { font-size:10px; }
+ .chapter-rail .rail-item small { font-size:11px; line-height:1.4; }
+ html:root[data-theme="dark"] body .chapter-rail.is-open[data-liquid-glass] {
+  backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important;
+  -webkit-backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important;
+ }
+ .mobile-rail-toggle { transform:translateX(-50%) !important; }
+}
+@media(prefers-reduced-motion:reduce){
+ .derivation .formula--step,.chapter-rail.is-open { animation:none; }
+}

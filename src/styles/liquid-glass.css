@@ -49,10 +49,10 @@
 /* The entire site uses ONE WebGL context in dark mode. */
 .studio-glass-shared-canvas {
   position: fixed;
-  inset: -2px;
+  inset: 0;
   z-index: 1;
-  width: calc(100vw + 4px) !important;
-  height: calc(100vh + 4px) !important;
+  width: 100vw !important;
+  height: 100dvh !important;
   display: block;
   pointer-events: none;
   background: transparent;

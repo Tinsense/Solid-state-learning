@@ -13,6 +13,7 @@ export function EquationAtlas({ chapter }: { chapter: number }) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState("all");
   const [open, setOpen] = useState(false);
+  const [zoomed, setZoomed] = useState<string | null>(null);
   useEffect(() => {
     let live = true;
     load().then(data => { if (live) setEntries(data.filter(item => item.chapter === chapter)); })
@@ -33,8 +34,11 @@ export function EquationAtlas({ chapter }: { chapter: number }) {
     </div>
     {error && <p role="alert">{error}，请刷新后重试。</p>}
     {open && <div className="atlas-grid">{filtered.map(item => <article className="atlas-card liquid-panel" key={item.id} id={item.id}>
-      <div className="atlas-caption"><strong>第 {chapter} 章 · 式 ({item.number})</strong><span>p. {item.page}</span></div>
+      <div className="atlas-caption"><strong>第 {chapter} 章 · 式 ({item.number})</strong><span>p. {item.page}</span><button className="liquid-button atlas-zoom" type="button" aria-expanded={zoomed===item.id} aria-label={`放大查看式 ${item.number}`} onClick={()=>setZoomed(zoomed===item.id?null:item.id)}>{zoomed===item.id?"缩小":"放大"}</button></div>
+      {zoomed===item.id&&<p className="atlas-pan-hint">已按原始尺寸显示，左右拖动阅读长公式。</p>}
+      <div className={`atlas-image ${zoomed===item.id?"is-zoomed":""}`} tabIndex={zoomed===item.id?0:undefined} aria-label={zoomed===item.id?"可横向滚动的放大公式":undefined}>
       <img loading="lazy" src={`${import.meta.env.BASE_URL}${item.src}`} width={item.width} height={item.height} alt={`Kittel 第 ${chapter} 章第 ${item.page} 页，编号 (${item.number}) 的原始数学公式`}/>
+      </div>
     </article>)}{!filtered.length && <p>没有匹配的式号或页码。</p>}</div>}
   </section>;
 }

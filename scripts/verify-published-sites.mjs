@@ -23,7 +23,30 @@ try {
   const image=page.locator(".atlas-card img").first();await image.waitFor({state:"visible"});
   await page.waitForFunction(()=>document.querySelector(".atlas-card img")?.naturalWidth>0);
   const atlas=await page.locator(".atlas-card").count();
-  results.push({kind:"course",chapter,status:response.status(),chapters:count,atlas,errors,...data});
+  const zoom=page.locator(".atlas-zoom").first();await zoom.click();
+  const zoomWorks=await zoom.getAttribute("aria-expanded")==="true";
+  const nestedSurfaces=await page.locator('[data-glass-layer="surface"]').evaluateAll(elements=>elements.filter(element=>element.parentElement?.closest('[data-glass-layer="surface"]')).length);
+  await page.getByRole("button",{name:"章节目录",exact:true}).click();
+  const drawer=page.getByRole("dialog");await drawer.waitFor({state:"visible"});
+  const drawerWorks=await page.locator("main").evaluate(element=>element.inert)&&await drawer.locator("optgroup").count()===4;
+  if(chapter===6){
+   for(const theme of ["light","dark"]){
+    await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
+    await page.waitForTimeout(350);
+    await page.screenshot({path:`tmp/live-mobile-directory-${theme}.png`});
+   }
+  }
+  await page.getByRole("button",{name:"关闭章节目录"}).click();
+  await page.locator(".atlas-card").first().scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>document.querySelector(".studio-glass-shared-canvas")?.style.visibility!=="hidden");
+  const scrollAligned=await page.evaluate(()=>{
+   const canvas=document.querySelector(".studio-glass-shared-canvas"),rect=canvas.getBoundingClientRect();
+   const gl=canvas.getContext("webgl2"),program=gl.getParameter(gl.CURRENT_PROGRAM);
+   const shader=gl.getUniform(program,gl.getUniformLocation(program,"u_rects[0]"));
+   const header=document.querySelector(".site-header").getBoundingClientRect();
+   return rect.left===0&&rect.top===0&&[header.left,header.top,header.width,header.height].every((value,i)=>Math.abs(shader[i]-value)<.2);
+  });
+  results.push({kind:"course",chapter,status:response.status(),chapters:count,atlas,zoomWorks,drawerWorks,nestedSurfaces,scrollAligned,errors,...data});
   page.off("pageerror",handler);
   if(chapter===14)await page.screenshot({path:"tmp/live-mobile-equation-atlas.png"});
  }
@@ -44,7 +67,7 @@ try {
   if(!route)await page.screenshot({path:"tmp/live-mobile-portal.png"});
  }
  fs.writeFileSync("tmp/published-sites-audit.json",JSON.stringify(results,null,2));
- const failed=results.filter(item=>item.status!==200||item.overflow>1||!item.program||item.glError!==0||item.errors.length||item.formulaFallbacks||item.kind==="course"&&item.chapters!==22);
+ const failed=results.filter(item=>item.status!==200||item.overflow>1||!item.program||item.glError!==0||item.errors.length||item.formulaFallbacks||item.kind==="course"&&(item.chapters!==22||!item.zoomWorks||!item.drawerWorks||item.nestedSurfaces||!item.scrollAligned));
  console.log(JSON.stringify({formulaCount:formulas.length,checks:results.length,failed},null,2));
  if(failed.length)process.exitCode=1;
 }finally{await browser.close();}
