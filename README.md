@@ -1,44 +1,52 @@
-# 晶格 · Kittel 第三章交互式电子教材
+# 晶格 · Kittel 固体物理学习网站
 
-面向材料、电池方向研究生的中文交互式学习网站，完整覆盖 Kittel *Introduction to Solid State Physics*（8th ed.）Chapter 3: **Crystal Binding and Elastic Constants**。
+依据用户提供的 Kittel *Introduction to Solid State Physics*（8th ed.），提供第 1–22 章中文课程、渐进推导、定量交互实验和原书编号公式索引。
 
-## 功能
+## 内容与覆盖边界
 
-- 11 个连续学习单元，覆盖惰性气体、离子/共价/金属/氢键、原子半径、应变应力、立方弹性和弹性波。
-- 10 组 KaTeX 公式卡片与 progressive derivation（逐步推导）。
-- 9 个实时实验：结合图景、London、Lennard–Jones、Pauli、Madelung、NaCl 壳层、电子密度、应变、立方弹性与弹性波。
-- Concept Check、三级练习、知识图谱、进度本地保存、Dark/Light、键盘导航与 reduced-motion 支持。
-- 黑白动态离子晶格网络以大小交替的离子节点、近邻键线和轻微波动构成，并与全部玻璃模块共用一套 WebGL2 场景纹理和时间轴；任务栏、章节侧栏、正文、示范图、公式推导、概念检查与练习采用 Liquid Glass Studio 同类四阶段管线：SDF 玻璃形状、双向高斯模糊、Snell 折射、无彩边 Fresnel 反射与克制的方向性 glare。浏览器原生 backdrop-filter 同时采样模块下方的实际页面内容；不支持 WebGL2 或上下文丢失时自动隐藏光学画布并降级为透明模糊玻璃。
+- 第 1–5 章保留已有主题单元和实验；第三章进一步补充晶格计数、Born–Mayer 平衡、弹性稳定性、Christoffel 方程与声速反演的推理和算例。
+- 第 6 章新增自由电子气课程及费米球、粒子数守恒的费米分布、输运和霍尔实验。
+- 第 7–22 章每章提供四个核心主题、渐进推导、两个定量实验、概念检查和带解答练习。实验明示变量单位、近似条件和模型边界，不把示意曲线当成实际材料数据。
+- 全书编号公式索引包含 1026 个数学展示，支持按章节、原式号和页码查找。公式以透明图像保留原始数学字形，避免旧 PDF 字体映射造成上下标丢失。
+- 编号公式索引不是逐式详解：核心公式的推导在课程中展开，未编号的行内公式和中间计算没有单独做完备索引。不能将本版本宣称为全书每个公式都有完整推导。
+- 中文讲解为重新编写；不发布用户的源 PDF、教材正文扫描页或原书插图。公式索引保留页码用于核对，原书 SI/CGS 表达式必须先统一单位制再和实验比较。
 
-## 运行
+## 视觉与交互
+
+黑白离子晶格背景带轻微波动，亮暗主题玻璃表面使用约 10% 的基础填色（90% 透明），文字保持不透明以保证阅读。填色比例不等于模糊、反射合成后的最终像素透明度。
+
+WebGL2 用圆角距离场计算边缘法线，采样背景画布完成折射、边缘散射和轻微色散；原生 backdrop-filter 对模块下面的实际 DOM 内容进行模糊。WebGL 并未截图或折射任意 DOM，也不是原生 iOS 的光学实现。无 WebGL2 时退化为透明毛玻璃，减少动态效果设置会停止背景动画。
+
+章节切换使用同页路由，支持浏览器前进/后退。手机目录保持正文亮度，主题、学习进度保存在本地。KaTeX 和字体随网站打包，不依赖外部公式 CDN。
+
+## 本地运行
 
 需要 Node.js 20.19+ 或 22.12+。
 
-```bash
+```sh
 npm install
 npm run dev
-```
-
-浏览器打开终端显示的本地地址，通常是 `http://127.0.0.1:5173`。
-
-## 构建与预览
-
-```bash
 npm run build
 npm run preview
 ```
 
-生产文件位于 `dist/`。KaTeX 字体与代码均被打包进 `dist`，预览不依赖外部 CDN。
+项目路径前缀为 /Solid-state-learning/，按终端地址访问。生产文件在 dist/。
 
-## 测试
+## 验证
 
-```bash
+```sh
 npx playwright install chromium
 npm test
 ```
 
-测试覆盖首页、目录、渐进推导、Lennard–Jones slider、Madelung 收敛、弹性波方向/模式、Concept Check、共享晶格场、WebGL2 折射模块、分段控件无横向滑轨和页面横向溢出，并在桌面 Chrome 与 Android Edge 用户代理下运行。
+覆盖桌面和手机的课程访问、章节同页切换、公式渲染、互动参数、关键解析值/极限、玻璃上下文、目录安全间距和横向溢出。
 
-## 内容说明
+scripts/extract_formula_atlas.py 根据本地源 PDF 重建公式索引；需要 pdfplumber、pypdfium2 和 Pillow。用 --help 查看参数，源文件不在仓库中。
 
-教学内容依据用户提供的 Kittel PDF 第 3 章重写。公式默认使用 SI；涉及 Kittel 原书 CGS 记号处提供明确对照。插图均用 SVG/CSS 重新绘制，没有扫描或嵌入教材原图。
+scripts/audit-independent-sites.mjs 用于核查独立静态站点。通过 SITE_REPO 指定仓库路径、SITE_URL 指定本地服务地址、CHROME_PATH 指定浏览器；只输出本地审计报告。
+
+## 发布
+
+main 分支推送后由 GitHub Actions 构建并发布到 https://tinsense.github.io/Solid-state-learning/ 。独立网站的共享玻璃样式在 Tinsense.github.io 仓库维护。
+
+光学设计参考 Liquid Glass Studio（MIT）：https://github.com/iyinchao/liquid-glass-studio 。按其许可保留项目内已有版权声明；本站实现针对长文阅读和移动设备做了性能、对比度和动画限制。

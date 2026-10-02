@@ -3,6 +3,7 @@ dist/
 .pnpm-store/
 test-results/
 tmp/
+__pycache__/
 
 *.tsbuildinfo
 

@@ -10,7 +10,7 @@ export function chapterHref(chapter: number) {
 
 export function readChapter() {
   const value = Number(new URLSearchParams(window.location.search).get("chapter") || 3);
-  return [1, 2, 3, 4, 5].includes(value) ? value : 3;
+  return Number.isInteger(value) && value >= 1 && value <= 22 ? value : 3;
 }
 
 export function navigateToChapter(chapter: number) {

@@ -129,6 +129,57 @@ function ThermalLab(){
   </LabShell>;
 }
 
+const electronCharge = 1.602176634e-19;
+const electronMass = 9.1093837139e-31;
+const hbar = 1.054571817e-34;
+const boltzmann = 1.380649e-23;
+
+function FermiSphereLab() {
+  const [density, setDensity] = useState(5);
+  const n = density * 1e28;
+  const kF = Math.cbrt(3 * Math.PI ** 2 * n);
+  const eF = hbar ** 2 * kF ** 2 / (2 * electronMass);
+  const radius = 28 + 25 * Math.cbrt(density);
+  return <LabShell label="K-SPACE STATE COUNTING" title="三维费米球：密度如何改变半径？" value={`n=${density.toFixed(1)}×10²⁸ m⁻³ · E_F=${(eF / electronCharge).toFixed(2)} eV`} contract={{model:"含双自旋的三维非相互作用自由电子气",assumptions:["T=0","各向同性抛物色散","电子采用裸质量 mₑ"],outputs:"k_F 以 nm⁻¹、E_F 以 eV、T_F 以 K 表示",checks:["N=Vk_F³/(3π²)","k_F 随 n^(1/3) 增长"]}}>
+    <div className="companion-lab__grid"><svg className="fermi-stage" viewBox="0 0 340 235" role="img" aria-label="三维费米球的二维截面与费米半径"><circle className="fermi-fill" cx="166" cy="112" r={radius}/><circle className="fermi-rim" cx="166" cy="112" r={radius}/><line x1="166" y1="112" x2={166+radius} y2="112"/><text x="170" y="104">kF</text><text x="52" y="219">占据态：球内 × 双自旋</text></svg><div className="lab-sliders"><label><span>电子数密度 n / 10²⁸ m⁻³</span><b>{density.toFixed(1)}</b><input type="range" min="1" max="15" step=".1" value={density} onChange={event=>setDensity(Number(event.target.value))}/></label><div className="numeric-audit"><span>费米波矢 kF<b>{(kF / 1e9).toFixed(3)} nm⁻¹</b></span><span>费米能 EF<b>{(eF / electronCharge).toFixed(3)} eV</b></span><span>费米速度 vF<b>{(hbar*kF/electronMass / 1e6).toFixed(3)} ×10⁶ m/s</b></span><span>费米温度 TF<b>{(eF/boltzmann).toFixed(0)} K</b></span></div><Formula latex={`k_F=(3\\pi^2n)^{1/3}=${(kF/1e9).toFixed(3)}\\,\\mathrm{nm}^{-1}`}/></div></div>
+  </LabShell>;
+}
+
+function FermiStepLab() {
+  const [temperature, setTemperature] = useState(.08);
+  const occupation = (energy:number, mu:number) => 1/(1+Math.exp(clamp((energy-mu)/temperature,-80,80)));
+  const count = (mu:number) => {
+    const countIntervals=500, step=4/countIntervals;
+    let sum=0;
+    for(let i=0;i<=countIntervals;i++) {
+      const energy=i*step;
+      sum+=(i===0||i===countIntervals?1:i%2?4:2)*Math.sqrt(energy)*occupation(energy,mu);
+    }
+    return 1.5*step*sum/3;
+  };
+  let low=0, high=2;
+  for(let i=0;i<28;i++){const mid=(low+high)/2;if(count(mid)>1)high=mid;else low=mid;}
+  const mu=(low+high)/2;
+  const path=Array.from({length:121},(_,i)=>{const e=i/120*2;return `${34+i/120*276},${198-occupation(e,mu)*165}`}).join(" ");
+  return <LabShell label="PARTICLE-CONSERVING FERMI FUNCTION" title="升温时费米边缘怎样模糊？" value={`T/T_F=${temperature.toFixed(3)} · μ/E_F=${mu.toFixed(4)}`} contract={{model:"三维自由电子 DOS∝√E，数值求解化学势以保持 N 不变",assumptions:["热平衡","自旋二重简并","0.015≤T/T_F≤0.3"],outputs:"E、μ 以 E_F 归一；f 为占据概率",checks:["∫g(E)f(E)dE=N","E=μ 时 f=1/2"]}}>
+    <div className="companion-lab__grid"><svg className="dispersion-stage fermi-step-stage" viewBox="0 0 340 235" role="img" aria-label="粒子数守恒下不同温度的费米占据曲线"><path className="axis" d="M34 22v176h276"/><polyline className="dispersion acoustic" points={path}/><line className="cursor" x1={34+mu/2*276} y1="22" x2={34+mu/2*276} y2="198"/><text x="8" y="25">f(E)</text><text x="277" y="218">E/EF</text><text x={Math.min(260,39+mu/2*276)} y="40">μ</text></svg><div className="lab-sliders"><label><span>约化温度 T/T_F</span><b>{temperature.toFixed(3)}</b><input type="range" min=".015" max=".3" step=".005" value={temperature} onChange={event=>setTemperature(Number(event.target.value))}/></label><div className="numeric-audit"><span>化学势 μ/EF<b>{mu.toFixed(5)}</b></span><span>费米能处占据 f(EF)<b>{occupation(1,mu).toFixed(5)}</b></span><span>粒子数数值校验 N/N₀<b>{count(mu).toFixed(6)}</b></span></div><Formula latex={`f(E)=\\frac{1}{e^{(E-\\mu)/k_BT}+1},\\quad f(\\mu)=\\frac12`}/></div></div>
+  </LabShell>;
+}
+
+function HallTransportLab() {
+  const [density, setDensity] = useState(6);
+  const [tau, setTau] = useState(12);
+  const [field, setField] = useState(8);
+  const n=density*1e28, time=tau*1e-15;
+  const conductivity=n*electronCharge**2*time/electronMass;
+  const hall=-1/(n*electronCharge);
+  const omegaTau=electronCharge*field*time/electronMass;
+  const lorenz=Math.PI**2/3*(boltzmann/electronCharge)**2;
+  return <LabShell label="SINGLE-BAND RELAXATION-TIME MODEL" title="电导与霍尔偏转" value={`σ=${(conductivity/1e6).toFixed(2)} MS/m · R_H=${(hall*1e6).toFixed(3)} cm³/C`} contract={{model:"单电子抛物带的 Drude–Hall 稳态近似",assumptions:["各向同性且仅一种电子载流子","τ 不随能量变化","弱磁场 ωcτ<1"],outputs:"σ 用 MS/m；R_H 用 cm³/C；Hall 角无量纲",checks:["R_H 为负","B=0 时 Hall 角为 0"]}}>
+    <div className="companion-lab__grid"><svg className="hall-stage" viewBox="0 0 340 235" role="img" aria-label="磁场使电子漂移发生横向偏转"><path className="axis" d="M40 195h260M40 195V25"/><path className="hall-orbit" d={`M56 178 Q174 ${176-omegaTau*420} 290 ${178-omegaTau*860}`}/><circle cx="56" cy="178" r="5"/><circle cx="290" cy={178-omegaTau*860} r="5"/><text x="223" y="216">E →</text><text x="52" y="33">B ⊙</text></svg><div className="lab-sliders"><label><span>密度 n / 10²⁸ m⁻³</span><b>{density.toFixed(1)}</b><input type="range" min="1" max="12" step=".1" value={density} onChange={event=>setDensity(Number(event.target.value))}/></label><label><span>弛豫时间 τ / fs</span><b>{tau.toFixed(1)}</b><input type="range" min="1" max="40" step=".5" value={tau} onChange={event=>setTau(Number(event.target.value))}/></label><label><span>磁场 B / T</span><b>{field.toFixed(1)}</b><input type="range" min="0" max="15" step=".1" value={field} onChange={event=>setField(Number(event.target.value))}/></label><div className="numeric-audit"><span>电导 σ<b>{(conductivity/1e6).toFixed(3)} MS/m</b></span><span>Hall 系数 RH<b>{(hall*1e6).toFixed(4)} cm³/C</b></span><span>|tan θH|=ωcτ<b>{omegaTau.toFixed(4)}</b></span><span>L₀<b>{(lorenz*1e8).toFixed(4)}×10⁻⁸ WΩK⁻²</b></span></div></div></div>
+  </LabShell>;
+}
+
 export function CompanionFigure({type}:{type:NonNullable<CompanionUnit["figure"]>}){
-  if(type==="crystal")return <CrystalLab/>; if(type==="miller")return <MillerLab/>; if(type==="bragg")return <BraggLab/>; if(type==="reciprocal")return <ReciprocalLab/>; if(type==="structure-factor")return <StructureFactorLab/>; if(type==="mono-phonon")return <PhononLab/>; if(type==="diatomic")return <PhononLab diatomic/>; if(type==="planck")return <PlanckLab/>; if(type==="dos")return <DosLab/>; if(type==="heat-capacity")return <HeatCapacityLab/>; return <ThermalLab/>;
+  if(type==="crystal")return <CrystalLab/>; if(type==="miller")return <MillerLab/>; if(type==="bragg")return <BraggLab/>; if(type==="reciprocal")return <ReciprocalLab/>; if(type==="structure-factor")return <StructureFactorLab/>; if(type==="mono-phonon")return <PhononLab/>; if(type==="diatomic")return <PhononLab diatomic/>; if(type==="planck")return <PlanckLab/>; if(type==="dos")return <DosLab/>; if(type==="heat-capacity")return <HeatCapacityLab/>; if(type==="fermi-step")return <FermiStepLab/>; if(type==="fermi-sphere")return <FermiSphereLab/>; if(type==="hall-transport")return <HallTransportLab/>; return <ThermalLab/>;
 }

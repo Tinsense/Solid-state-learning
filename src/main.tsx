@@ -6,6 +6,7 @@ import "./styles/typography.css";
 import "./styles/lattice.css";
 import "./styles/liquid-glass.css";
 import "./styles/app.css";
+import "./styles/course-expansion.css";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

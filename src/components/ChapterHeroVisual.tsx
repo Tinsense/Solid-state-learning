@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { physicsModels } from "../content/physicsModels";
 
 const latticePoints = Array.from({ length: 16 }, (_, i) => ({ x: 42 + (i % 4) * 72, y: 42 + Math.floor(i / 4) * 58 }));
 
@@ -41,9 +42,40 @@ function ThermalHero() {
   </svg><label className="hero-visual-slider"><span>约化温度 T/ΘD</span><b>{temperature.toFixed(2)}</b><input aria-label="约化温度" type="range" min=".08" max="1" step=".01" value={temperature} onChange={e=>setTemperature(Number(e.target.value))}/></label><p>升温会逐步解冻更高频的声子模，而不是同时激活全部自由度。</p></>;
 }
 
-export function ChapterHeroVisual({ chapter }: { chapter: 1 | 2 | 4 | 5 }) {
+function FermiHero() {
+  const [temperature, setTemperature] = useState(.12);
+  const occupancy = (x: number) => 1 / (Math.exp((x - 1) / temperature) + 1);
+  const curve = Array.from({ length: 80 }, (_, index) => {
+    const energy = index / 79 * 2;
+    return `${30 + energy * 120},${208 - occupancy(energy) * 150}`;
+  }).join(" ");
+  return <><svg viewBox="0 0 300 260" role="img" aria-label="温度升高时费米能附近的占据阶跃变宽">
+    <path className="hero-axis" d="M30 35v173h244"/>
+    <line className="hero-equilibrium" x1="150" y1="45" x2="150" y2="209"/>
+    <polyline className="hero-dos" points={curve} fill="none"/>
+    <circle className="hero-reciprocal-hit" cx="150" cy="133" r="5"/>
+    <text x="154" y="231">E / E<tspan baselineShift="sub" fontSize="10">F</tspan></text>
+    <text x="36" y="28">f(E)</text><text x="153" y="54">f=½</text>
+  </svg><label className="hero-visual-slider"><span>约化温度 T/T<sub>F</sub></span><b>{temperature.toFixed(2)}</b><input aria-label="费米气体约化温度" type="range" min=".02" max=".4" step=".01" value={temperature} onChange={event=>setTemperature(Number(event.target.value))}/></label><p>封面示意固定 μ≈E<sub>F</sub>；下方实验会重新求 μ 以严格保持电子数。</p></>;
+}
+
+function PhysicsHero({ chapter }: { chapter: number }) {
+  const data=physicsModels[chapter][0];
+  const [value,setValue]=useState(data.controls[0].initial);
+  const parameters=data.controls.map((item,i)=>i===0?value:item.initial);
+  const samples=Array.from({length:101},(_,i)=>{
+    const x=data.domain[0]+(data.domain[1]-data.domain[0])*i/100;
+    return data.series[0].evaluate(x,parameters);
+  });
+  const min=Math.min(...samples),span=Math.max(1e-9,Math.max(...samples)-min);
+  return <><svg viewBox="0 0 300 260" role="img" aria-label={data.title}><path className="hero-axis" d="M30 35v173h240"/><polyline className="hero-dos" fill="none" points={samples.map((y,i)=>(30+i*2.4)+","+(208-(y-min)/span*150)).join(" ")}/><text x="30" y="25">{data.yLabel}</text><text x="30" y="232">{data.xLabel}</text></svg>
+    <label className="hero-visual-slider"><span>{data.controls[0].label}</span><b>{value.toFixed(2)}</b><input type="range" aria-label={data.controls[0].label} min={data.controls[0].min} max={data.controls[0].max} step={data.controls[0].step} value={value} onChange={event=>setValue(Number(event.target.value))}/></label>
+    <p>{data.title}；完整假设、单位与第二条实验见本章正文。</p></>;
+}
+export function ChapterHeroVisual({ chapter }: { chapter: number }) {
+  if(chapter>=7)return <div className={"chapter-hero-visual chapter-hero-visual--"+chapter} data-testid={"chapter-hero-"+chapter}><span className="overline">PHYSICS IN MOTION</span><PhysicsHero chapter={chapter}/></div>;
   return <div className={`chapter-hero-visual chapter-hero-visual--${chapter}`} data-testid={`chapter-hero-${chapter}`}>
-    <span className="overline">{chapter===1?"LATTICE + BASIS":chapter===2?"RECIPROCAL SPACE":chapter===4?"NORMAL MODES":"THERMAL PHONONS"}</span>
-    {chapter===1?<CrystalHero/>:chapter===2?<DiffractionHero/>:chapter===4?<VibrationHero/>:<ThermalHero/>}
+    <span className="overline">{chapter===1?"LATTICE + BASIS":chapter===2?"RECIPROCAL SPACE":chapter===4?"NORMAL MODES":chapter===5?"THERMAL PHONONS":"FERMI SURFACE"}</span>
+    {chapter===1?<CrystalHero/>:chapter===2?<DiffractionHero/>:chapter===4?<VibrationHero/>:chapter===5?<ThermalHero/>:<FermiHero/>}
   </div>;
 }

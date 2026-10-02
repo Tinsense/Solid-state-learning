@@ -4,6 +4,8 @@ export default defineConfig({
   testDir: "./tests",
   timeout: 30_000,
   fullyParallel: false,
+  // WebGL runs on the same GPU; avoid four competing long-form renderers.
+  workers: 2,
   reporter: [["list"]],
   use: {
     baseURL: "http://127.0.0.1:4173",

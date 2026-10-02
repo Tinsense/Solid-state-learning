@@ -1,6 +1,11 @@
 import type { DerivationData, ExerciseData, SectionMeta } from "./chapter3";
+import { chapter6 } from "./chapter6";
+import { advancedChapters } from "./advancedChapters";
+import { advancedChaptersB } from "./advancedChaptersB";
+import { advancedChaptersC } from "./advancedChaptersC";
 
 export type CompanionUnit = {
+  advancedLab?: number;
   meta: SectionMeta;
   paragraphs: string[];
   formula?: { latex: string; meaning: string; variables: string[] };
@@ -11,11 +16,11 @@ export type CompanionUnit = {
     question: string;
     choices: { label: string; correct?: boolean; feedback: string }[];
   };
-  figure?: "crystal" | "miller" | "bragg" | "reciprocal" | "structure-factor" | "mono-phonon" | "diatomic" | "planck" | "dos" | "heat-capacity" | "thermal";
+  figure?: "crystal" | "miller" | "bragg" | "reciprocal" | "structure-factor" | "mono-phonon" | "diatomic" | "planck" | "dos" | "heat-capacity" | "thermal" | "fermi-step" | "fermi-sphere" | "hall-transport";
 };
 
 export type CompanionChapter = {
-  number: 1 | 2 | 4 | 5;
+  number: number;
   english: string;
   title: string;
   pages: string;
@@ -304,4 +309,4 @@ const chapter5: CompanionChapter = {
   ],
 };
 
-export const companionChapters: Record<1 | 2 | 4 | 5, CompanionChapter> = { 1: chapter1, 2: chapter2, 4: chapter4, 5: chapter5 };
+export const companionChapters: Record<number, CompanionChapter> = { 1: chapter1, 2: chapter2, 4: chapter4, 5: chapter5, 6: chapter6, ...advancedChapters, ...advancedChaptersB, ...advancedChaptersC };

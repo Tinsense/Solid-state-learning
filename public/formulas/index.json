@@ -1,0 +1,9236 @@
+[
+  {
+    "id": "c01-e001",
+    "chapter": 1,
+    "number": "1",
+    "page": 4,
+    "src": "formulas/c01-e001.png",
+    "width": 603,
+    "height": 44
+  },
+  {
+    "id": "c01-e002",
+    "chapter": 1,
+    "number": "2",
+    "page": 5,
+    "src": "formulas/c01-e002.png",
+    "width": 590,
+    "height": 76
+  },
+  {
+    "id": "c01-e003",
+    "chapter": 1,
+    "number": "3",
+    "page": 6,
+    "src": "formulas/c01-e003.png",
+    "width": 559,
+    "height": 46
+  },
+  {
+    "id": "c02-e001",
+    "chapter": 2,
+    "number": "1",
+    "page": 25,
+    "src": "formulas/c02-e001.png",
+    "width": 551,
+    "height": 69
+  },
+  {
+    "id": "c02-e002",
+    "chapter": 2,
+    "number": "2",
+    "page": 27,
+    "src": "formulas/c02-e002.png",
+    "width": 548,
+    "height": 41
+  },
+  {
+    "id": "c02-e003",
+    "chapter": 2,
+    "number": "3",
+    "page": 27,
+    "src": "formulas/c02-e003.png",
+    "width": 725,
+    "height": 67
+  },
+  {
+    "id": "c02-e004",
+    "chapter": 2,
+    "number": "4",
+    "page": 27,
+    "src": "formulas/c02-e004.png",
+    "width": 809,
+    "height": 106
+  },
+  {
+    "id": "c02-e005",
+    "chapter": 2,
+    "number": "5",
+    "page": 28,
+    "src": "formulas/c02-e005.png",
+    "width": 597,
+    "height": 67
+  },
+  {
+    "id": "c02-e006",
+    "chapter": 2,
+    "number": "6",
+    "page": 28,
+    "src": "formulas/c02-e006.png",
+    "width": 506,
+    "height": 48
+  },
+  {
+    "id": "c02-e007",
+    "chapter": 2,
+    "number": "7",
+    "page": 28,
+    "src": "formulas/c02-e007.png",
+    "width": 822,
+    "height": 84
+  },
+  {
+    "id": "c02-e008",
+    "chapter": 2,
+    "number": "8",
+    "page": 28,
+    "src": "formulas/c02-e008.png",
+    "width": 615,
+    "height": 48
+  },
+  {
+    "id": "c02-e009",
+    "chapter": 2,
+    "number": "9",
+    "page": 28,
+    "src": "formulas/c02-e009.png",
+    "width": 576,
+    "height": 63
+  },
+  {
+    "id": "c02-e010",
+    "chapter": 2,
+    "number": "10",
+    "page": 28,
+    "src": "formulas/c02-e010.png",
+    "width": 648,
+    "height": 75
+  },
+  {
+    "id": "c02-e011",
+    "chapter": 2,
+    "number": "11",
+    "page": 28,
+    "src": "formulas/c02-e011.png",
+    "width": 681,
+    "height": 80
+  },
+  {
+    "id": "c02-e012",
+    "chapter": 2,
+    "number": "12",
+    "page": 29,
+    "src": "formulas/c02-e012.png",
+    "width": 649,
+    "height": 76
+  },
+  {
+    "id": "c02-e013",
+    "chapter": 2,
+    "number": "13",
+    "page": 29,
+    "src": "formulas/c02-e013.png",
+    "width": 882,
+    "height": 107
+  },
+  {
+    "id": "c02-e014",
+    "chapter": 2,
+    "number": "14",
+    "page": 29,
+    "src": "formulas/c02-e014.png",
+    "width": 528,
+    "height": 49
+  },
+  {
+    "id": "c02-e015",
+    "chapter": 2,
+    "number": "15",
+    "page": 29,
+    "src": "formulas/c02-e015.png",
+    "width": 589,
+    "height": 44
+  },
+  {
+    "id": "c02-e016",
+    "chapter": 2,
+    "number": "16",
+    "page": 29,
+    "src": "formulas/c02-e016.png",
+    "width": 678,
+    "height": 63
+  },
+  {
+    "id": "c02-e017",
+    "chapter": 2,
+    "number": "17",
+    "page": 30,
+    "src": "formulas/c02-e017.png",
+    "width": 774,
+    "height": 87
+  },
+  {
+    "id": "c02-e018",
+    "chapter": 2,
+    "number": "18",
+    "page": 31,
+    "src": "formulas/c02-e018.png",
+    "width": 768,
+    "height": 46
+  },
+  {
+    "id": "c02-e019",
+    "chapter": 2,
+    "number": "19",
+    "page": 31,
+    "src": "formulas/c02-e019.png",
+    "width": 530,
+    "height": 42
+  },
+  {
+    "id": "c02-e020",
+    "chapter": 2,
+    "number": "20",
+    "page": 31,
+    "src": "formulas/c02-e020.png",
+    "width": 645,
+    "height": 63
+  },
+  {
+    "id": "c02-e021",
+    "chapter": 2,
+    "number": "21",
+    "page": 31,
+    "src": "formulas/c02-e021.png",
+    "width": 522,
+    "height": 73
+  },
+  {
+    "id": "c02-e022",
+    "chapter": 2,
+    "number": "22",
+    "page": 31,
+    "src": "formulas/c02-e022.png",
+    "width": 890,
+    "height": 106
+  },
+  {
+    "id": "c02-e023",
+    "chapter": 2,
+    "number": "23",
+    "page": 32,
+    "src": "formulas/c02-e023.png",
+    "width": 544,
+    "height": 72
+  },
+  {
+    "id": "c02-e024",
+    "chapter": 2,
+    "number": "24",
+    "page": 32,
+    "src": "formulas/c02-e024.png",
+    "width": 537,
+    "height": 42
+  },
+  {
+    "id": "c02-e025",
+    "chapter": 2,
+    "number": "25",
+    "page": 32,
+    "src": "formulas/c02-e025.png",
+    "width": 776,
+    "height": 43
+  },
+  {
+    "id": "c02-e026",
+    "chapter": 2,
+    "number": "26",
+    "page": 33,
+    "src": "formulas/c02-e026.png",
+    "width": 559,
+    "height": 49
+  },
+  {
+    "id": "c02-e27a",
+    "chapter": 2,
+    "number": "27a",
+    "page": 34,
+    "src": "formulas/c02-e27a.png",
+    "width": 657,
+    "height": 46
+  },
+  {
+    "id": "c02-e27b",
+    "chapter": 2,
+    "number": "27b",
+    "page": 35,
+    "src": "formulas/c02-e27b.png",
+    "width": 744,
+    "height": 46
+  },
+  {
+    "id": "c02-e028",
+    "chapter": 2,
+    "number": "28",
+    "page": 36,
+    "src": "formulas/c02-e028.png",
+    "width": 809,
+    "height": 49
+  },
+  {
+    "id": "c02-e029",
+    "chapter": 2,
+    "number": "29",
+    "page": 36,
+    "src": "formulas/c02-e029.png",
+    "width": 874,
+    "height": 49
+  },
+  {
+    "id": "c02-e030",
+    "chapter": 2,
+    "number": "30",
+    "page": 36,
+    "src": "formulas/c02-e030.png",
+    "width": 589,
+    "height": 48
+  },
+  {
+    "id": "c02-e031",
+    "chapter": 2,
+    "number": "31",
+    "page": 36,
+    "src": "formulas/c02-e031.png",
+    "width": 850,
+    "height": 46
+  },
+  {
+    "id": "c02-e032",
+    "chapter": 2,
+    "number": "32",
+    "page": 36,
+    "src": "formulas/c02-e032.png",
+    "width": 851,
+    "height": 46
+  },
+  {
+    "id": "c02-e033",
+    "chapter": 2,
+    "number": "33",
+    "page": 37,
+    "src": "formulas/c02-e033.png",
+    "width": 787,
+    "height": 46
+  },
+  {
+    "id": "c02-e034",
+    "chapter": 2,
+    "number": "34",
+    "page": 37,
+    "src": "formulas/c02-e034.png",
+    "width": 752,
+    "height": 65
+  },
+  {
+    "id": "c02-e035",
+    "chapter": 2,
+    "number": "35",
+    "page": 37,
+    "src": "formulas/c02-e035.png",
+    "width": 592,
+    "height": 66
+  },
+  {
+    "id": "c02-e036",
+    "chapter": 2,
+    "number": "36",
+    "page": 38,
+    "src": "formulas/c02-e036.png",
+    "width": 755,
+    "height": 85
+  },
+  {
+    "id": "c02-e037",
+    "chapter": 2,
+    "number": "37",
+    "page": 38,
+    "src": "formulas/c02-e037.png",
+    "width": 567,
+    "height": 45
+  },
+  {
+    "id": "c02-e038",
+    "chapter": 2,
+    "number": "38",
+    "page": 38,
+    "src": "formulas/c02-e038.png",
+    "width": 737,
+    "height": 45
+  },
+  {
+    "id": "c02-e039",
+    "chapter": 2,
+    "number": "39",
+    "page": 39,
+    "src": "formulas/c02-e039.png",
+    "width": 682,
+    "height": 76
+  },
+  {
+    "id": "c02-e040",
+    "chapter": 2,
+    "number": "40",
+    "page": 39,
+    "src": "formulas/c02-e040.png",
+    "width": 555,
+    "height": 78
+  },
+  {
+    "id": "c02-e041",
+    "chapter": 2,
+    "number": "41",
+    "page": 39,
+    "src": "formulas/c02-e041.png",
+    "width": 854,
+    "height": 134
+  },
+  {
+    "id": "c02-e042",
+    "chapter": 2,
+    "number": "42",
+    "page": 39,
+    "src": "formulas/c02-e042.png",
+    "width": 628,
+    "height": 80
+  },
+  {
+    "id": "c02-e043",
+    "chapter": 2,
+    "number": "43",
+    "page": 39,
+    "src": "formulas/c02-e043.png",
+    "width": 590,
+    "height": 68
+  },
+  {
+    "id": "c02-e044",
+    "chapter": 2,
+    "number": "44",
+    "page": 39,
+    "src": "formulas/c02-e044.png",
+    "width": 576,
+    "height": 47
+  },
+  {
+    "id": "c02-e045",
+    "chapter": 2,
+    "number": "45",
+    "page": 40,
+    "src": "formulas/c02-e045.png",
+    "width": 713,
+    "height": 87
+  },
+  {
+    "id": "c02-e046",
+    "chapter": 2,
+    "number": "46",
+    "page": 40,
+    "src": "formulas/c02-e046.png",
+    "width": 710,
+    "height": 67
+  },
+  {
+    "id": "c02-e047",
+    "chapter": 2,
+    "number": "47",
+    "page": 40,
+    "src": "formulas/c02-e047.png",
+    "width": 684,
+    "height": 46
+  },
+  {
+    "id": "c02-e048",
+    "chapter": 2,
+    "number": "48",
+    "page": 40,
+    "src": "formulas/c02-e048.png",
+    "width": 890,
+    "height": 94
+  },
+  {
+    "id": "c02-e049",
+    "chapter": 2,
+    "number": "49",
+    "page": 41,
+    "src": "formulas/c02-e049.png",
+    "width": 612,
+    "height": 48
+  },
+  {
+    "id": "c02-e050",
+    "chapter": 2,
+    "number": "50",
+    "page": 42,
+    "src": "formulas/c02-e050.png",
+    "width": 632,
+    "height": 97
+  },
+  {
+    "id": "c02-e051",
+    "chapter": 2,
+    "number": "51",
+    "page": 42,
+    "src": "formulas/c02-e051.png",
+    "width": 589,
+    "height": 51
+  },
+  {
+    "id": "c03-e001",
+    "chapter": 3,
+    "number": "1",
+    "page": 53,
+    "src": "formulas/c03-e001.png",
+    "width": 650,
+    "height": 66
+  },
+  {
+    "id": "c03-e002",
+    "chapter": 3,
+    "number": "2",
+    "page": 55,
+    "src": "formulas/c03-e002.png",
+    "width": 890,
+    "height": 75
+  },
+  {
+    "id": "c03-e003",
+    "chapter": 3,
+    "number": "3",
+    "page": 55,
+    "src": "formulas/c03-e003.png",
+    "width": 542,
+    "height": 79
+  },
+  {
+    "id": "c03-e004",
+    "chapter": 3,
+    "number": "4",
+    "page": 55,
+    "src": "formulas/c03-e004.png",
+    "width": 691,
+    "height": 73
+  },
+  {
+    "id": "c03-e005",
+    "chapter": 3,
+    "number": "5",
+    "page": 56,
+    "src": "formulas/c03-e005.png",
+    "width": 690,
+    "height": 73
+  },
+  {
+    "id": "c03-e006",
+    "chapter": 3,
+    "number": "6",
+    "page": 56,
+    "src": "formulas/c03-e006.png",
+    "width": 699,
+    "height": 73
+  },
+  {
+    "id": "c03-e007",
+    "chapter": 3,
+    "number": "7",
+    "page": 56,
+    "src": "formulas/c03-e007.png",
+    "width": 778,
+    "height": 85
+  },
+  {
+    "id": "c03-e008",
+    "chapter": 3,
+    "number": "8",
+    "page": 56,
+    "src": "formulas/c03-e008.png",
+    "width": 812,
+    "height": 88
+  },
+  {
+    "id": "c03-e009",
+    "chapter": 3,
+    "number": "9",
+    "page": 56,
+    "src": "formulas/c03-e009.png",
+    "width": 724,
+    "height": 86
+  },
+  {
+    "id": "c03-e010",
+    "chapter": 3,
+    "number": "10",
+    "page": 58,
+    "src": "formulas/c03-e010.png",
+    "width": 609,
+    "height": 87
+  },
+  {
+    "id": "c03-e011",
+    "chapter": 3,
+    "number": "11",
+    "page": 58,
+    "src": "formulas/c03-e011.png",
+    "width": 686,
+    "height": 84
+  },
+  {
+    "id": "c03-e012",
+    "chapter": 3,
+    "number": "12",
+    "page": 59,
+    "src": "formulas/c03-e012.png",
+    "width": 705,
+    "height": 68
+  },
+  {
+    "id": "c03-e013",
+    "chapter": 3,
+    "number": "13",
+    "page": 59,
+    "src": "formulas/c03-e013.png",
+    "width": 743,
+    "height": 87
+  },
+  {
+    "id": "c03-e014",
+    "chapter": 3,
+    "number": "14",
+    "page": 59,
+    "src": "formulas/c03-e014.png",
+    "width": 528,
+    "height": 42
+  },
+  {
+    "id": "c03-e015",
+    "chapter": 3,
+    "number": "15",
+    "page": 59,
+    "src": "formulas/c03-e015.png",
+    "width": 703,
+    "height": 88
+  },
+  {
+    "id": "c03-e016",
+    "chapter": 3,
+    "number": "16",
+    "page": 59,
+    "src": "formulas/c03-e016.png",
+    "width": 590,
+    "height": 43
+  },
+  {
+    "id": "c03-e017",
+    "chapter": 3,
+    "number": "17",
+    "page": 62,
+    "src": "formulas/c03-e017.png",
+    "width": 519,
+    "height": 67
+  },
+  {
+    "id": "c03-e018",
+    "chapter": 3,
+    "number": "18",
+    "page": 62,
+    "src": "formulas/c03-e018.png",
+    "width": 890,
+    "height": 51
+  },
+  {
+    "id": "c03-e019",
+    "chapter": 3,
+    "number": "19",
+    "page": 63,
+    "src": "formulas/c03-e019.png",
+    "width": 890,
+    "height": 147
+  },
+  {
+    "id": "c03-e020",
+    "chapter": 3,
+    "number": "20",
+    "page": 63,
+    "src": "formulas/c03-e020.png",
+    "width": 890,
+    "height": 85
+  },
+  {
+    "id": "c03-e021",
+    "chapter": 3,
+    "number": "21",
+    "page": 63,
+    "src": "formulas/c03-e021.png",
+    "width": 674,
+    "height": 112
+  },
+  {
+    "id": "c03-e022",
+    "chapter": 3,
+    "number": "22",
+    "page": 63,
+    "src": "formulas/c03-e022.png",
+    "width": 890,
+    "height": 101
+  },
+  {
+    "id": "c03-e023",
+    "chapter": 3,
+    "number": "23",
+    "page": 63,
+    "src": "formulas/c03-e023.png",
+    "width": 891,
+    "height": 77
+  },
+  {
+    "id": "c03-e024",
+    "chapter": 3,
+    "number": "24",
+    "page": 63,
+    "src": "formulas/c03-e024.png",
+    "width": 890,
+    "height": 85
+  },
+  {
+    "id": "c03-e025",
+    "chapter": 3,
+    "number": "25",
+    "page": 64,
+    "src": "formulas/c03-e025.png",
+    "width": 528,
+    "height": 80
+  },
+  {
+    "id": "c03-e026",
+    "chapter": 3,
+    "number": "26",
+    "page": 73,
+    "src": "formulas/c03-e026.png",
+    "width": 614,
+    "height": 126
+  },
+  {
+    "id": "c03-e027",
+    "chapter": 3,
+    "number": "27",
+    "page": 74,
+    "src": "formulas/c03-e027.png",
+    "width": 711,
+    "height": 45
+  },
+  {
+    "id": "c03-e028",
+    "chapter": 3,
+    "number": "28",
+    "page": 74,
+    "src": "formulas/c03-e028.png",
+    "width": 891,
+    "height": 85
+  },
+  {
+    "id": "c03-e029",
+    "chapter": 3,
+    "number": "29",
+    "page": 74,
+    "src": "formulas/c03-e029.png",
+    "width": 641,
+    "height": 77
+  },
+  {
+    "id": "c03-e030",
+    "chapter": 3,
+    "number": "30",
+    "page": 74,
+    "src": "formulas/c03-e030.png",
+    "width": 665,
+    "height": 71
+  },
+  {
+    "id": "c03-e031",
+    "chapter": 3,
+    "number": "31",
+    "page": 75,
+    "src": "formulas/c03-e031.png",
+    "width": 769,
+    "height": 102
+  },
+  {
+    "id": "c03-e032",
+    "chapter": 3,
+    "number": "32",
+    "page": 75,
+    "src": "formulas/c03-e032.png",
+    "width": 661,
+    "height": 220
+  },
+  {
+    "id": "c03-e033",
+    "chapter": 3,
+    "number": "33",
+    "page": 75,
+    "src": "formulas/c03-e033.png",
+    "width": 550,
+    "height": 45
+  },
+  {
+    "id": "c03-e034",
+    "chapter": 3,
+    "number": "34",
+    "page": 75,
+    "src": "formulas/c03-e034.png",
+    "width": 802,
+    "height": 117
+  },
+  {
+    "id": "c03-e035",
+    "chapter": 3,
+    "number": "35",
+    "page": 75,
+    "src": "formulas/c03-e035.png",
+    "width": 627,
+    "height": 98
+  },
+  {
+    "id": "c03-e036",
+    "chapter": 3,
+    "number": "36",
+    "page": 76,
+    "src": "formulas/c03-e036.png",
+    "width": 657,
+    "height": 48
+  },
+  {
+    "id": "c03-e037",
+    "chapter": 3,
+    "number": "37",
+    "page": 77,
+    "src": "formulas/c03-e037.png",
+    "width": 741,
+    "height": 280
+  },
+  {
+    "id": "c03-e038",
+    "chapter": 3,
+    "number": "38",
+    "page": 77,
+    "src": "formulas/c03-e038.png",
+    "width": 745,
+    "height": 281
+  },
+  {
+    "id": "c03-e039",
+    "chapter": 3,
+    "number": "39",
+    "page": 77,
+    "src": "formulas/c03-e039.png",
+    "width": 578,
+    "height": 80
+  },
+  {
+    "id": "c03-e040",
+    "chapter": 3,
+    "number": "40",
+    "page": 77,
+    "src": "formulas/c03-e040.png",
+    "width": 889,
+    "height": 55
+  },
+  {
+    "id": "c03-e041",
+    "chapter": 3,
+    "number": "41",
+    "page": 78,
+    "src": "formulas/c03-e041.png",
+    "width": 710,
+    "height": 121
+  },
+  {
+    "id": "c03-e042",
+    "chapter": 3,
+    "number": "42",
+    "page": 78,
+    "src": "formulas/c03-e042.png",
+    "width": 599,
+    "height": 55
+  },
+  {
+    "id": "c03-e043",
+    "chapter": 3,
+    "number": "43",
+    "page": 78,
+    "src": "formulas/c03-e043.png",
+    "width": 889,
+    "height": 53
+  },
+  {
+    "id": "c03-e044",
+    "chapter": 3,
+    "number": "44",
+    "page": 78,
+    "src": "formulas/c03-e044.png",
+    "width": 722,
+    "height": 47
+  },
+  {
+    "id": "c03-e045",
+    "chapter": 3,
+    "number": "45",
+    "page": 78,
+    "src": "formulas/c03-e045.png",
+    "width": 714,
+    "height": 70
+  },
+  {
+    "id": "c03-e046",
+    "chapter": 3,
+    "number": "46",
+    "page": 79,
+    "src": "formulas/c03-e046.png",
+    "width": 659,
+    "height": 47
+  },
+  {
+    "id": "c03-e047",
+    "chapter": 3,
+    "number": "47",
+    "page": 79,
+    "src": "formulas/c03-e047.png",
+    "width": 659,
+    "height": 44
+  },
+  {
+    "id": "c03-e048",
+    "chapter": 3,
+    "number": "48",
+    "page": 79,
+    "src": "formulas/c03-e048.png",
+    "width": 577,
+    "height": 47
+  },
+  {
+    "id": "c03-e049",
+    "chapter": 3,
+    "number": "49",
+    "page": 79,
+    "src": "formulas/c03-e049.png",
+    "width": 726,
+    "height": 43
+  },
+  {
+    "id": "c03-e050",
+    "chapter": 3,
+    "number": "50",
+    "page": 79,
+    "src": "formulas/c03-e050.png",
+    "width": 743,
+    "height": 311
+  },
+  {
+    "id": "c03-e051",
+    "chapter": 3,
+    "number": "51",
+    "page": 80,
+    "src": "formulas/c03-e051.png",
+    "width": 890,
+    "height": 78
+  },
+  {
+    "id": "c03-e052",
+    "chapter": 3,
+    "number": "52",
+    "page": 80,
+    "src": "formulas/c03-e052.png",
+    "width": 891,
+    "height": 98
+  },
+  {
+    "id": "c03-e053",
+    "chapter": 3,
+    "number": "53",
+    "page": 80,
+    "src": "formulas/c03-e053.png",
+    "width": 511,
+    "height": 46
+  },
+  {
+    "id": "c03-e054",
+    "chapter": 3,
+    "number": "54",
+    "page": 80,
+    "src": "formulas/c03-e054.png",
+    "width": 559,
+    "height": 46
+  },
+  {
+    "id": "c03-e055",
+    "chapter": 3,
+    "number": "55",
+    "page": 80,
+    "src": "formulas/c03-e055.png",
+    "width": 597,
+    "height": 82
+  },
+  {
+    "id": "c03-e056",
+    "chapter": 3,
+    "number": "56",
+    "page": 80,
+    "src": "formulas/c03-e056.png",
+    "width": 768,
+    "height": 85
+  },
+  {
+    "id": "c03-e57a",
+    "chapter": 3,
+    "number": "57a",
+    "page": 80,
+    "src": "formulas/c03-e57a.png",
+    "width": 812,
+    "height": 89
+  },
+  {
+    "id": "c03-e57b",
+    "chapter": 3,
+    "number": "57b",
+    "page": 81,
+    "src": "formulas/c03-e57b.png",
+    "width": 820,
+    "height": 148
+  },
+  {
+    "id": "c03-e57c",
+    "chapter": 3,
+    "number": "57c",
+    "page": 81,
+    "src": "formulas/c03-e57c.png",
+    "width": 825,
+    "height": 72
+  },
+  {
+    "id": "c03-e058",
+    "chapter": 3,
+    "number": "58",
+    "page": 81,
+    "src": "formulas/c03-e058.png",
+    "width": 589,
+    "height": 46
+  },
+  {
+    "id": "c03-e059",
+    "chapter": 3,
+    "number": "59",
+    "page": 82,
+    "src": "formulas/c03-e059.png",
+    "width": 529,
+    "height": 46
+  },
+  {
+    "id": "c03-e060",
+    "chapter": 3,
+    "number": "60",
+    "page": 82,
+    "src": "formulas/c03-e060.png",
+    "width": 602,
+    "height": 47
+  },
+  {
+    "id": "c03-e061",
+    "chapter": 3,
+    "number": "61",
+    "page": 82,
+    "src": "formulas/c03-e061.png",
+    "width": 587,
+    "height": 46
+  },
+  {
+    "id": "c03-e062",
+    "chapter": 3,
+    "number": "62",
+    "page": 82,
+    "src": "formulas/c03-e062.png",
+    "width": 529,
+    "height": 46
+  },
+  {
+    "id": "c03-e063",
+    "chapter": 3,
+    "number": "63",
+    "page": 82,
+    "src": "formulas/c03-e063.png",
+    "width": 536,
+    "height": 46
+  },
+  {
+    "id": "c03-e064",
+    "chapter": 3,
+    "number": "64",
+    "page": 82,
+    "src": "formulas/c03-e064.png",
+    "width": 633,
+    "height": 48
+  },
+  {
+    "id": "c03-e065",
+    "chapter": 3,
+    "number": "65",
+    "page": 82,
+    "src": "formulas/c03-e065.png",
+    "width": 611,
+    "height": 51
+  },
+  {
+    "id": "c03-e066",
+    "chapter": 3,
+    "number": "66",
+    "page": 82,
+    "src": "formulas/c03-e066.png",
+    "width": 847,
+    "height": 48
+  },
+  {
+    "id": "c03-e067",
+    "chapter": 3,
+    "number": "67",
+    "page": 82,
+    "src": "formulas/c03-e067.png",
+    "width": 708,
+    "height": 101
+  },
+  {
+    "id": "c03-e068",
+    "chapter": 3,
+    "number": "68",
+    "page": 83,
+    "src": "formulas/c03-e068.png",
+    "width": 779,
+    "height": 94
+  },
+  {
+    "id": "c03-e069",
+    "chapter": 3,
+    "number": "69",
+    "page": 83,
+    "src": "formulas/c03-e069.png",
+    "width": 762,
+    "height": 47
+  },
+  {
+    "id": "c03-e070",
+    "chapter": 3,
+    "number": "70",
+    "page": 83,
+    "src": "formulas/c03-e070.png",
+    "width": 784,
+    "height": 47
+  },
+  {
+    "id": "c03-e071",
+    "chapter": 3,
+    "number": "71",
+    "page": 83,
+    "src": "formulas/c03-e071.png",
+    "width": 753,
+    "height": 46
+  },
+  {
+    "id": "c04-e001",
+    "chapter": 4,
+    "number": "1",
+    "page": 91,
+    "src": "formulas/c04-e001.png",
+    "width": 637,
+    "height": 43
+  },
+  {
+    "id": "c04-e002",
+    "chapter": 4,
+    "number": "2",
+    "page": 91,
+    "src": "formulas/c04-e002.png",
+    "width": 624,
+    "height": 79
+  },
+  {
+    "id": "c04-e003",
+    "chapter": 4,
+    "number": "3",
+    "page": 91,
+    "src": "formulas/c04-e003.png",
+    "width": 631,
+    "height": 46
+  },
+  {
+    "id": "c04-e004",
+    "chapter": 4,
+    "number": "4",
+    "page": 92,
+    "src": "formulas/c04-e004.png",
+    "width": 625,
+    "height": 45
+  },
+  {
+    "id": "c04-e005",
+    "chapter": 4,
+    "number": "5",
+    "page": 92,
+    "src": "formulas/c04-e005.png",
+    "width": 888,
+    "height": 49
+  },
+  {
+    "id": "c04-e006",
+    "chapter": 4,
+    "number": "6",
+    "page": 92,
+    "src": "formulas/c04-e006.png",
+    "width": 673,
+    "height": 48
+  },
+  {
+    "id": "c04-e007",
+    "chapter": 4,
+    "number": "7",
+    "page": 92,
+    "src": "formulas/c04-e007.png",
+    "width": 598,
+    "height": 44
+  },
+  {
+    "id": "c04-e008",
+    "chapter": 4,
+    "number": "8",
+    "page": 92,
+    "src": "formulas/c04-e008.png",
+    "width": 614,
+    "height": 44
+  },
+  {
+    "id": "c04-e009",
+    "chapter": 4,
+    "number": "9",
+    "page": 92,
+    "src": "formulas/c04-e009.png",
+    "width": 746,
+    "height": 47
+  },
+  {
+    "id": "c04-e010",
+    "chapter": 4,
+    "number": "10",
+    "page": 93,
+    "src": "formulas/c04-e010.png",
+    "width": 656,
+    "height": 85
+  },
+  {
+    "id": "c04-e011",
+    "chapter": 4,
+    "number": "11",
+    "page": 93,
+    "src": "formulas/c04-e011.png",
+    "width": 792,
+    "height": 46
+  },
+  {
+    "id": "c04-e012",
+    "chapter": 4,
+    "number": "12",
+    "page": 93,
+    "src": "formulas/c04-e012.png",
+    "width": 614,
+    "height": 45
+  },
+  {
+    "id": "c04-e013",
+    "chapter": 4,
+    "number": "13",
+    "page": 94,
+    "src": "formulas/c04-e013.png",
+    "width": 891,
+    "height": 143
+  },
+  {
+    "id": "c04-e014",
+    "chapter": 4,
+    "number": "14",
+    "page": 94,
+    "src": "formulas/c04-e014.png",
+    "width": 592,
+    "height": 51
+  },
+  {
+    "id": "c04-e015",
+    "chapter": 4,
+    "number": "15",
+    "page": 94,
+    "src": "formulas/c04-e015.png",
+    "width": 891,
+    "height": 85
+  },
+  {
+    "id": "c04-e16a",
+    "chapter": 4,
+    "number": "16a",
+    "page": 95,
+    "src": "formulas/c04-e16a.png",
+    "width": 630,
+    "height": 67
+  },
+  {
+    "id": "c04-e16b",
+    "chapter": 4,
+    "number": "16b",
+    "page": 95,
+    "src": "formulas/c04-e16b.png",
+    "width": 785,
+    "height": 119
+  },
+  {
+    "id": "c04-e017",
+    "chapter": 4,
+    "number": "17",
+    "page": 95,
+    "src": "formulas/c04-e017.png",
+    "width": 620,
+    "height": 78
+  },
+  {
+    "id": "c04-e018",
+    "chapter": 4,
+    "number": "18",
+    "page": 97,
+    "src": "formulas/c04-e018.png",
+    "width": 614,
+    "height": 151
+  },
+  {
+    "id": "c04-e019",
+    "chapter": 4,
+    "number": "19",
+    "page": 97,
+    "src": "formulas/c04-e019.png",
+    "width": 791,
+    "height": 45
+  },
+  {
+    "id": "c04-e020",
+    "chapter": 4,
+    "number": "20",
+    "page": 97,
+    "src": "formulas/c04-e020.png",
+    "width": 662,
+    "height": 87
+  },
+  {
+    "id": "c04-e021",
+    "chapter": 4,
+    "number": "21",
+    "page": 98,
+    "src": "formulas/c04-e021.png",
+    "width": 715,
+    "height": 117
+  },
+  {
+    "id": "c04-e022",
+    "chapter": 4,
+    "number": "22",
+    "page": 98,
+    "src": "formulas/c04-e022.png",
+    "width": 891,
+    "height": 85
+  },
+  {
+    "id": "c04-e023",
+    "chapter": 4,
+    "number": "23",
+    "page": 98,
+    "src": "formulas/c04-e023.png",
+    "width": 713,
+    "height": 85
+  },
+  {
+    "id": "c04-e024",
+    "chapter": 4,
+    "number": "24",
+    "page": 98,
+    "src": "formulas/c04-e024.png",
+    "width": 729,
+    "height": 75
+  },
+  {
+    "id": "c04-e025",
+    "chapter": 4,
+    "number": "25",
+    "page": 98,
+    "src": "formulas/c04-e025.png",
+    "width": 629,
+    "height": 45
+  },
+  {
+    "id": "c04-e026",
+    "chapter": 4,
+    "number": "26",
+    "page": 98,
+    "src": "formulas/c04-e026.png",
+    "width": 517,
+    "height": 75
+  },
+  {
+    "id": "c04-e027",
+    "chapter": 4,
+    "number": "27",
+    "page": 99,
+    "src": "formulas/c04-e027.png",
+    "width": 528,
+    "height": 46
+  },
+  {
+    "id": "c04-e028",
+    "chapter": 4,
+    "number": "28",
+    "page": 99,
+    "src": "formulas/c04-e028.png",
+    "width": 584,
+    "height": 47
+  },
+  {
+    "id": "c04-e029",
+    "chapter": 4,
+    "number": "29",
+    "page": 99,
+    "src": "formulas/c04-e029.png",
+    "width": 569,
+    "height": 47
+  },
+  {
+    "id": "c04-e030",
+    "chapter": 4,
+    "number": "30",
+    "page": 100,
+    "src": "formulas/c04-e030.png",
+    "width": 525,
+    "height": 42
+  },
+  {
+    "id": "c04-e031",
+    "chapter": 4,
+    "number": "31",
+    "page": 100,
+    "src": "formulas/c04-e031.png",
+    "width": 551,
+    "height": 42
+  },
+  {
+    "id": "c04-e032",
+    "chapter": 4,
+    "number": "32",
+    "page": 100,
+    "src": "formulas/c04-e032.png",
+    "width": 551,
+    "height": 42
+  },
+  {
+    "id": "c04-e033",
+    "chapter": 4,
+    "number": "33",
+    "page": 101,
+    "src": "formulas/c04-e033.png",
+    "width": 551,
+    "height": 42
+  },
+  {
+    "id": "c04-e034",
+    "chapter": 4,
+    "number": "34",
+    "page": 102,
+    "src": "formulas/c04-e034.png",
+    "width": 562,
+    "height": 76
+  },
+  {
+    "id": "c05-e001",
+    "chapter": 5,
+    "number": "1",
+    "page": 107,
+    "src": "formulas/c05-e001.png",
+    "width": 648,
+    "height": 68
+  },
+  {
+    "id": "c05-e002",
+    "chapter": 5,
+    "number": "2",
+    "page": 107,
+    "src": "formulas/c05-e002.png",
+    "width": 573,
+    "height": 75
+  },
+  {
+    "id": "c05-e003",
+    "chapter": 5,
+    "number": "3",
+    "page": 107,
+    "src": "formulas/c05-e003.png",
+    "width": 665,
+    "height": 46
+  },
+  {
+    "id": "c05-e004",
+    "chapter": 5,
+    "number": "4",
+    "page": 108,
+    "src": "formulas/c05-e004.png",
+    "width": 590,
+    "height": 112
+  },
+  {
+    "id": "c05-e005",
+    "chapter": 5,
+    "number": "5",
+    "page": 108,
+    "src": "formulas/c05-e005.png",
+    "width": 586,
+    "height": 122
+  },
+  {
+    "id": "c05-e006",
+    "chapter": 5,
+    "number": "6",
+    "page": 108,
+    "src": "formulas/c05-e006.png",
+    "width": 719,
+    "height": 76
+  },
+  {
+    "id": "c05-e007",
+    "chapter": 5,
+    "number": "7",
+    "page": 108,
+    "src": "formulas/c05-e007.png",
+    "width": 617,
+    "height": 75
+  },
+  {
+    "id": "c05-e008",
+    "chapter": 5,
+    "number": "8",
+    "page": 108,
+    "src": "formulas/c05-e008.png",
+    "width": 604,
+    "height": 87
+  },
+  {
+    "id": "c05-e009",
+    "chapter": 5,
+    "number": "9",
+    "page": 108,
+    "src": "formulas/c05-e009.png",
+    "width": 639,
+    "height": 80
+  },
+  {
+    "id": "c05-e010",
+    "chapter": 5,
+    "number": "10",
+    "page": 108,
+    "src": "formulas/c05-e010.png",
+    "width": 653,
+    "height": 90
+  },
+  {
+    "id": "c05-e011",
+    "chapter": 5,
+    "number": "11",
+    "page": 109,
+    "src": "formulas/c05-e011.png",
+    "width": 624,
+    "height": 47
+  },
+  {
+    "id": "c05-e012",
+    "chapter": 5,
+    "number": "12",
+    "page": 109,
+    "src": "formulas/c05-e012.png",
+    "width": 672,
+    "height": 71
+  },
+  {
+    "id": "c05-e013",
+    "chapter": 5,
+    "number": "13",
+    "page": 109,
+    "src": "formulas/c05-e013.png",
+    "width": 539,
+    "height": 43
+  },
+  {
+    "id": "c05-e014",
+    "chapter": 5,
+    "number": "14",
+    "page": 110,
+    "src": "formulas/c05-e014.png",
+    "width": 715,
+    "height": 66
+  },
+  {
+    "id": "c05-e015",
+    "chapter": 5,
+    "number": "15",
+    "page": 110,
+    "src": "formulas/c05-e015.png",
+    "width": 649,
+    "height": 66
+  },
+  {
+    "id": "c05-e016",
+    "chapter": 5,
+    "number": "16",
+    "page": 111,
+    "src": "formulas/c05-e016.png",
+    "width": 891,
+    "height": 48
+  },
+  {
+    "id": "c05-e017",
+    "chapter": 5,
+    "number": "17",
+    "page": 111,
+    "src": "formulas/c05-e017.png",
+    "width": 719,
+    "height": 66
+  },
+  {
+    "id": "c05-e018",
+    "chapter": 5,
+    "number": "18",
+    "page": 111,
+    "src": "formulas/c05-e018.png",
+    "width": 523,
+    "height": 85
+  },
+  {
+    "id": "c05-e019",
+    "chapter": 5,
+    "number": "19",
+    "page": 111,
+    "src": "formulas/c05-e019.png",
+    "width": 566,
+    "height": 45
+  },
+  {
+    "id": "c05-e020",
+    "chapter": 5,
+    "number": "20",
+    "page": 112,
+    "src": "formulas/c05-e020.png",
+    "width": 657,
+    "height": 45
+  },
+  {
+    "id": "c05-e021",
+    "chapter": 5,
+    "number": "21",
+    "page": 112,
+    "src": "formulas/c05-e021.png",
+    "width": 503,
+    "height": 41
+  },
+  {
+    "id": "c05-e022",
+    "chapter": 5,
+    "number": "22",
+    "page": 112,
+    "src": "formulas/c05-e022.png",
+    "width": 562,
+    "height": 44
+  },
+  {
+    "id": "c05-e023",
+    "chapter": 5,
+    "number": "23",
+    "page": 112,
+    "src": "formulas/c05-e023.png",
+    "width": 547,
+    "height": 46
+  },
+  {
+    "id": "c05-e024",
+    "chapter": 5,
+    "number": "24",
+    "page": 112,
+    "src": "formulas/c05-e024.png",
+    "width": 598,
+    "height": 47
+  },
+  {
+    "id": "c05-e025",
+    "chapter": 5,
+    "number": "25",
+    "page": 112,
+    "src": "formulas/c05-e025.png",
+    "width": 758,
+    "height": 85
+  },
+  {
+    "id": "c05-e026",
+    "chapter": 5,
+    "number": "26",
+    "page": 112,
+    "src": "formulas/c05-e026.png",
+    "width": 734,
+    "height": 79
+  },
+  {
+    "id": "c05-e027",
+    "chapter": 5,
+    "number": "27",
+    "page": 112,
+    "src": "formulas/c05-e027.png",
+    "width": 577,
+    "height": 45
+  },
+  {
+    "id": "c05-e028",
+    "chapter": 5,
+    "number": "28",
+    "page": 112,
+    "src": "formulas/c05-e028.png",
+    "width": 566,
+    "height": 85
+  },
+  {
+    "id": "c05-e029",
+    "chapter": 5,
+    "number": "29",
+    "page": 113,
+    "src": "formulas/c05-e029.png",
+    "width": 623,
+    "height": 86
+  },
+  {
+    "id": "c05-e030",
+    "chapter": 5,
+    "number": "30",
+    "page": 113,
+    "src": "formulas/c05-e030.png",
+    "width": 811,
+    "height": 87
+  },
+  {
+    "id": "c05-e031",
+    "chapter": 5,
+    "number": "31",
+    "page": 114,
+    "src": "formulas/c05-e031.png",
+    "width": 749,
+    "height": 76
+  },
+  {
+    "id": "c05-e032",
+    "chapter": 5,
+    "number": "32",
+    "page": 114,
+    "src": "formulas/c05-e032.png",
+    "width": 661,
+    "height": 81
+  },
+  {
+    "id": "c05-e033",
+    "chapter": 5,
+    "number": "33",
+    "page": 114,
+    "src": "formulas/c05-e033.png",
+    "width": 588,
+    "height": 72
+  },
+  {
+    "id": "c05-e034",
+    "chapter": 5,
+    "number": "34",
+    "page": 117,
+    "src": "formulas/c05-e034.png",
+    "width": 663,
+    "height": 86
+  },
+  {
+    "id": "c05-e035",
+    "chapter": 5,
+    "number": "35",
+    "page": 117,
+    "src": "formulas/c05-e035.png",
+    "width": 610,
+    "height": 85
+  },
+  {
+    "id": "c05-e036",
+    "chapter": 5,
+    "number": "36",
+    "page": 118,
+    "src": "formulas/c05-e036.png",
+    "width": 580,
+    "height": 76
+  },
+  {
+    "id": "c05-e037",
+    "chapter": 5,
+    "number": "37",
+    "page": 118,
+    "src": "formulas/c05-e037.png",
+    "width": 581,
+    "height": 111
+  },
+  {
+    "id": "c05-e038",
+    "chapter": 5,
+    "number": "38",
+    "page": 120,
+    "src": "formulas/c05-e038.png",
+    "width": 578,
+    "height": 48
+  },
+  {
+    "id": "c05-e039",
+    "chapter": 5,
+    "number": "39",
+    "page": 120,
+    "src": "formulas/c05-e039.png",
+    "width": 876,
+    "height": 82
+  },
+  {
+    "id": "c05-e040",
+    "chapter": 5,
+    "number": "40",
+    "page": 120,
+    "src": "formulas/c05-e040.png",
+    "width": 522,
+    "height": 71
+  },
+  {
+    "id": "c05-e041",
+    "chapter": 5,
+    "number": "41",
+    "page": 121,
+    "src": "formulas/c05-e041.png",
+    "width": 892,
+    "height": 107
+  },
+  {
+    "id": "c05-e042",
+    "chapter": 5,
+    "number": "42",
+    "page": 122,
+    "src": "formulas/c05-e042.png",
+    "width": 515,
+    "height": 47
+  },
+  {
+    "id": "c05-e043",
+    "chapter": 5,
+    "number": "43",
+    "page": 122,
+    "src": "formulas/c05-e043.png",
+    "width": 652,
+    "height": 70
+  },
+  {
+    "id": "c05-e044",
+    "chapter": 5,
+    "number": "44",
+    "page": 122,
+    "src": "formulas/c05-e044.png",
+    "width": 546,
+    "height": 70
+  },
+  {
+    "id": "c05-e045",
+    "chapter": 5,
+    "number": "45",
+    "page": 123,
+    "src": "formulas/c05-e045.png",
+    "width": 527,
+    "height": 42
+  },
+  {
+    "id": "c05-e046",
+    "chapter": 5,
+    "number": "46",
+    "page": 123,
+    "src": "formulas/c05-e046.png",
+    "width": 521,
+    "height": 62
+  },
+  {
+    "id": "c05-e047",
+    "chapter": 5,
+    "number": "47",
+    "page": 125,
+    "src": "formulas/c05-e047.png",
+    "width": 563,
+    "height": 42
+  },
+  {
+    "id": "c05-e048",
+    "chapter": 5,
+    "number": "48",
+    "page": 126,
+    "src": "formulas/c05-e048.png",
+    "width": 514,
+    "height": 41
+  },
+  {
+    "id": "c06-e001",
+    "chapter": 6,
+    "number": "1",
+    "page": 134,
+    "src": "formulas/c06-e001.png",
+    "width": 597,
+    "height": 80
+  },
+  {
+    "id": "c06-e002",
+    "chapter": 6,
+    "number": "2",
+    "page": 134,
+    "src": "formulas/c06-e002.png",
+    "width": 648,
+    "height": 85
+  },
+  {
+    "id": "c06-e003",
+    "chapter": 6,
+    "number": "3",
+    "page": 134,
+    "src": "formulas/c06-e003.png",
+    "width": 546,
+    "height": 86
+  },
+  {
+    "id": "c06-e004",
+    "chapter": 6,
+    "number": "4",
+    "page": 135,
+    "src": "formulas/c06-e004.png",
+    "width": 626,
+    "height": 86
+  },
+  {
+    "id": "c06-e005",
+    "chapter": 6,
+    "number": "5",
+    "page": 136,
+    "src": "formulas/c06-e005.png",
+    "width": 630,
+    "height": 106
+  },
+  {
+    "id": "c06-e006",
+    "chapter": 6,
+    "number": "6",
+    "page": 137,
+    "src": "formulas/c06-e006.png",
+    "width": 680,
+    "height": 89
+  },
+  {
+    "id": "c06-e007",
+    "chapter": 6,
+    "number": "7",
+    "page": 137,
+    "src": "formulas/c06-e007.png",
+    "width": 716,
+    "height": 48
+  },
+  {
+    "id": "c06-e008",
+    "chapter": 6,
+    "number": "8",
+    "page": 137,
+    "src": "formulas/c06-e008.png",
+    "width": 598,
+    "height": 45
+  },
+  {
+    "id": "c06-e009",
+    "chapter": 6,
+    "number": "9",
+    "page": 137,
+    "src": "formulas/c06-e009.png",
+    "width": 580,
+    "height": 77
+  },
+  {
+    "id": "c06-e010",
+    "chapter": 6,
+    "number": "10",
+    "page": 137,
+    "src": "formulas/c06-e010.png",
+    "width": 640,
+    "height": 66
+  },
+  {
+    "id": "c06-e011",
+    "chapter": 6,
+    "number": "11",
+    "page": 137,
+    "src": "formulas/c06-e011.png",
+    "width": 891,
+    "height": 77
+  },
+  {
+    "id": "c06-e012",
+    "chapter": 6,
+    "number": "12",
+    "page": 138,
+    "src": "formulas/c06-e012.png",
+    "width": 629,
+    "height": 70
+  },
+  {
+    "id": "c06-e013",
+    "chapter": 6,
+    "number": "13",
+    "page": 138,
+    "src": "formulas/c06-e013.png",
+    "width": 632,
+    "height": 46
+  },
+  {
+    "id": "c06-e014",
+    "chapter": 6,
+    "number": "14",
+    "page": 138,
+    "src": "formulas/c06-e014.png",
+    "width": 523,
+    "height": 69
+  },
+  {
+    "id": "c06-e015",
+    "chapter": 6,
+    "number": "15",
+    "page": 138,
+    "src": "formulas/c06-e015.png",
+    "width": 596,
+    "height": 83
+  },
+  {
+    "id": "c06-e016",
+    "chapter": 6,
+    "number": "16",
+    "page": 138,
+    "src": "formulas/c06-e016.png",
+    "width": 546,
+    "height": 85
+  },
+  {
+    "id": "c06-e017",
+    "chapter": 6,
+    "number": "17",
+    "page": 140,
+    "src": "formulas/c06-e017.png",
+    "width": 581,
+    "height": 121
+  },
+  {
+    "id": "c06-e018",
+    "chapter": 6,
+    "number": "18",
+    "page": 140,
+    "src": "formulas/c06-e018.png",
+    "width": 623,
+    "height": 85
+  },
+  {
+    "id": "c06-e019",
+    "chapter": 6,
+    "number": "19",
+    "page": 140,
+    "src": "formulas/c06-e019.png",
+    "width": 561,
+    "height": 91
+  },
+  {
+    "id": "c06-e020",
+    "chapter": 6,
+    "number": "20",
+    "page": 140,
+    "src": "formulas/c06-e020.png",
+    "width": 660,
+    "height": 117
+  },
+  {
+    "id": "c06-e021",
+    "chapter": 6,
+    "number": "21",
+    "page": 141,
+    "src": "formulas/c06-e021.png",
+    "width": 891,
+    "height": 116
+  },
+  {
+    "id": "c06-e022",
+    "chapter": 6,
+    "number": "22",
+    "page": 141,
+    "src": "formulas/c06-e022.png",
+    "width": 555,
+    "height": 44
+  },
+  {
+    "id": "c06-e023",
+    "chapter": 6,
+    "number": "23",
+    "page": 141,
+    "src": "formulas/c06-e023.png",
+    "width": 590,
+    "height": 45
+  },
+  {
+    "id": "c06-e024",
+    "chapter": 6,
+    "number": "24",
+    "page": 142,
+    "src": "formulas/c06-e024.png",
+    "width": 672,
+    "height": 75
+  },
+  {
+    "id": "c06-e24a",
+    "chapter": 6,
+    "number": "24a",
+    "page": 142,
+    "src": "formulas/c06-e24a.png",
+    "width": 649,
+    "height": 106
+  },
+  {
+    "id": "c06-e025",
+    "chapter": 6,
+    "number": "25",
+    "page": 142,
+    "src": "formulas/c06-e025.png",
+    "width": 639,
+    "height": 75
+  },
+  {
+    "id": "c06-e026",
+    "chapter": 6,
+    "number": "26",
+    "page": 142,
+    "src": "formulas/c06-e026.png",
+    "width": 693,
+    "height": 85
+  },
+  {
+    "id": "c06-e027",
+    "chapter": 6,
+    "number": "27",
+    "page": 142,
+    "src": "formulas/c06-e027.png",
+    "width": 778,
+    "height": 79
+  },
+  {
+    "id": "c06-e028",
+    "chapter": 6,
+    "number": "28",
+    "page": 142,
+    "src": "formulas/c06-e028.png",
+    "width": 641,
+    "height": 79
+  },
+  {
+    "id": "c06-e029",
+    "chapter": 6,
+    "number": "29",
+    "page": 143,
+    "src": "formulas/c06-e029.png",
+    "width": 617,
+    "height": 78
+  },
+  {
+    "id": "c06-e030",
+    "chapter": 6,
+    "number": "30",
+    "page": 144,
+    "src": "formulas/c06-e030.png",
+    "width": 650,
+    "height": 86
+  },
+  {
+    "id": "c06-e031",
+    "chapter": 6,
+    "number": "31",
+    "page": 144,
+    "src": "formulas/c06-e031.png",
+    "width": 537,
+    "height": 43
+  },
+  {
+    "id": "c06-e032",
+    "chapter": 6,
+    "number": "32",
+    "page": 144,
+    "src": "formulas/c06-e032.png",
+    "width": 650,
+    "height": 78
+  },
+  {
+    "id": "c06-e033",
+    "chapter": 6,
+    "number": "33",
+    "page": 144,
+    "src": "formulas/c06-e033.png",
+    "width": 589,
+    "height": 78
+  },
+  {
+    "id": "c06-e034",
+    "chapter": 6,
+    "number": "34",
+    "page": 144,
+    "src": "formulas/c06-e034.png",
+    "width": 560,
+    "height": 48
+  },
+  {
+    "id": "c06-e035",
+    "chapter": 6,
+    "number": "35",
+    "page": 144,
+    "src": "formulas/c06-e035.png",
+    "width": 603,
+    "height": 43
+  },
+  {
+    "id": "c06-e036",
+    "chapter": 6,
+    "number": "36",
+    "page": 144,
+    "src": "formulas/c06-e036.png",
+    "width": 557,
+    "height": 48
+  },
+  {
+    "id": "c06-e037",
+    "chapter": 6,
+    "number": "37",
+    "page": 145,
+    "src": "formulas/c06-e037.png",
+    "width": 543,
+    "height": 47
+  },
+  {
+    "id": "c06-e038",
+    "chapter": 6,
+    "number": "38",
+    "page": 145,
+    "src": "formulas/c06-e038.png",
+    "width": 563,
+    "height": 80
+  },
+  {
+    "id": "c06-e039",
+    "chapter": 6,
+    "number": "39",
+    "page": 147,
+    "src": "formulas/c06-e039.png",
+    "width": 890,
+    "height": 117
+  },
+  {
+    "id": "c06-e040",
+    "chapter": 6,
+    "number": "40",
+    "page": 147,
+    "src": "formulas/c06-e040.png",
+    "width": 581,
+    "height": 42
+  },
+  {
+    "id": "c06-e041",
+    "chapter": 6,
+    "number": "41",
+    "page": 147,
+    "src": "formulas/c06-e041.png",
+    "width": 536,
+    "height": 42
+  },
+  {
+    "id": "c06-e042",
+    "chapter": 6,
+    "number": "42",
+    "page": 147,
+    "src": "formulas/c06-e042.png",
+    "width": 567,
+    "height": 49
+  },
+  {
+    "id": "c06-e043",
+    "chapter": 6,
+    "number": "43",
+    "page": 148,
+    "src": "formulas/c06-e043.png",
+    "width": 527,
+    "height": 95
+  },
+  {
+    "id": "c06-e044",
+    "chapter": 6,
+    "number": "44",
+    "page": 148,
+    "src": "formulas/c06-e044.png",
+    "width": 523,
+    "height": 46
+  },
+  {
+    "id": "c06-e045",
+    "chapter": 6,
+    "number": "45",
+    "page": 150,
+    "src": "formulas/c06-e045.png",
+    "width": 523,
+    "height": 65
+  },
+  {
+    "id": "c06-e046",
+    "chapter": 6,
+    "number": "46",
+    "page": 150,
+    "src": "formulas/c06-e046.png",
+    "width": 523,
+    "height": 43
+  },
+  {
+    "id": "c06-e047",
+    "chapter": 6,
+    "number": "47",
+    "page": 151,
+    "src": "formulas/c06-e047.png",
+    "width": 504,
+    "height": 42
+  },
+  {
+    "id": "c06-e048",
+    "chapter": 6,
+    "number": "48",
+    "page": 152,
+    "src": "formulas/c06-e048.png",
+    "width": 564,
+    "height": 85
+  },
+  {
+    "id": "c06-e049",
+    "chapter": 6,
+    "number": "49",
+    "page": 153,
+    "src": "formulas/c06-e049.png",
+    "width": 890,
+    "height": 158
+  },
+  {
+    "id": "c06-e050",
+    "chapter": 6,
+    "number": "50",
+    "page": 153,
+    "src": "formulas/c06-e050.png",
+    "width": 890,
+    "height": 86
+  },
+  {
+    "id": "c06-e051",
+    "chapter": 6,
+    "number": "51",
+    "page": 153,
+    "src": "formulas/c06-e051.png",
+    "width": 890,
+    "height": 284
+  },
+  {
+    "id": "c06-e052",
+    "chapter": 6,
+    "number": "52",
+    "page": 153,
+    "src": "formulas/c06-e052.png",
+    "width": 825,
+    "height": 54
+  },
+  {
+    "id": "c06-e053",
+    "chapter": 6,
+    "number": "53",
+    "page": 153,
+    "src": "formulas/c06-e053.png",
+    "width": 890,
+    "height": 60
+  },
+  {
+    "id": "c06-e054",
+    "chapter": 6,
+    "number": "54",
+    "page": 154,
+    "src": "formulas/c06-e054.png",
+    "width": 517,
+    "height": 114
+  },
+  {
+    "id": "c06-e055",
+    "chapter": 6,
+    "number": "55",
+    "page": 154,
+    "src": "formulas/c06-e055.png",
+    "width": 890,
+    "height": 190
+  },
+  {
+    "id": "c06-e056",
+    "chapter": 6,
+    "number": "56",
+    "page": 156,
+    "src": "formulas/c06-e056.png",
+    "width": 647,
+    "height": 84
+  },
+  {
+    "id": "c06-e057",
+    "chapter": 6,
+    "number": "57",
+    "page": 156,
+    "src": "formulas/c06-e057.png",
+    "width": 628,
+    "height": 86
+  },
+  {
+    "id": "c06-e058",
+    "chapter": 6,
+    "number": "58",
+    "page": 157,
+    "src": "formulas/c06-e058.png",
+    "width": 518,
+    "height": 41
+  },
+  {
+    "id": "c06-e059",
+    "chapter": 6,
+    "number": "59",
+    "page": 157,
+    "src": "formulas/c06-e059.png",
+    "width": 706,
+    "height": 116
+  },
+  {
+    "id": "c06-e060",
+    "chapter": 6,
+    "number": "60",
+    "page": 157,
+    "src": "formulas/c06-e060.png",
+    "width": 512,
+    "height": 46
+  },
+  {
+    "id": "c06-e061",
+    "chapter": 6,
+    "number": "61",
+    "page": 157,
+    "src": "formulas/c06-e061.png",
+    "width": 639,
+    "height": 48
+  },
+  {
+    "id": "c06-e062",
+    "chapter": 6,
+    "number": "62",
+    "page": 158,
+    "src": "formulas/c06-e062.png",
+    "width": 584,
+    "height": 73
+  },
+  {
+    "id": "c06-e063",
+    "chapter": 6,
+    "number": "63",
+    "page": 158,
+    "src": "formulas/c06-e063.png",
+    "width": 592,
+    "height": 51
+  },
+  {
+    "id": "c06-e064",
+    "chapter": 6,
+    "number": "64",
+    "page": 159,
+    "src": "formulas/c06-e064.png",
+    "width": 715,
+    "height": 109
+  },
+  {
+    "id": "c06-e065",
+    "chapter": 6,
+    "number": "65",
+    "page": 159,
+    "src": "formulas/c06-e065.png",
+    "width": 559,
+    "height": 45
+  },
+  {
+    "id": "c07-e001",
+    "chapter": 7,
+    "number": "1",
+    "page": 164,
+    "src": "formulas/c07-e001.png",
+    "width": 582,
+    "height": 70
+  },
+  {
+    "id": "c07-e002",
+    "chapter": 7,
+    "number": "2",
+    "page": 164,
+    "src": "formulas/c07-e002.png",
+    "width": 683,
+    "height": 66
+  },
+  {
+    "id": "c07-e003",
+    "chapter": 7,
+    "number": "3",
+    "page": 164,
+    "src": "formulas/c07-e003.png",
+    "width": 562,
+    "height": 46
+  },
+  {
+    "id": "c07-e004",
+    "chapter": 7,
+    "number": "4",
+    "page": 165,
+    "src": "formulas/c07-e004.png",
+    "width": 567,
+    "height": 46
+  },
+  {
+    "id": "c07-e005",
+    "chapter": 7,
+    "number": "5",
+    "page": 165,
+    "src": "formulas/c07-e005.png",
+    "width": 727,
+    "height": 94
+  },
+  {
+    "id": "c07-e006",
+    "chapter": 7,
+    "number": "6",
+    "page": 167,
+    "src": "formulas/c07-e006.png",
+    "width": 756,
+    "height": 139
+  },
+  {
+    "id": "c07-e007",
+    "chapter": 7,
+    "number": "7",
+    "page": 167,
+    "src": "formulas/c07-e007.png",
+    "width": 608,
+    "height": 77
+  },
+  {
+    "id": "c07-e008",
+    "chapter": 7,
+    "number": "8",
+    "page": 167,
+    "src": "formulas/c07-e008.png",
+    "width": 555,
+    "height": 43
+  },
+  {
+    "id": "c07-e009",
+    "chapter": 7,
+    "number": "9",
+    "page": 168,
+    "src": "formulas/c07-e009.png",
+    "width": 721,
+    "height": 45
+  },
+  {
+    "id": "c07-e010",
+    "chapter": 7,
+    "number": "10",
+    "page": 168,
+    "src": "formulas/c07-e010.png",
+    "width": 595,
+    "height": 45
+  },
+  {
+    "id": "c07-e011",
+    "chapter": 7,
+    "number": "11",
+    "page": 168,
+    "src": "formulas/c07-e011.png",
+    "width": 595,
+    "height": 80
+  },
+  {
+    "id": "c07-e012",
+    "chapter": 7,
+    "number": "12",
+    "page": 168,
+    "src": "formulas/c07-e012.png",
+    "width": 561,
+    "height": 46
+  },
+  {
+    "id": "c07-e013",
+    "chapter": 7,
+    "number": "13",
+    "page": 168,
+    "src": "formulas/c07-e013.png",
+    "width": 530,
+    "height": 45
+  },
+  {
+    "id": "c07-e014",
+    "chapter": 7,
+    "number": "14",
+    "page": 168,
+    "src": "formulas/c07-e014.png",
+    "width": 564,
+    "height": 46
+  },
+  {
+    "id": "c07-e015",
+    "chapter": 7,
+    "number": "15",
+    "page": 168,
+    "src": "formulas/c07-e015.png",
+    "width": 558,
+    "height": 265
+  },
+  {
+    "id": "c07-e016",
+    "chapter": 7,
+    "number": "16",
+    "page": 169,
+    "src": "formulas/c07-e016.png",
+    "width": 683,
+    "height": 47
+  },
+  {
+    "id": "c07-e017",
+    "chapter": 7,
+    "number": "17",
+    "page": 169,
+    "src": "formulas/c07-e017.png",
+    "width": 546,
+    "height": 41
+  },
+  {
+    "id": "c07-e018",
+    "chapter": 7,
+    "number": "18",
+    "page": 169,
+    "src": "formulas/c07-e018.png",
+    "width": 588,
+    "height": 45
+  },
+  {
+    "id": "c07-e019",
+    "chapter": 7,
+    "number": "19",
+    "page": 169,
+    "src": "formulas/c07-e019.png",
+    "width": 674,
+    "height": 46
+  },
+  {
+    "id": "c07-e020",
+    "chapter": 7,
+    "number": "20",
+    "page": 169,
+    "src": "formulas/c07-e020.png",
+    "width": 705,
+    "height": 49
+  },
+  {
+    "id": "c07-e21a",
+    "chapter": 7,
+    "number": "21a",
+    "page": 169,
+    "src": "formulas/c07-e21a.png",
+    "width": 812,
+    "height": 48
+  },
+  {
+    "id": "c07-e21b",
+    "chapter": 7,
+    "number": "21b",
+    "page": 169,
+    "src": "formulas/c07-e21b.png",
+    "width": 631,
+    "height": 42
+  },
+  {
+    "id": "c07-e022",
+    "chapter": 7,
+    "number": "22",
+    "page": 170,
+    "src": "formulas/c07-e022.png",
+    "width": 553,
+    "height": 63
+  },
+  {
+    "id": "c07-e023",
+    "chapter": 7,
+    "number": "23",
+    "page": 171,
+    "src": "formulas/c07-e023.png",
+    "width": 703,
+    "height": 64
+  },
+  {
+    "id": "c07-e024",
+    "chapter": 7,
+    "number": "24",
+    "page": 171,
+    "src": "formulas/c07-e024.png",
+    "width": 771,
+    "height": 86
+  },
+  {
+    "id": "c07-e025",
+    "chapter": 7,
+    "number": "25",
+    "page": 171,
+    "src": "formulas/c07-e025.png",
+    "width": 545,
+    "height": 63
+  },
+  {
+    "id": "c07-e026",
+    "chapter": 7,
+    "number": "26",
+    "page": 172,
+    "src": "formulas/c07-e026.png",
+    "width": 753,
+    "height": 76
+  },
+  {
+    "id": "c07-e027",
+    "chapter": 7,
+    "number": "27",
+    "page": 172,
+    "src": "formulas/c07-e027.png",
+    "width": 665,
+    "height": 97
+  },
+  {
+    "id": "c07-e028",
+    "chapter": 7,
+    "number": "28",
+    "page": 172,
+    "src": "formulas/c07-e028.png",
+    "width": 534,
+    "height": 47
+  },
+  {
+    "id": "c07-e029",
+    "chapter": 7,
+    "number": "29",
+    "page": 173,
+    "src": "formulas/c07-e029.png",
+    "width": 607,
+    "height": 59
+  },
+  {
+    "id": "c07-e030",
+    "chapter": 7,
+    "number": "30",
+    "page": 173,
+    "src": "formulas/c07-e030.png",
+    "width": 696,
+    "height": 47
+  },
+  {
+    "id": "c07-e031",
+    "chapter": 7,
+    "number": "31",
+    "page": 174,
+    "src": "formulas/c07-e031.png",
+    "width": 647,
+    "height": 63
+  },
+  {
+    "id": "c07-e032",
+    "chapter": 7,
+    "number": "32",
+    "page": 174,
+    "src": "formulas/c07-e032.png",
+    "width": 748,
+    "height": 171
+  },
+  {
+    "id": "c07-e033",
+    "chapter": 7,
+    "number": "33",
+    "page": 174,
+    "src": "formulas/c07-e033.png",
+    "width": 675,
+    "height": 63
+  },
+  {
+    "id": "c07-e034",
+    "chapter": 7,
+    "number": "34",
+    "page": 175,
+    "src": "formulas/c07-e034.png",
+    "width": 764,
+    "height": 140
+  },
+  {
+    "id": "c07-e035",
+    "chapter": 7,
+    "number": "35",
+    "page": 175,
+    "src": "formulas/c07-e035.png",
+    "width": 662,
+    "height": 63
+  },
+  {
+    "id": "c07-e036",
+    "chapter": 7,
+    "number": "36",
+    "page": 175,
+    "src": "formulas/c07-e036.png",
+    "width": 589,
+    "height": 64
+  },
+  {
+    "id": "c07-e037",
+    "chapter": 7,
+    "number": "37",
+    "page": 175,
+    "src": "formulas/c07-e037.png",
+    "width": 594,
+    "height": 85
+  },
+  {
+    "id": "c07-e038",
+    "chapter": 7,
+    "number": "38",
+    "page": 175,
+    "src": "formulas/c07-e038.png",
+    "width": 575,
+    "height": 45
+  },
+  {
+    "id": "c07-e039",
+    "chapter": 7,
+    "number": "39",
+    "page": 175,
+    "src": "formulas/c07-e039.png",
+    "width": 784,
+    "height": 48
+  },
+  {
+    "id": "c07-e040",
+    "chapter": 7,
+    "number": "40",
+    "page": 175,
+    "src": "formulas/c07-e040.png",
+    "width": 703,
+    "height": 63
+  },
+  {
+    "id": "c07-e041",
+    "chapter": 7,
+    "number": "41",
+    "page": 175,
+    "src": "formulas/c07-e041.png",
+    "width": 561,
+    "height": 71
+  },
+  {
+    "id": "c07-e042",
+    "chapter": 7,
+    "number": "42",
+    "page": 175,
+    "src": "formulas/c07-e042.png",
+    "width": 581,
+    "height": 76
+  },
+  {
+    "id": "c07-e043",
+    "chapter": 7,
+    "number": "43",
+    "page": 176,
+    "src": "formulas/c07-e043.png",
+    "width": 694,
+    "height": 45
+  },
+  {
+    "id": "c07-e044",
+    "chapter": 7,
+    "number": "44",
+    "page": 178,
+    "src": "formulas/c07-e044.png",
+    "width": 627,
+    "height": 46
+  },
+  {
+    "id": "c07-e045",
+    "chapter": 7,
+    "number": "45",
+    "page": 178,
+    "src": "formulas/c07-e045.png",
+    "width": 629,
+    "height": 46
+  },
+  {
+    "id": "c07-e046",
+    "chapter": 7,
+    "number": "46",
+    "page": 178,
+    "src": "formulas/c07-e046.png",
+    "width": 570,
+    "height": 80
+  },
+  {
+    "id": "c07-e047",
+    "chapter": 7,
+    "number": "47",
+    "page": 178,
+    "src": "formulas/c07-e047.png",
+    "width": 715,
+    "height": 70
+  },
+  {
+    "id": "c07-e048",
+    "chapter": 7,
+    "number": "48",
+    "page": 178,
+    "src": "formulas/c07-e048.png",
+    "width": 595,
+    "height": 86
+  },
+  {
+    "id": "c07-e049",
+    "chapter": 7,
+    "number": "49",
+    "page": 178,
+    "src": "formulas/c07-e049.png",
+    "width": 647,
+    "height": 47
+  },
+  {
+    "id": "c07-e050",
+    "chapter": 7,
+    "number": "50",
+    "page": 179,
+    "src": "formulas/c07-e050.png",
+    "width": 693,
+    "height": 48
+  },
+  {
+    "id": "c07-e051",
+    "chapter": 7,
+    "number": "51",
+    "page": 179,
+    "src": "formulas/c07-e051.png",
+    "width": 684,
+    "height": 90
+  },
+  {
+    "id": "c07-e052",
+    "chapter": 7,
+    "number": "52",
+    "page": 179,
+    "src": "formulas/c07-e052.png",
+    "width": 634,
+    "height": 83
+  },
+  {
+    "id": "c07-e053",
+    "chapter": 7,
+    "number": "53",
+    "page": 180,
+    "src": "formulas/c07-e053.png",
+    "width": 671,
+    "height": 66
+  },
+  {
+    "id": "c08-e001",
+    "chapter": 8,
+    "number": "1",
+    "page": 191,
+    "src": "formulas/c08-e001.png",
+    "width": 690,
+    "height": 50
+  },
+  {
+    "id": "c08-e002",
+    "chapter": 8,
+    "number": "2",
+    "page": 192,
+    "src": "formulas/c08-e002.png",
+    "width": 542,
+    "height": 47
+  },
+  {
+    "id": "c08-e003",
+    "chapter": 8,
+    "number": "3",
+    "page": 192,
+    "src": "formulas/c08-e003.png",
+    "width": 595,
+    "height": 48
+  },
+  {
+    "id": "c08-e004",
+    "chapter": 8,
+    "number": "4",
+    "page": 192,
+    "src": "formulas/c08-e004.png",
+    "width": 549,
+    "height": 42
+  },
+  {
+    "id": "c08-e005",
+    "chapter": 8,
+    "number": "5",
+    "page": 192,
+    "src": "formulas/c08-e005.png",
+    "width": 528,
+    "height": 101
+  },
+  {
+    "id": "c08-e006",
+    "chapter": 8,
+    "number": "6",
+    "page": 192,
+    "src": "formulas/c08-e006.png",
+    "width": 889,
+    "height": 100
+  },
+  {
+    "id": "c08-e007",
+    "chapter": 8,
+    "number": "7",
+    "page": 192,
+    "src": "formulas/c08-e007.png",
+    "width": 887,
+    "height": 102
+  },
+  {
+    "id": "c08-e008",
+    "chapter": 8,
+    "number": "8",
+    "page": 193,
+    "src": "formulas/c08-e008.png",
+    "width": 659,
+    "height": 63
+  },
+  {
+    "id": "c08-e009",
+    "chapter": 8,
+    "number": "9",
+    "page": 193,
+    "src": "formulas/c08-e009.png",
+    "width": 860,
+    "height": 92
+  },
+  {
+    "id": "c08-e010",
+    "chapter": 8,
+    "number": "10",
+    "page": 193,
+    "src": "formulas/c08-e010.png",
+    "width": 595,
+    "height": 46
+  },
+  {
+    "id": "c08-e011",
+    "chapter": 8,
+    "number": "11",
+    "page": 193,
+    "src": "formulas/c08-e011.png",
+    "width": 597,
+    "height": 45
+  },
+  {
+    "id": "c08-e012",
+    "chapter": 8,
+    "number": "12",
+    "page": 193,
+    "src": "formulas/c08-e012.png",
+    "width": 700,
+    "height": 63
+  },
+  {
+    "id": "c08-e013",
+    "chapter": 8,
+    "number": "13",
+    "page": 193,
+    "src": "formulas/c08-e013.png",
+    "width": 671,
+    "height": 62
+  },
+  {
+    "id": "c08-e014",
+    "chapter": 8,
+    "number": "14",
+    "page": 194,
+    "src": "formulas/c08-e014.png",
+    "width": 567,
+    "height": 46
+  },
+  {
+    "id": "c08-e015",
+    "chapter": 8,
+    "number": "15",
+    "page": 194,
+    "src": "formulas/c08-e015.png",
+    "width": 593,
+    "height": 46
+  },
+  {
+    "id": "c08-e016",
+    "chapter": 8,
+    "number": "16",
+    "page": 194,
+    "src": "formulas/c08-e016.png",
+    "width": 528,
+    "height": 42
+  },
+  {
+    "id": "c08-e017",
+    "chapter": 8,
+    "number": "17",
+    "page": 194,
+    "src": "formulas/c08-e017.png",
+    "width": 893,
+    "height": 102
+  },
+  {
+    "id": "c08-e018",
+    "chapter": 8,
+    "number": "18",
+    "page": 195,
+    "src": "formulas/c08-e018.png",
+    "width": 892,
+    "height": 103
+  },
+  {
+    "id": "c08-e019",
+    "chapter": 8,
+    "number": "19",
+    "page": 195,
+    "src": "formulas/c08-e019.png",
+    "width": 892,
+    "height": 72
+  },
+  {
+    "id": "c08-e020",
+    "chapter": 8,
+    "number": "20",
+    "page": 196,
+    "src": "formulas/c08-e020.png",
+    "width": 893,
+    "height": 95
+  },
+  {
+    "id": "c08-e021",
+    "chapter": 8,
+    "number": "21",
+    "page": 196,
+    "src": "formulas/c08-e021.png",
+    "width": 893,
+    "height": 125
+  },
+  {
+    "id": "c08-e022",
+    "chapter": 8,
+    "number": "22",
+    "page": 196,
+    "src": "formulas/c08-e022.png",
+    "width": 893,
+    "height": 101
+  },
+  {
+    "id": "c08-e023",
+    "chapter": 8,
+    "number": "23",
+    "page": 196,
+    "src": "formulas/c08-e023.png",
+    "width": 893,
+    "height": 72
+  },
+  {
+    "id": "c08-e024",
+    "chapter": 8,
+    "number": "24",
+    "page": 197,
+    "src": "formulas/c08-e024.png",
+    "width": 739,
+    "height": 44
+  },
+  {
+    "id": "c08-e025",
+    "chapter": 8,
+    "number": "25",
+    "page": 198,
+    "src": "formulas/c08-e025.png",
+    "width": 744,
+    "height": 47
+  },
+  {
+    "id": "c08-e026",
+    "chapter": 8,
+    "number": "26",
+    "page": 198,
+    "src": "formulas/c08-e026.png",
+    "width": 634,
+    "height": 84
+  },
+  {
+    "id": "c08-e027",
+    "chapter": 8,
+    "number": "27",
+    "page": 198,
+    "src": "formulas/c08-e027.png",
+    "width": 722,
+    "height": 85
+  },
+  {
+    "id": "c08-e028",
+    "chapter": 8,
+    "number": "28",
+    "page": 198,
+    "src": "formulas/c08-e028.png",
+    "width": 543,
+    "height": 106
+  },
+  {
+    "id": "c08-e029",
+    "chapter": 8,
+    "number": "29",
+    "page": 198,
+    "src": "formulas/c08-e029.png",
+    "width": 700,
+    "height": 87
+  },
+  {
+    "id": "c08-e030",
+    "chapter": 8,
+    "number": "30",
+    "page": 200,
+    "src": "formulas/c08-e030.png",
+    "width": 890,
+    "height": 91
+  },
+  {
+    "id": "c08-e031",
+    "chapter": 8,
+    "number": "31",
+    "page": 200,
+    "src": "formulas/c08-e031.png",
+    "width": 563,
+    "height": 51
+  },
+  {
+    "id": "c08-e032",
+    "chapter": 8,
+    "number": "32",
+    "page": 201,
+    "src": "formulas/c08-e032.png",
+    "width": 716,
+    "height": 95
+  },
+  {
+    "id": "c08-e033",
+    "chapter": 8,
+    "number": "33",
+    "page": 202,
+    "src": "formulas/c08-e033.png",
+    "width": 700,
+    "height": 51
+  },
+  {
+    "id": "c08-e034",
+    "chapter": 8,
+    "number": "34",
+    "page": 202,
+    "src": "formulas/c08-e034.png",
+    "width": 556,
+    "height": 80
+  },
+  {
+    "id": "c08-e035",
+    "chapter": 8,
+    "number": "35",
+    "page": 205,
+    "src": "formulas/c08-e035.png",
+    "width": 573,
+    "height": 46
+  },
+  {
+    "id": "c08-e036",
+    "chapter": 8,
+    "number": "36",
+    "page": 205,
+    "src": "formulas/c08-e036.png",
+    "width": 563,
+    "height": 47
+  },
+  {
+    "id": "c08-e037",
+    "chapter": 8,
+    "number": "37",
+    "page": 205,
+    "src": "formulas/c08-e037.png",
+    "width": 632,
+    "height": 86
+  },
+  {
+    "id": "c08-e038",
+    "chapter": 8,
+    "number": "38",
+    "page": 206,
+    "src": "formulas/c08-e038.png",
+    "width": 727,
+    "height": 166
+  },
+  {
+    "id": "c08-e039",
+    "chapter": 8,
+    "number": "39",
+    "page": 206,
+    "src": "formulas/c08-e039.png",
+    "width": 656,
+    "height": 86
+  },
+  {
+    "id": "c08-e040",
+    "chapter": 8,
+    "number": "40",
+    "page": 206,
+    "src": "formulas/c08-e040.png",
+    "width": 745,
+    "height": 120
+  },
+  {
+    "id": "c08-e041",
+    "chapter": 8,
+    "number": "41",
+    "page": 206,
+    "src": "formulas/c08-e041.png",
+    "width": 634,
+    "height": 85
+  },
+  {
+    "id": "c08-e042",
+    "chapter": 8,
+    "number": "42",
+    "page": 206,
+    "src": "formulas/c08-e042.png",
+    "width": 750,
+    "height": 85
+  },
+  {
+    "id": "c08-e043",
+    "chapter": 8,
+    "number": "43",
+    "page": 206,
+    "src": "formulas/c08-e043.png",
+    "width": 673,
+    "height": 85
+  },
+  {
+    "id": "c08-e044",
+    "chapter": 8,
+    "number": "44",
+    "page": 207,
+    "src": "formulas/c08-e044.png",
+    "width": 634,
+    "height": 46
+  },
+  {
+    "id": "c08-e045",
+    "chapter": 8,
+    "number": "45",
+    "page": 207,
+    "src": "formulas/c08-e045.png",
+    "width": 709,
+    "height": 85
+  },
+  {
+    "id": "c08-e046",
+    "chapter": 8,
+    "number": "46",
+    "page": 207,
+    "src": "formulas/c08-e046.png",
+    "width": 662,
+    "height": 50
+  },
+  {
+    "id": "c08-e047",
+    "chapter": 8,
+    "number": "47",
+    "page": 207,
+    "src": "formulas/c08-e047.png",
+    "width": 609,
+    "height": 44
+  },
+  {
+    "id": "c08-e048",
+    "chapter": 8,
+    "number": "48",
+    "page": 208,
+    "src": "formulas/c08-e048.png",
+    "width": 516,
+    "height": 45
+  },
+  {
+    "id": "c08-e049",
+    "chapter": 8,
+    "number": "49",
+    "page": 208,
+    "src": "formulas/c08-e049.png",
+    "width": 563,
+    "height": 45
+  },
+  {
+    "id": "c08-e050",
+    "chapter": 8,
+    "number": "50",
+    "page": 208,
+    "src": "formulas/c08-e050.png",
+    "width": 626,
+    "height": 43
+  },
+  {
+    "id": "c08-e051",
+    "chapter": 8,
+    "number": "51",
+    "page": 210,
+    "src": "formulas/c08-e051.png",
+    "width": 890,
+    "height": 115
+  },
+  {
+    "id": "c08-e052",
+    "chapter": 8,
+    "number": "52",
+    "page": 210,
+    "src": "formulas/c08-e052.png",
+    "width": 890,
+    "height": 115
+  },
+  {
+    "id": "c08-e053",
+    "chapter": 8,
+    "number": "53",
+    "page": 213,
+    "src": "formulas/c08-e053.png",
+    "width": 631,
+    "height": 79
+  },
+  {
+    "id": "c08-e054",
+    "chapter": 8,
+    "number": "54",
+    "page": 214,
+    "src": "formulas/c08-e054.png",
+    "width": 612,
+    "height": 47
+  },
+  {
+    "id": "c08-e055",
+    "chapter": 8,
+    "number": "55",
+    "page": 215,
+    "src": "formulas/c08-e055.png",
+    "width": 627,
+    "height": 49
+  },
+  {
+    "id": "c08-e056",
+    "chapter": 8,
+    "number": "56",
+    "page": 215,
+    "src": "formulas/c08-e056.png",
+    "width": 592,
+    "height": 47
+  },
+  {
+    "id": "c08-e057",
+    "chapter": 8,
+    "number": "57",
+    "page": 215,
+    "src": "formulas/c08-e057.png",
+    "width": 703,
+    "height": 51
+  },
+  {
+    "id": "c08-e058",
+    "chapter": 8,
+    "number": "58",
+    "page": 215,
+    "src": "formulas/c08-e058.png",
+    "width": 579,
+    "height": 47
+  },
+  {
+    "id": "c08-e059",
+    "chapter": 8,
+    "number": "59",
+    "page": 215,
+    "src": "formulas/c08-e059.png",
+    "width": 536,
+    "height": 46
+  },
+  {
+    "id": "c08-e060",
+    "chapter": 8,
+    "number": "60",
+    "page": 215,
+    "src": "formulas/c08-e060.png",
+    "width": 508,
+    "height": 45
+  },
+  {
+    "id": "c08-e061",
+    "chapter": 8,
+    "number": "61",
+    "page": 217,
+    "src": "formulas/c08-e061.png",
+    "width": 552,
+    "height": 44
+  },
+  {
+    "id": "c08-e062",
+    "chapter": 8,
+    "number": "62",
+    "page": 217,
+    "src": "formulas/c08-e062.png",
+    "width": 620,
+    "height": 44
+  },
+  {
+    "id": "c08-e063",
+    "chapter": 8,
+    "number": "63",
+    "page": 217,
+    "src": "formulas/c08-e063.png",
+    "width": 767,
+    "height": 90
+  },
+  {
+    "id": "c09-e001",
+    "chapter": 9,
+    "number": "1",
+    "page": 223,
+    "src": "formulas/c09-e001.png",
+    "width": 648,
+    "height": 85
+  },
+  {
+    "id": "c09-e002",
+    "chapter": 9,
+    "number": "2",
+    "page": 225,
+    "src": "formulas/c09-e002.png",
+    "width": 514,
+    "height": 43
+  },
+  {
+    "id": "c09-e003",
+    "chapter": 9,
+    "number": "3",
+    "page": 226,
+    "src": "formulas/c09-e003.png",
+    "width": 692,
+    "height": 49
+  },
+  {
+    "id": "c09-e004",
+    "chapter": 9,
+    "number": "4",
+    "page": 233,
+    "src": "formulas/c09-e004.png",
+    "width": 585,
+    "height": 67
+  },
+  {
+    "id": "c09-e005",
+    "chapter": 9,
+    "number": "5",
+    "page": 234,
+    "src": "formulas/c09-e005.png",
+    "width": 654,
+    "height": 67
+  },
+  {
+    "id": "c09-e006",
+    "chapter": 9,
+    "number": "6",
+    "page": 234,
+    "src": "formulas/c09-e006.png",
+    "width": 797,
+    "height": 175
+  },
+  {
+    "id": "c09-e007",
+    "chapter": 9,
+    "number": "7",
+    "page": 234,
+    "src": "formulas/c09-e007.png",
+    "width": 721,
+    "height": 68
+  },
+  {
+    "id": "c09-e008",
+    "chapter": 9,
+    "number": "8",
+    "page": 234,
+    "src": "formulas/c09-e008.png",
+    "width": 728,
+    "height": 63
+  },
+  {
+    "id": "c09-e009",
+    "chapter": 9,
+    "number": "9",
+    "page": 234,
+    "src": "formulas/c09-e009.png",
+    "width": 754,
+    "height": 44
+  },
+  {
+    "id": "c09-e010",
+    "chapter": 9,
+    "number": "10",
+    "page": 234,
+    "src": "formulas/c09-e010.png",
+    "width": 681,
+    "height": 63
+  },
+  {
+    "id": "c09-e011",
+    "chapter": 9,
+    "number": "11",
+    "page": 234,
+    "src": "formulas/c09-e011.png",
+    "width": 632,
+    "height": 45
+  },
+  {
+    "id": "c09-e012",
+    "chapter": 9,
+    "number": "12",
+    "page": 235,
+    "src": "formulas/c09-e012.png",
+    "width": 692,
+    "height": 44
+  },
+  {
+    "id": "c09-e013",
+    "chapter": 9,
+    "number": "13",
+    "page": 235,
+    "src": "formulas/c09-e013.png",
+    "width": 690,
+    "height": 48
+  },
+  {
+    "id": "c09-e014",
+    "chapter": 9,
+    "number": "14",
+    "page": 235,
+    "src": "formulas/c09-e014.png",
+    "width": 680,
+    "height": 52
+  },
+  {
+    "id": "c09-e015",
+    "chapter": 9,
+    "number": "15",
+    "page": 235,
+    "src": "formulas/c09-e015.png",
+    "width": 891,
+    "height": 51
+  },
+  {
+    "id": "c09-e016",
+    "chapter": 9,
+    "number": "16",
+    "page": 236,
+    "src": "formulas/c09-e016.png",
+    "width": 667,
+    "height": 85
+  },
+  {
+    "id": "c09-e017",
+    "chapter": 9,
+    "number": "17",
+    "page": 236,
+    "src": "formulas/c09-e017.png",
+    "width": 668,
+    "height": 85
+  },
+  {
+    "id": "c09-e018",
+    "chapter": 9,
+    "number": "18",
+    "page": 236,
+    "src": "formulas/c09-e018.png",
+    "width": 571,
+    "height": 46
+  },
+  {
+    "id": "c09-e019",
+    "chapter": 9,
+    "number": "19",
+    "page": 236,
+    "src": "formulas/c09-e019.png",
+    "width": 630,
+    "height": 85
+  },
+  {
+    "id": "c09-e020",
+    "chapter": 9,
+    "number": "20",
+    "page": 238,
+    "src": "formulas/c09-e020.png",
+    "width": 531,
+    "height": 46
+  },
+  {
+    "id": "c09-e021",
+    "chapter": 9,
+    "number": "21",
+    "page": 240,
+    "src": "formulas/c09-e021.png",
+    "width": 628,
+    "height": 88
+  },
+  {
+    "id": "c09-e022",
+    "chapter": 9,
+    "number": "22",
+    "page": 242,
+    "src": "formulas/c09-e022.png",
+    "width": 890,
+    "height": 49
+  },
+  {
+    "id": "c09-e023",
+    "chapter": 9,
+    "number": "23",
+    "page": 243,
+    "src": "formulas/c09-e023.png",
+    "width": 584,
+    "height": 71
+  },
+  {
+    "id": "c09-e024",
+    "chapter": 9,
+    "number": "24",
+    "page": 243,
+    "src": "formulas/c09-e024.png",
+    "width": 639,
+    "height": 71
+  },
+  {
+    "id": "c09-e25a",
+    "chapter": 9,
+    "number": "25a",
+    "page": 243,
+    "src": "formulas/c09-e25a.png",
+    "width": 552,
+    "height": 70
+  },
+  {
+    "id": "c09-e25b",
+    "chapter": 9,
+    "number": "25b",
+    "page": 243,
+    "src": "formulas/c09-e25b.png",
+    "width": 770,
+    "height": 74
+  },
+  {
+    "id": "c09-e25c",
+    "chapter": 9,
+    "number": "25c",
+    "page": 243,
+    "src": "formulas/c09-e25c.png",
+    "width": 729,
+    "height": 72
+  },
+  {
+    "id": "c09-e026",
+    "chapter": 9,
+    "number": "26",
+    "page": 243,
+    "src": "formulas/c09-e026.png",
+    "width": 634,
+    "height": 72
+  },
+  {
+    "id": "c09-e027",
+    "chapter": 9,
+    "number": "27",
+    "page": 243,
+    "src": "formulas/c09-e027.png",
+    "width": 579,
+    "height": 44
+  },
+  {
+    "id": "c09-e028",
+    "chapter": 9,
+    "number": "28",
+    "page": 244,
+    "src": "formulas/c09-e028.png",
+    "width": 548,
+    "height": 47
+  },
+  {
+    "id": "c09-e029",
+    "chapter": 9,
+    "number": "29",
+    "page": 244,
+    "src": "formulas/c09-e029.png",
+    "width": 633,
+    "height": 86
+  },
+  {
+    "id": "c09-e030",
+    "chapter": 9,
+    "number": "30",
+    "page": 244,
+    "src": "formulas/c09-e030.png",
+    "width": 561,
+    "height": 67
+  },
+  {
+    "id": "c09-e031",
+    "chapter": 9,
+    "number": "31",
+    "page": 244,
+    "src": "formulas/c09-e031.png",
+    "width": 576,
+    "height": 85
+  },
+  {
+    "id": "c09-e032",
+    "chapter": 9,
+    "number": "32",
+    "page": 244,
+    "src": "formulas/c09-e032.png",
+    "width": 607,
+    "height": 43
+  },
+  {
+    "id": "c09-e033",
+    "chapter": 9,
+    "number": "33",
+    "page": 245,
+    "src": "formulas/c09-e033.png",
+    "width": 615,
+    "height": 46
+  },
+  {
+    "id": "c09-e034",
+    "chapter": 9,
+    "number": "34",
+    "page": 246,
+    "src": "formulas/c09-e034.png",
+    "width": 513,
+    "height": 39
+  },
+  {
+    "id": "c09-e035",
+    "chapter": 9,
+    "number": "35",
+    "page": 247,
+    "src": "formulas/c09-e035.png",
+    "width": 608,
+    "height": 74
+  },
+  {
+    "id": "c09-e036",
+    "chapter": 9,
+    "number": "36",
+    "page": 247,
+    "src": "formulas/c09-e036.png",
+    "width": 566,
+    "height": 44
+  },
+  {
+    "id": "c09-e037",
+    "chapter": 9,
+    "number": "37",
+    "page": 247,
+    "src": "formulas/c09-e037.png",
+    "width": 533,
+    "height": 74
+  },
+  {
+    "id": "c09-e038",
+    "chapter": 9,
+    "number": "38",
+    "page": 249,
+    "src": "formulas/c09-e038.png",
+    "width": 670,
+    "height": 47
+  },
+  {
+    "id": "c09-e039",
+    "chapter": 9,
+    "number": "39",
+    "page": 253,
+    "src": "formulas/c09-e039.png",
+    "width": 684,
+    "height": 83
+  },
+  {
+    "id": "c09-e040",
+    "chapter": 9,
+    "number": "40",
+    "page": 253,
+    "src": "formulas/c09-e040.png",
+    "width": 603,
+    "height": 83
+  },
+  {
+    "id": "c09-e041",
+    "chapter": 9,
+    "number": "41",
+    "page": 254,
+    "src": "formulas/c09-e041.png",
+    "width": 575,
+    "height": 71
+  },
+  {
+    "id": "c09-e042",
+    "chapter": 9,
+    "number": "42",
+    "page": 254,
+    "src": "formulas/c09-e042.png",
+    "width": 656,
+    "height": 57
+  },
+  {
+    "id": "c09-e043",
+    "chapter": 9,
+    "number": "43",
+    "page": 254,
+    "src": "formulas/c09-e043.png",
+    "width": 653,
+    "height": 42
+  },
+  {
+    "id": "c10-e001",
+    "chapter": 10,
+    "number": "1",
+    "page": 263,
+    "src": "formulas/c10-e001.png",
+    "width": 890,
+    "height": 148
+  },
+  {
+    "id": "c10-e002",
+    "chapter": 10,
+    "number": "2",
+    "page": 269,
+    "src": "formulas/c10-e002.png",
+    "width": 552,
+    "height": 43
+  },
+  {
+    "id": "c10-e003",
+    "chapter": 10,
+    "number": "3",
+    "page": 271,
+    "src": "formulas/c10-e003.png",
+    "width": 858,
+    "height": 256
+  },
+  {
+    "id": "c10-e004",
+    "chapter": 10,
+    "number": "4",
+    "page": 272,
+    "src": "formulas/c10-e004.png",
+    "width": 548,
+    "height": 44
+  },
+  {
+    "id": "c10-e005",
+    "chapter": 10,
+    "number": "5",
+    "page": 272,
+    "src": "formulas/c10-e005.png",
+    "width": 890,
+    "height": 153
+  },
+  {
+    "id": "c10-e006",
+    "chapter": 10,
+    "number": "6",
+    "page": 272,
+    "src": "formulas/c10-e006.png",
+    "width": 890,
+    "height": 127
+  },
+  {
+    "id": "c10-e007",
+    "chapter": 10,
+    "number": "7",
+    "page": 272,
+    "src": "formulas/c10-e007.png",
+    "width": 547,
+    "height": 43
+  },
+  {
+    "id": "c10-e008",
+    "chapter": 10,
+    "number": "8",
+    "page": 272,
+    "src": "formulas/c10-e008.png",
+    "width": 890,
+    "height": 125
+  },
+  {
+    "id": "c10-e009",
+    "chapter": 10,
+    "number": "9",
+    "page": 272,
+    "src": "formulas/c10-e009.png",
+    "width": 890,
+    "height": 47
+  },
+  {
+    "id": "c10-e010",
+    "chapter": 10,
+    "number": "10",
+    "page": 274,
+    "src": "formulas/c10-e010.png",
+    "width": 890,
+    "height": 106
+  },
+  {
+    "id": "c10-e011",
+    "chapter": 10,
+    "number": "11",
+    "page": 274,
+    "src": "formulas/c10-e011.png",
+    "width": 890,
+    "height": 106
+  },
+  {
+    "id": "c10-e012",
+    "chapter": 10,
+    "number": "12",
+    "page": 274,
+    "src": "formulas/c10-e012.png",
+    "width": 890,
+    "height": 77
+  },
+  {
+    "id": "c10-e013",
+    "chapter": 10,
+    "number": "13",
+    "page": 274,
+    "src": "formulas/c10-e013.png",
+    "width": 527,
+    "height": 47
+  },
+  {
+    "id": "c10-e014",
+    "chapter": 10,
+    "number": "14",
+    "page": 275,
+    "src": "formulas/c10-e014.png",
+    "width": 589,
+    "height": 45
+  },
+  {
+    "id": "c10-e14a",
+    "chapter": 10,
+    "number": "14a",
+    "page": 275,
+    "src": "formulas/c10-e14a.png",
+    "width": 890,
+    "height": 79
+  },
+  {
+    "id": "c10-e15a",
+    "chapter": 10,
+    "number": "15a",
+    "page": 276,
+    "src": "formulas/c10-e15a.png",
+    "width": 600,
+    "height": 47
+  },
+  {
+    "id": "c10-e15b",
+    "chapter": 10,
+    "number": "15b",
+    "page": 276,
+    "src": "formulas/c10-e15b.png",
+    "width": 668,
+    "height": 97
+  },
+  {
+    "id": "c10-e16a",
+    "chapter": 10,
+    "number": "16a",
+    "page": 276,
+    "src": "formulas/c10-e16a.png",
+    "width": 535,
+    "height": 70
+  },
+  {
+    "id": "c10-e16b",
+    "chapter": 10,
+    "number": "16b",
+    "page": 277,
+    "src": "formulas/c10-e16b.png",
+    "width": 605,
+    "height": 50
+  },
+  {
+    "id": "c10-e017",
+    "chapter": 10,
+    "number": "17",
+    "page": 277,
+    "src": "formulas/c10-e017.png",
+    "width": 557,
+    "height": 79
+  },
+  {
+    "id": "c10-e018",
+    "chapter": 10,
+    "number": "18",
+    "page": 278,
+    "src": "formulas/c10-e018.png",
+    "width": 609,
+    "height": 49
+  },
+  {
+    "id": "c10-e019",
+    "chapter": 10,
+    "number": "19",
+    "page": 280,
+    "src": "formulas/c10-e019.png",
+    "width": 648,
+    "height": 49
+  },
+  {
+    "id": "c10-e020",
+    "chapter": 10,
+    "number": "20",
+    "page": 280,
+    "src": "formulas/c10-e020.png",
+    "width": 587,
+    "height": 85
+  },
+  {
+    "id": "c10-e021",
+    "chapter": 10,
+    "number": "21",
+    "page": 280,
+    "src": "formulas/c10-e021.png",
+    "width": 625,
+    "height": 84
+  },
+  {
+    "id": "c10-e022",
+    "chapter": 10,
+    "number": "22",
+    "page": 280,
+    "src": "formulas/c10-e022.png",
+    "width": 546,
+    "height": 72
+  },
+  {
+    "id": "c10-e023",
+    "chapter": 10,
+    "number": "23",
+    "page": 281,
+    "src": "formulas/c10-e023.png",
+    "width": 523,
+    "height": 45
+  },
+  {
+    "id": "c10-e024",
+    "chapter": 10,
+    "number": "24",
+    "page": 281,
+    "src": "formulas/c10-e024.png",
+    "width": 536,
+    "height": 42
+  },
+  {
+    "id": "c10-e025",
+    "chapter": 10,
+    "number": "25",
+    "page": 281,
+    "src": "formulas/c10-e025.png",
+    "width": 703,
+    "height": 76
+  },
+  {
+    "id": "c10-e026",
+    "chapter": 10,
+    "number": "26",
+    "page": 281,
+    "src": "formulas/c10-e026.png",
+    "width": 541,
+    "height": 45
+  },
+  {
+    "id": "c10-e027",
+    "chapter": 10,
+    "number": "27",
+    "page": 281,
+    "src": "formulas/c10-e027.png",
+    "width": 886,
+    "height": 126
+  },
+  {
+    "id": "c10-e028",
+    "chapter": 10,
+    "number": "28",
+    "page": 282,
+    "src": "formulas/c10-e028.png",
+    "width": 743,
+    "height": 46
+  },
+  {
+    "id": "c10-e029",
+    "chapter": 10,
+    "number": "29",
+    "page": 282,
+    "src": "formulas/c10-e029.png",
+    "width": 548,
+    "height": 47
+  },
+  {
+    "id": "c10-e030",
+    "chapter": 10,
+    "number": "30",
+    "page": 285,
+    "src": "formulas/c10-e030.png",
+    "width": 535,
+    "height": 47
+  },
+  {
+    "id": "c10-e031",
+    "chapter": 10,
+    "number": "31",
+    "page": 285,
+    "src": "formulas/c10-e031.png",
+    "width": 525,
+    "height": 46
+  },
+  {
+    "id": "c10-e032",
+    "chapter": 10,
+    "number": "32",
+    "page": 286,
+    "src": "formulas/c10-e032.png",
+    "width": 890,
+    "height": 66
+  },
+  {
+    "id": "c10-e033",
+    "chapter": 10,
+    "number": "33",
+    "page": 287,
+    "src": "formulas/c10-e033.png",
+    "width": 890,
+    "height": 66
+  },
+  {
+    "id": "c10-e034",
+    "chapter": 10,
+    "number": "34",
+    "page": 287,
+    "src": "formulas/c10-e034.png",
+    "width": 890,
+    "height": 51
+  },
+  {
+    "id": "c10-e035",
+    "chapter": 10,
+    "number": "35",
+    "page": 287,
+    "src": "formulas/c10-e035.png",
+    "width": 531,
+    "height": 43
+  },
+  {
+    "id": "c10-e036",
+    "chapter": 10,
+    "number": "36",
+    "page": 287,
+    "src": "formulas/c10-e036.png",
+    "width": 528,
+    "height": 43
+  },
+  {
+    "id": "c10-e37a",
+    "chapter": 10,
+    "number": "37a",
+    "page": 287,
+    "src": "formulas/c10-e37a.png",
+    "width": 890,
+    "height": 76
+  },
+  {
+    "id": "c10-e37b",
+    "chapter": 10,
+    "number": "37b",
+    "page": 287,
+    "src": "formulas/c10-e37b.png",
+    "width": 891,
+    "height": 70
+  },
+  {
+    "id": "c10-e038",
+    "chapter": 10,
+    "number": "38",
+    "page": 289,
+    "src": "formulas/c10-e038.png",
+    "width": 656,
+    "height": 70
+  },
+  {
+    "id": "c10-e039",
+    "chapter": 10,
+    "number": "39",
+    "page": 289,
+    "src": "formulas/c10-e039.png",
+    "width": 671,
+    "height": 70
+  },
+  {
+    "id": "c10-e040",
+    "chapter": 10,
+    "number": "40",
+    "page": 289,
+    "src": "formulas/c10-e040.png",
+    "width": 671,
+    "height": 70
+  },
+  {
+    "id": "c10-e041",
+    "chapter": 10,
+    "number": "41",
+    "page": 290,
+    "src": "formulas/c10-e041.png",
+    "width": 641,
+    "height": 70
+  },
+  {
+    "id": "c10-e042",
+    "chapter": 10,
+    "number": "42",
+    "page": 290,
+    "src": "formulas/c10-e042.png",
+    "width": 650,
+    "height": 70
+  },
+  {
+    "id": "c10-e043",
+    "chapter": 10,
+    "number": "43",
+    "page": 290,
+    "src": "formulas/c10-e043.png",
+    "width": 751,
+    "height": 70
+  },
+  {
+    "id": "c10-e044",
+    "chapter": 10,
+    "number": "44",
+    "page": 290,
+    "src": "formulas/c10-e044.png",
+    "width": 747,
+    "height": 69
+  },
+  {
+    "id": "c10-e045",
+    "chapter": 10,
+    "number": "45",
+    "page": 290,
+    "src": "formulas/c10-e045.png",
+    "width": 642,
+    "height": 70
+  },
+  {
+    "id": "c10-e046",
+    "chapter": 10,
+    "number": "46",
+    "page": 290,
+    "src": "formulas/c10-e046.png",
+    "width": 529,
+    "height": 67
+  },
+  {
+    "id": "c10-e047",
+    "chapter": 10,
+    "number": "47",
+    "page": 290,
+    "src": "formulas/c10-e047.png",
+    "width": 632,
+    "height": 77
+  },
+  {
+    "id": "c10-e048",
+    "chapter": 10,
+    "number": "48",
+    "page": 290,
+    "src": "formulas/c10-e048.png",
+    "width": 771,
+    "height": 43
+  },
+  {
+    "id": "c10-e049",
+    "chapter": 10,
+    "number": "49",
+    "page": 290,
+    "src": "formulas/c10-e049.png",
+    "width": 692,
+    "height": 70
+  },
+  {
+    "id": "c10-e050",
+    "chapter": 10,
+    "number": "50",
+    "page": 291,
+    "src": "formulas/c10-e050.png",
+    "width": 597,
+    "height": 45
+  },
+  {
+    "id": "c10-e051",
+    "chapter": 10,
+    "number": "51",
+    "page": 291,
+    "src": "formulas/c10-e051.png",
+    "width": 646,
+    "height": 46
+  },
+  {
+    "id": "c10-e052",
+    "chapter": 10,
+    "number": "52",
+    "page": 291,
+    "src": "formulas/c10-e052.png",
+    "width": 843,
+    "height": 104
+  },
+  {
+    "id": "c10-e053",
+    "chapter": 10,
+    "number": "53",
+    "page": 291,
+    "src": "formulas/c10-e053.png",
+    "width": 610,
+    "height": 45
+  },
+  {
+    "id": "c10-e054",
+    "chapter": 10,
+    "number": "54",
+    "page": 291,
+    "src": "formulas/c10-e054.png",
+    "width": 655,
+    "height": 44
+  },
+  {
+    "id": "c10-e055",
+    "chapter": 10,
+    "number": "55",
+    "page": 291,
+    "src": "formulas/c10-e055.png",
+    "width": 631,
+    "height": 42
+  },
+  {
+    "id": "c10-e056",
+    "chapter": 10,
+    "number": "56",
+    "page": 291,
+    "src": "formulas/c10-e056.png",
+    "width": 581,
+    "height": 41
+  },
+  {
+    "id": "c10-e057",
+    "chapter": 10,
+    "number": "57",
+    "page": 291,
+    "src": "formulas/c10-e057.png",
+    "width": 623,
+    "height": 77
+  },
+  {
+    "id": "c10-e058",
+    "chapter": 10,
+    "number": "58",
+    "page": 292,
+    "src": "formulas/c10-e058.png",
+    "width": 520,
+    "height": 41
+  },
+  {
+    "id": "c10-e059",
+    "chapter": 10,
+    "number": "59",
+    "page": 292,
+    "src": "formulas/c10-e059.png",
+    "width": 564,
+    "height": 42
+  },
+  {
+    "id": "c10-e060",
+    "chapter": 10,
+    "number": "60",
+    "page": 292,
+    "src": "formulas/c10-e060.png",
+    "width": 891,
+    "height": 112
+  },
+  {
+    "id": "c10-e061",
+    "chapter": 10,
+    "number": "61",
+    "page": 293,
+    "src": "formulas/c10-e061.png",
+    "width": 609,
+    "height": 45
+  },
+  {
+    "id": "c11-e001",
+    "chapter": 11,
+    "number": "1",
+    "page": 299,
+    "src": "formulas/c11-e001.png",
+    "width": 890,
+    "height": 100
+  },
+  {
+    "id": "c11-e002",
+    "chapter": 11,
+    "number": "2",
+    "page": 300,
+    "src": "formulas/c11-e002.png",
+    "width": 890,
+    "height": 73
+  },
+  {
+    "id": "c11-e003",
+    "chapter": 11,
+    "number": "3",
+    "page": 300,
+    "src": "formulas/c11-e003.png",
+    "width": 890,
+    "height": 117
+  },
+  {
+    "id": "c11-e004",
+    "chapter": 11,
+    "number": "4",
+    "page": 300,
+    "src": "formulas/c11-e004.png",
+    "width": 890,
+    "height": 101
+  },
+  {
+    "id": "c11-e005",
+    "chapter": 11,
+    "number": "5",
+    "page": 301,
+    "src": "formulas/c11-e005.png",
+    "width": 890,
+    "height": 180
+  },
+  {
+    "id": "c11-e006",
+    "chapter": 11,
+    "number": "6",
+    "page": 301,
+    "src": "formulas/c11-e006.png",
+    "width": 656,
+    "height": 75
+  },
+  {
+    "id": "c11-e007",
+    "chapter": 11,
+    "number": "7",
+    "page": 301,
+    "src": "formulas/c11-e007.png",
+    "width": 685,
+    "height": 51
+  },
+  {
+    "id": "c11-e008",
+    "chapter": 11,
+    "number": "8",
+    "page": 301,
+    "src": "formulas/c11-e008.png",
+    "width": 678,
+    "height": 85
+  },
+  {
+    "id": "c11-e009",
+    "chapter": 11,
+    "number": "9",
+    "page": 302,
+    "src": "formulas/c11-e009.png",
+    "width": 548,
+    "height": 71
+  },
+  {
+    "id": "c11-e010",
+    "chapter": 11,
+    "number": "10",
+    "page": 302,
+    "src": "formulas/c11-e010.png",
+    "width": 589,
+    "height": 64
+  },
+  {
+    "id": "c11-e011",
+    "chapter": 11,
+    "number": "11",
+    "page": 302,
+    "src": "formulas/c11-e011.png",
+    "width": 580,
+    "height": 76
+  },
+  {
+    "id": "c11-e012",
+    "chapter": 11,
+    "number": "12",
+    "page": 302,
+    "src": "formulas/c11-e012.png",
+    "width": 525,
+    "height": 36
+  },
+  {
+    "id": "c11-e013",
+    "chapter": 11,
+    "number": "13",
+    "page": 302,
+    "src": "formulas/c11-e013.png",
+    "width": 677,
+    "height": 82
+  },
+  {
+    "id": "c11-e014",
+    "chapter": 11,
+    "number": "14",
+    "page": 303,
+    "src": "formulas/c11-e014.png",
+    "width": 585,
+    "height": 47
+  },
+  {
+    "id": "c11-e015",
+    "chapter": 11,
+    "number": "15",
+    "page": 303,
+    "src": "formulas/c11-e015.png",
+    "width": 891,
+    "height": 115
+  },
+  {
+    "id": "c11-e016",
+    "chapter": 11,
+    "number": "16",
+    "page": 303,
+    "src": "formulas/c11-e016.png",
+    "width": 626,
+    "height": 76
+  },
+  {
+    "id": "c11-e017",
+    "chapter": 11,
+    "number": "17",
+    "page": 303,
+    "src": "formulas/c11-e017.png",
+    "width": 709,
+    "height": 65
+  },
+  {
+    "id": "c11-e018",
+    "chapter": 11,
+    "number": "18",
+    "page": 303,
+    "src": "formulas/c11-e018.png",
+    "width": 559,
+    "height": 44
+  },
+  {
+    "id": "c11-e019",
+    "chapter": 11,
+    "number": "19",
+    "page": 303,
+    "src": "formulas/c11-e019.png",
+    "width": 679,
+    "height": 48
+  },
+  {
+    "id": "c11-e020",
+    "chapter": 11,
+    "number": "20",
+    "page": 304,
+    "src": "formulas/c11-e020.png",
+    "width": 718,
+    "height": 85
+  },
+  {
+    "id": "c11-e021",
+    "chapter": 11,
+    "number": "21",
+    "page": 304,
+    "src": "formulas/c11-e021.png",
+    "width": 600,
+    "height": 71
+  },
+  {
+    "id": "c11-e022",
+    "chapter": 11,
+    "number": "22",
+    "page": 304,
+    "src": "formulas/c11-e022.png",
+    "width": 647,
+    "height": 84
+  },
+  {
+    "id": "c11-e023",
+    "chapter": 11,
+    "number": "23",
+    "page": 304,
+    "src": "formulas/c11-e023.png",
+    "width": 556,
+    "height": 48
+  },
+  {
+    "id": "c11-e024",
+    "chapter": 11,
+    "number": "24",
+    "page": 309,
+    "src": "formulas/c11-e024.png",
+    "width": 614,
+    "height": 48
+  },
+  {
+    "id": "c11-e025",
+    "chapter": 11,
+    "number": "25",
+    "page": 309,
+    "src": "formulas/c11-e025.png",
+    "width": 696,
+    "height": 49
+  },
+  {
+    "id": "c11-e026",
+    "chapter": 11,
+    "number": "26",
+    "page": 310,
+    "src": "formulas/c11-e026.png",
+    "width": 598,
+    "height": 46
+  },
+  {
+    "id": "c11-e027",
+    "chapter": 11,
+    "number": "27",
+    "page": 310,
+    "src": "formulas/c11-e027.png",
+    "width": 691,
+    "height": 51
+  },
+  {
+    "id": "c11-e028",
+    "chapter": 11,
+    "number": "28",
+    "page": 310,
+    "src": "formulas/c11-e028.png",
+    "width": 770,
+    "height": 51
+  },
+  {
+    "id": "c11-e029",
+    "chapter": 11,
+    "number": "29",
+    "page": 310,
+    "src": "formulas/c11-e029.png",
+    "width": 766,
+    "height": 93
+  },
+  {
+    "id": "c11-e030",
+    "chapter": 11,
+    "number": "30",
+    "page": 311,
+    "src": "formulas/c11-e030.png",
+    "width": 667,
+    "height": 48
+  },
+  {
+    "id": "c11-e031",
+    "chapter": 11,
+    "number": "31",
+    "page": 311,
+    "src": "formulas/c11-e031.png",
+    "width": 557,
+    "height": 46
+  },
+  {
+    "id": "c11-e032",
+    "chapter": 11,
+    "number": "32",
+    "page": 311,
+    "src": "formulas/c11-e032.png",
+    "width": 602,
+    "height": 46
+  },
+  {
+    "id": "c11-e033",
+    "chapter": 11,
+    "number": "33",
+    "page": 312,
+    "src": "formulas/c11-e033.png",
+    "width": 602,
+    "height": 47
+  },
+  {
+    "id": "c11-e034",
+    "chapter": 11,
+    "number": "34",
+    "page": 312,
+    "src": "formulas/c11-e034.png",
+    "width": 615,
+    "height": 47
+  },
+  {
+    "id": "c11-e035",
+    "chapter": 11,
+    "number": "35",
+    "page": 312,
+    "src": "formulas/c11-e035.png",
+    "width": 622,
+    "height": 47
+  },
+  {
+    "id": "c11-e036",
+    "chapter": 11,
+    "number": "36",
+    "page": 312,
+    "src": "formulas/c11-e036.png",
+    "width": 600,
+    "height": 82
+  },
+  {
+    "id": "c11-e037",
+    "chapter": 11,
+    "number": "37",
+    "page": 312,
+    "src": "formulas/c11-e037.png",
+    "width": 574,
+    "height": 46
+  },
+  {
+    "id": "c11-e038",
+    "chapter": 11,
+    "number": "38",
+    "page": 312,
+    "src": "formulas/c11-e038.png",
+    "width": 570,
+    "height": 71
+  },
+  {
+    "id": "c11-e039",
+    "chapter": 11,
+    "number": "39",
+    "page": 312,
+    "src": "formulas/c11-e039.png",
+    "width": 558,
+    "height": 71
+  },
+  {
+    "id": "c11-e040",
+    "chapter": 11,
+    "number": "40",
+    "page": 313,
+    "src": "formulas/c11-e040.png",
+    "width": 668,
+    "height": 46
+  },
+  {
+    "id": "c11-e041",
+    "chapter": 11,
+    "number": "41",
+    "page": 314,
+    "src": "formulas/c11-e041.png",
+    "width": 554,
+    "height": 75
+  },
+  {
+    "id": "c11-e042",
+    "chapter": 11,
+    "number": "42",
+    "page": 316,
+    "src": "formulas/c11-e042.png",
+    "width": 598,
+    "height": 82
+  },
+  {
+    "id": "c11-e043",
+    "chapter": 11,
+    "number": "43",
+    "page": 317,
+    "src": "formulas/c11-e043.png",
+    "width": 779,
+    "height": 78
+  },
+  {
+    "id": "c11-e044",
+    "chapter": 11,
+    "number": "44",
+    "page": 317,
+    "src": "formulas/c11-e044.png",
+    "width": 773,
+    "height": 78
+  },
+  {
+    "id": "c11-e045",
+    "chapter": 11,
+    "number": "45",
+    "page": 317,
+    "src": "formulas/c11-e045.png",
+    "width": 602,
+    "height": 81
+  },
+  {
+    "id": "c11-e046",
+    "chapter": 11,
+    "number": "46",
+    "page": 317,
+    "src": "formulas/c11-e046.png",
+    "width": 528,
+    "height": 82
+  },
+  {
+    "id": "c12-e001",
+    "chapter": 12,
+    "number": "1",
+    "page": 323,
+    "src": "formulas/c12-e001.png",
+    "width": 513,
+    "height": 42
+  },
+  {
+    "id": "c12-e002",
+    "chapter": 12,
+    "number": "2",
+    "page": 324,
+    "src": "formulas/c12-e002.png",
+    "width": 889,
+    "height": 75
+  },
+  {
+    "id": "c12-e003",
+    "chapter": 12,
+    "number": "3",
+    "page": 324,
+    "src": "formulas/c12-e003.png",
+    "width": 890,
+    "height": 72
+  },
+  {
+    "id": "c12-e004",
+    "chapter": 12,
+    "number": "4",
+    "page": 324,
+    "src": "formulas/c12-e004.png",
+    "width": 890,
+    "height": 72
+  },
+  {
+    "id": "c12-e005",
+    "chapter": 12,
+    "number": "5",
+    "page": 325,
+    "src": "formulas/c12-e005.png",
+    "width": 890,
+    "height": 84
+  },
+  {
+    "id": "c12-e006",
+    "chapter": 12,
+    "number": "6",
+    "page": 325,
+    "src": "formulas/c12-e006.png",
+    "width": 538,
+    "height": 43
+  },
+  {
+    "id": "c12-e007",
+    "chapter": 12,
+    "number": "7",
+    "page": 325,
+    "src": "formulas/c12-e007.png",
+    "width": 544,
+    "height": 70
+  },
+  {
+    "id": "c12-e008",
+    "chapter": 12,
+    "number": "8",
+    "page": 326,
+    "src": "formulas/c12-e008.png",
+    "width": 595,
+    "height": 44
+  },
+  {
+    "id": "c12-e009",
+    "chapter": 12,
+    "number": "9",
+    "page": 326,
+    "src": "formulas/c12-e009.png",
+    "width": 541,
+    "height": 42
+  },
+  {
+    "id": "c12-e010",
+    "chapter": 12,
+    "number": "10",
+    "page": 327,
+    "src": "formulas/c12-e010.png",
+    "width": 624,
+    "height": 48
+  },
+  {
+    "id": "c12-e011",
+    "chapter": 12,
+    "number": "11",
+    "page": 327,
+    "src": "formulas/c12-e011.png",
+    "width": 558,
+    "height": 44
+  },
+  {
+    "id": "c12-e012",
+    "chapter": 12,
+    "number": "12",
+    "page": 330,
+    "src": "formulas/c12-e012.png",
+    "width": 848,
+    "height": 286
+  },
+  {
+    "id": "c12-e013",
+    "chapter": 12,
+    "number": "13",
+    "page": 331,
+    "src": "formulas/c12-e013.png",
+    "width": 578,
+    "height": 47
+  },
+  {
+    "id": "c12-e014",
+    "chapter": 12,
+    "number": "14",
+    "page": 331,
+    "src": "formulas/c12-e014.png",
+    "width": 629,
+    "height": 49
+  },
+  {
+    "id": "c12-e015",
+    "chapter": 12,
+    "number": "15",
+    "page": 331,
+    "src": "formulas/c12-e015.png",
+    "width": 618,
+    "height": 47
+  },
+  {
+    "id": "c12-e016",
+    "chapter": 12,
+    "number": "16",
+    "page": 331,
+    "src": "formulas/c12-e016.png",
+    "width": 782,
+    "height": 48
+  },
+  {
+    "id": "c12-e017",
+    "chapter": 12,
+    "number": "17",
+    "page": 331,
+    "src": "formulas/c12-e017.png",
+    "width": 739,
+    "height": 48
+  },
+  {
+    "id": "c12-e18a",
+    "chapter": 12,
+    "number": "18a",
+    "page": 332,
+    "src": "formulas/c12-e18a.png",
+    "width": 662,
+    "height": 48
+  },
+  {
+    "id": "c12-e18b",
+    "chapter": 12,
+    "number": "18b",
+    "page": 332,
+    "src": "formulas/c12-e18b.png",
+    "width": 672,
+    "height": 48
+  },
+  {
+    "id": "c12-e019",
+    "chapter": 12,
+    "number": "19",
+    "page": 332,
+    "src": "formulas/c12-e019.png",
+    "width": 523,
+    "height": 48
+  },
+  {
+    "id": "c12-e020",
+    "chapter": 12,
+    "number": "20",
+    "page": 332,
+    "src": "formulas/c12-e020.png",
+    "width": 754,
+    "height": 48
+  },
+  {
+    "id": "c12-e021",
+    "chapter": 12,
+    "number": "21",
+    "page": 332,
+    "src": "formulas/c12-e021.png",
+    "width": 722,
+    "height": 85
+  },
+  {
+    "id": "c12-e022",
+    "chapter": 12,
+    "number": "22",
+    "page": 332,
+    "src": "formulas/c12-e022.png",
+    "width": 578,
+    "height": 46
+  },
+  {
+    "id": "c12-e023",
+    "chapter": 12,
+    "number": "23",
+    "page": 332,
+    "src": "formulas/c12-e023.png",
+    "width": 543,
+    "height": 48
+  },
+  {
+    "id": "c12-e024",
+    "chapter": 12,
+    "number": "24",
+    "page": 333,
+    "src": "formulas/c12-e024.png",
+    "width": 609,
+    "height": 62
+  },
+  {
+    "id": "c12-e025",
+    "chapter": 12,
+    "number": "25",
+    "page": 333,
+    "src": "formulas/c12-e025.png",
+    "width": 533,
+    "height": 48
+  },
+  {
+    "id": "c12-e026",
+    "chapter": 12,
+    "number": "26",
+    "page": 333,
+    "src": "formulas/c12-e026.png",
+    "width": 550,
+    "height": 47
+  },
+  {
+    "id": "c12-e027",
+    "chapter": 12,
+    "number": "27",
+    "page": 334,
+    "src": "formulas/c12-e027.png",
+    "width": 594,
+    "height": 75
+  },
+  {
+    "id": "c12-e028",
+    "chapter": 12,
+    "number": "28",
+    "page": 334,
+    "src": "formulas/c12-e028.png",
+    "width": 597,
+    "height": 75
+  },
+  {
+    "id": "c12-e029",
+    "chapter": 12,
+    "number": "29",
+    "page": 334,
+    "src": "formulas/c12-e029.png",
+    "width": 602,
+    "height": 89
+  },
+  {
+    "id": "c12-e030",
+    "chapter": 12,
+    "number": "30",
+    "page": 334,
+    "src": "formulas/c12-e030.png",
+    "width": 614,
+    "height": 117
+  },
+  {
+    "id": "c12-e031",
+    "chapter": 12,
+    "number": "31",
+    "page": 335,
+    "src": "formulas/c12-e031.png",
+    "width": 566,
+    "height": 81
+  },
+  {
+    "id": "c12-e032",
+    "chapter": 12,
+    "number": "32",
+    "page": 338,
+    "src": "formulas/c12-e032.png",
+    "width": 704,
+    "height": 43
+  },
+  {
+    "id": "c12-e033",
+    "chapter": 12,
+    "number": "33",
+    "page": 338,
+    "src": "formulas/c12-e033.png",
+    "width": 759,
+    "height": 48
+  },
+  {
+    "id": "c12-e034",
+    "chapter": 12,
+    "number": "34",
+    "page": 338,
+    "src": "formulas/c12-e034.png",
+    "width": 601,
+    "height": 47
+  },
+  {
+    "id": "c12-e035",
+    "chapter": 12,
+    "number": "35",
+    "page": 339,
+    "src": "formulas/c12-e035.png",
+    "width": 890,
+    "height": 43
+  },
+  {
+    "id": "c12-e036",
+    "chapter": 12,
+    "number": "36",
+    "page": 339,
+    "src": "formulas/c12-e036.png",
+    "width": 567,
+    "height": 85
+  },
+  {
+    "id": "c12-e037",
+    "chapter": 12,
+    "number": "37",
+    "page": 339,
+    "src": "formulas/c12-e037.png",
+    "width": 890,
+    "height": 82
+  },
+  {
+    "id": "c12-e038",
+    "chapter": 12,
+    "number": "38",
+    "page": 341,
+    "src": "formulas/c12-e038.png",
+    "width": 511,
+    "height": 43
+  },
+  {
+    "id": "c12-e039",
+    "chapter": 12,
+    "number": "39",
+    "page": 342,
+    "src": "formulas/c12-e039.png",
+    "width": 668,
+    "height": 85
+  },
+  {
+    "id": "c12-e040",
+    "chapter": 12,
+    "number": "40",
+    "page": 342,
+    "src": "formulas/c12-e040.png",
+    "width": 890,
+    "height": 66
+  },
+  {
+    "id": "c12-e041",
+    "chapter": 12,
+    "number": "41",
+    "page": 343,
+    "src": "formulas/c12-e041.png",
+    "width": 800,
+    "height": 48
+  },
+  {
+    "id": "c12-e042",
+    "chapter": 12,
+    "number": "42",
+    "page": 343,
+    "src": "formulas/c12-e042.png",
+    "width": 713,
+    "height": 47
+  },
+  {
+    "id": "c12-e043",
+    "chapter": 12,
+    "number": "43",
+    "page": 343,
+    "src": "formulas/c12-e043.png",
+    "width": 890,
+    "height": 46
+  },
+  {
+    "id": "c12-e044",
+    "chapter": 12,
+    "number": "44",
+    "page": 343,
+    "src": "formulas/c12-e044.png",
+    "width": 708,
+    "height": 384
+  },
+  {
+    "id": "c12-e45a",
+    "chapter": 12,
+    "number": "45a",
+    "page": 344,
+    "src": "formulas/c12-e45a.png",
+    "width": 699,
+    "height": 48
+  },
+  {
+    "id": "c12-e45b",
+    "chapter": 12,
+    "number": "45b",
+    "page": 344,
+    "src": "formulas/c12-e45b.png",
+    "width": 699,
+    "height": 48
+  },
+  {
+    "id": "c12-e46a",
+    "chapter": 12,
+    "number": "46a",
+    "page": 344,
+    "src": "formulas/c12-e46a.png",
+    "width": 695,
+    "height": 48
+  },
+  {
+    "id": "c12-e46b",
+    "chapter": 12,
+    "number": "46b",
+    "page": 344,
+    "src": "formulas/c12-e46b.png",
+    "width": 695,
+    "height": 49
+  },
+  {
+    "id": "c12-e047",
+    "chapter": 12,
+    "number": "47",
+    "page": 344,
+    "src": "formulas/c12-e047.png",
+    "width": 677,
+    "height": 49
+  },
+  {
+    "id": "c12-e048",
+    "chapter": 12,
+    "number": "48",
+    "page": 344,
+    "src": "formulas/c12-e048.png",
+    "width": 697,
+    "height": 49
+  },
+  {
+    "id": "c12-e049",
+    "chapter": 12,
+    "number": "49",
+    "page": 345,
+    "src": "formulas/c12-e049.png",
+    "width": 794,
+    "height": 49
+  },
+  {
+    "id": "c12-e50a",
+    "chapter": 12,
+    "number": "50a",
+    "page": 345,
+    "src": "formulas/c12-e50a.png",
+    "width": 638,
+    "height": 48
+  },
+  {
+    "id": "c12-e50b",
+    "chapter": 12,
+    "number": "50b",
+    "page": 345,
+    "src": "formulas/c12-e50b.png",
+    "width": 632,
+    "height": 45
+  },
+  {
+    "id": "c12-e051",
+    "chapter": 12,
+    "number": "51",
+    "page": 345,
+    "src": "formulas/c12-e051.png",
+    "width": 620,
+    "height": 85
+  },
+  {
+    "id": "c12-e052",
+    "chapter": 12,
+    "number": "52",
+    "page": 345,
+    "src": "formulas/c12-e052.png",
+    "width": 891,
+    "height": 47
+  },
+  {
+    "id": "c12-e053",
+    "chapter": 12,
+    "number": "53",
+    "page": 349,
+    "src": "formulas/c12-e053.png",
+    "width": 597,
+    "height": 47
+  },
+  {
+    "id": "c12-e054",
+    "chapter": 12,
+    "number": "54",
+    "page": 349,
+    "src": "formulas/c12-e054.png",
+    "width": 684,
+    "height": 46
+  },
+  {
+    "id": "c12-e055",
+    "chapter": 12,
+    "number": "55",
+    "page": 349,
+    "src": "formulas/c12-e055.png",
+    "width": 548,
+    "height": 48
+  },
+  {
+    "id": "c12-e056",
+    "chapter": 12,
+    "number": "56",
+    "page": 350,
+    "src": "formulas/c12-e056.png",
+    "width": 595,
+    "height": 48
+  },
+  {
+    "id": "c12-e057",
+    "chapter": 12,
+    "number": "57",
+    "page": 350,
+    "src": "formulas/c12-e057.png",
+    "width": 891,
+    "height": 84
+  },
+  {
+    "id": "c12-e058",
+    "chapter": 12,
+    "number": "58",
+    "page": 350,
+    "src": "formulas/c12-e058.png",
+    "width": 891,
+    "height": 81
+  },
+  {
+    "id": "c12-e059",
+    "chapter": 12,
+    "number": "59",
+    "page": 350,
+    "src": "formulas/c12-e059.png",
+    "width": 562,
+    "height": 48
+  },
+  {
+    "id": "c13-e001",
+    "chapter": 13,
+    "number": "1",
+    "page": 363,
+    "src": "formulas/c13-e001.png",
+    "width": 510,
+    "height": 43
+  },
+  {
+    "id": "c13-e002",
+    "chapter": 13,
+    "number": "2",
+    "page": 364,
+    "src": "formulas/c13-e002.png",
+    "width": 531,
+    "height": 43
+  },
+  {
+    "id": "c13-e003",
+    "chapter": 13,
+    "number": "3",
+    "page": 364,
+    "src": "formulas/c13-e003.png",
+    "width": 585,
+    "height": 43
+  },
+  {
+    "id": "c13-e004",
+    "chapter": 13,
+    "number": "4",
+    "page": 364,
+    "src": "formulas/c13-e004.png",
+    "width": 512,
+    "height": 43
+  },
+  {
+    "id": "c13-e04a",
+    "chapter": 13,
+    "number": "4a",
+    "page": 364,
+    "src": "formulas/c13-e04a.png",
+    "width": 735,
+    "height": 77
+  },
+  {
+    "id": "c13-e04b",
+    "chapter": 13,
+    "number": "4b",
+    "page": 364,
+    "src": "formulas/c13-e04b.png",
+    "width": 720,
+    "height": 77
+  },
+  {
+    "id": "c13-e005",
+    "chapter": 13,
+    "number": "5",
+    "page": 366,
+    "src": "formulas/c13-e005.png",
+    "width": 891,
+    "height": 66
+  },
+  {
+    "id": "c13-e006",
+    "chapter": 13,
+    "number": "6",
+    "page": 366,
+    "src": "formulas/c13-e006.png",
+    "width": 891,
+    "height": 63
+  },
+  {
+    "id": "c13-e007",
+    "chapter": 13,
+    "number": "7",
+    "page": 366,
+    "src": "formulas/c13-e007.png",
+    "width": 563,
+    "height": 44
+  },
+  {
+    "id": "c13-e008",
+    "chapter": 13,
+    "number": "8",
+    "page": 366,
+    "src": "formulas/c13-e008.png",
+    "width": 723,
+    "height": 48
+  },
+  {
+    "id": "c13-e009",
+    "chapter": 13,
+    "number": "9",
+    "page": 366,
+    "src": "formulas/c13-e009.png",
+    "width": 612,
+    "height": 46
+  },
+  {
+    "id": "c13-e010",
+    "chapter": 13,
+    "number": "10",
+    "page": 366,
+    "src": "formulas/c13-e010.png",
+    "width": 549,
+    "height": 77
+  },
+  {
+    "id": "c13-e011",
+    "chapter": 13,
+    "number": "11",
+    "page": 366,
+    "src": "formulas/c13-e011.png",
+    "width": 592,
+    "height": 79
+  },
+  {
+    "id": "c13-e012",
+    "chapter": 13,
+    "number": "12",
+    "page": 367,
+    "src": "formulas/c13-e012.png",
+    "width": 891,
+    "height": 125
+  },
+  {
+    "id": "c13-e13a",
+    "chapter": 13,
+    "number": "13a",
+    "page": 367,
+    "src": "formulas/c13-e13a.png",
+    "width": 626,
+    "height": 78
+  },
+  {
+    "id": "c13-e13b",
+    "chapter": 13,
+    "number": "13b",
+    "page": 368,
+    "src": "formulas/c13-e13b.png",
+    "width": 626,
+    "height": 44
+  },
+  {
+    "id": "c13-e13c",
+    "chapter": 13,
+    "number": "13c",
+    "page": 368,
+    "src": "formulas/c13-e13c.png",
+    "width": 628,
+    "height": 48
+  },
+  {
+    "id": "c13-e014",
+    "chapter": 13,
+    "number": "14",
+    "page": 369,
+    "src": "formulas/c13-e014.png",
+    "width": 780,
+    "height": 82
+  },
+  {
+    "id": "c13-e015",
+    "chapter": 13,
+    "number": "15",
+    "page": 369,
+    "src": "formulas/c13-e015.png",
+    "width": 777,
+    "height": 48
+  },
+  {
+    "id": "c13-e016",
+    "chapter": 13,
+    "number": "16",
+    "page": 369,
+    "src": "formulas/c13-e016.png",
+    "width": 726,
+    "height": 70
+  },
+  {
+    "id": "c13-e017",
+    "chapter": 13,
+    "number": "17",
+    "page": 369,
+    "src": "formulas/c13-e017.png",
+    "width": 574,
+    "height": 43
+  },
+  {
+    "id": "c13-e018",
+    "chapter": 13,
+    "number": "18",
+    "page": 369,
+    "src": "formulas/c13-e018.png",
+    "width": 651,
+    "height": 47
+  },
+  {
+    "id": "c13-e019",
+    "chapter": 13,
+    "number": "19",
+    "page": 370,
+    "src": "formulas/c13-e019.png",
+    "width": 890,
+    "height": 79
+  },
+  {
+    "id": "c13-e020",
+    "chapter": 13,
+    "number": "20",
+    "page": 370,
+    "src": "formulas/c13-e020.png",
+    "width": 537,
+    "height": 43
+  },
+  {
+    "id": "c13-e021",
+    "chapter": 13,
+    "number": "21",
+    "page": 370,
+    "src": "formulas/c13-e021.png",
+    "width": 890,
+    "height": 85
+  },
+  {
+    "id": "c13-e022",
+    "chapter": 13,
+    "number": "22",
+    "page": 370,
+    "src": "formulas/c13-e022.png",
+    "width": 890,
+    "height": 46
+  },
+  {
+    "id": "c13-e023",
+    "chapter": 13,
+    "number": "23",
+    "page": 370,
+    "src": "formulas/c13-e023.png",
+    "width": 890,
+    "height": 47
+  },
+  {
+    "id": "c13-e024",
+    "chapter": 13,
+    "number": "24",
+    "page": 371,
+    "src": "formulas/c13-e024.png",
+    "width": 735,
+    "height": 75
+  },
+  {
+    "id": "c13-e025",
+    "chapter": 13,
+    "number": "25",
+    "page": 372,
+    "src": "formulas/c13-e025.png",
+    "width": 593,
+    "height": 46
+  },
+  {
+    "id": "c13-e026",
+    "chapter": 13,
+    "number": "26",
+    "page": 372,
+    "src": "formulas/c13-e026.png",
+    "width": 561,
+    "height": 46
+  },
+  {
+    "id": "c13-e027",
+    "chapter": 13,
+    "number": "27",
+    "page": 373,
+    "src": "formulas/c13-e027.png",
+    "width": 891,
+    "height": 75
+  },
+  {
+    "id": "c13-e028",
+    "chapter": 13,
+    "number": "28",
+    "page": 373,
+    "src": "formulas/c13-e028.png",
+    "width": 891,
+    "height": 69
+  },
+  {
+    "id": "c13-e029",
+    "chapter": 13,
+    "number": "29",
+    "page": 373,
+    "src": "formulas/c13-e029.png",
+    "width": 662,
+    "height": 45
+  },
+  {
+    "id": "c13-e030",
+    "chapter": 13,
+    "number": "30",
+    "page": 374,
+    "src": "formulas/c13-e030.png",
+    "width": 890,
+    "height": 47
+  },
+  {
+    "id": "c13-e031",
+    "chapter": 13,
+    "number": "31",
+    "page": 374,
+    "src": "formulas/c13-e031.png",
+    "width": 526,
+    "height": 47
+  },
+  {
+    "id": "c13-e032",
+    "chapter": 13,
+    "number": "32",
+    "page": 374,
+    "src": "formulas/c13-e032.png",
+    "width": 608,
+    "height": 46
+  },
+  {
+    "id": "c13-e033",
+    "chapter": 13,
+    "number": "33",
+    "page": 374,
+    "src": "formulas/c13-e033.png",
+    "width": 733,
+    "height": 46
+  },
+  {
+    "id": "c13-e034",
+    "chapter": 13,
+    "number": "34",
+    "page": 374,
+    "src": "formulas/c13-e034.png",
+    "width": 518,
+    "height": 41
+  },
+  {
+    "id": "c13-e035",
+    "chapter": 13,
+    "number": "35",
+    "page": 376,
+    "src": "formulas/c13-e035.png",
+    "width": 582,
+    "height": 67
+  },
+  {
+    "id": "c13-e036",
+    "chapter": 13,
+    "number": "36",
+    "page": 378,
+    "src": "formulas/c13-e036.png",
+    "width": 890,
+    "height": 93
+  },
+  {
+    "id": "c13-e037",
+    "chapter": 13,
+    "number": "37",
+    "page": 378,
+    "src": "formulas/c13-e037.png",
+    "width": 734,
+    "height": 85
+  },
+  {
+    "id": "c13-e038",
+    "chapter": 13,
+    "number": "38",
+    "page": 378,
+    "src": "formulas/c13-e038.png",
+    "width": 571,
+    "height": 75
+  },
+  {
+    "id": "c13-e039",
+    "chapter": 13,
+    "number": "39",
+    "page": 379,
+    "src": "formulas/c13-e039.png",
+    "width": 600,
+    "height": 49
+  },
+  {
+    "id": "c13-e040",
+    "chapter": 13,
+    "number": "40",
+    "page": 380,
+    "src": "formulas/c13-e040.png",
+    "width": 818,
+    "height": 156
+  },
+  {
+    "id": "c13-e041",
+    "chapter": 13,
+    "number": "41",
+    "page": 381,
+    "src": "formulas/c13-e041.png",
+    "width": 890,
+    "height": 131
+  },
+  {
+    "id": "c13-e042",
+    "chapter": 13,
+    "number": "42",
+    "page": 381,
+    "src": "formulas/c13-e042.png",
+    "width": 890,
+    "height": 66
+  },
+  {
+    "id": "c13-e043",
+    "chapter": 13,
+    "number": "43",
+    "page": 381,
+    "src": "formulas/c13-e043.png",
+    "width": 890,
+    "height": 66
+  },
+  {
+    "id": "c13-e044",
+    "chapter": 13,
+    "number": "44",
+    "page": 382,
+    "src": "formulas/c13-e044.png",
+    "width": 890,
+    "height": 46
+  },
+  {
+    "id": "c13-e045",
+    "chapter": 13,
+    "number": "45",
+    "page": 383,
+    "src": "formulas/c13-e045.png",
+    "width": 653,
+    "height": 42
+  },
+  {
+    "id": "c13-e046",
+    "chapter": 13,
+    "number": "46",
+    "page": 384,
+    "src": "formulas/c13-e046.png",
+    "width": 710,
+    "height": 118
+  },
+  {
+    "id": "c13-e047",
+    "chapter": 13,
+    "number": "47",
+    "page": 384,
+    "src": "formulas/c13-e047.png",
+    "width": 710,
+    "height": 69
+  },
+  {
+    "id": "c13-e048",
+    "chapter": 13,
+    "number": "48",
+    "page": 384,
+    "src": "formulas/c13-e048.png",
+    "width": 577,
+    "height": 46
+  },
+  {
+    "id": "c13-e049",
+    "chapter": 13,
+    "number": "49",
+    "page": 386,
+    "src": "formulas/c13-e049.png",
+    "width": 549,
+    "height": 46
+  },
+  {
+    "id": "c13-e050",
+    "chapter": 13,
+    "number": "50",
+    "page": 386,
+    "src": "formulas/c13-e050.png",
+    "width": 551,
+    "height": 86
+  },
+  {
+    "id": "c13-e051",
+    "chapter": 13,
+    "number": "51",
+    "page": 387,
+    "src": "formulas/c13-e051.png",
+    "width": 640,
+    "height": 86
+  },
+  {
+    "id": "c13-e052",
+    "chapter": 13,
+    "number": "52",
+    "page": 387,
+    "src": "formulas/c13-e052.png",
+    "width": 890,
+    "height": 103
+  },
+  {
+    "id": "c13-e053",
+    "chapter": 13,
+    "number": "53",
+    "page": 387,
+    "src": "formulas/c13-e053.png",
+    "width": 890,
+    "height": 105
+  },
+  {
+    "id": "c13-e054",
+    "chapter": 13,
+    "number": "54",
+    "page": 388,
+    "src": "formulas/c13-e054.png",
+    "width": 810,
+    "height": 43
+  },
+  {
+    "id": "c13-e055",
+    "chapter": 13,
+    "number": "55",
+    "page": 388,
+    "src": "formulas/c13-e055.png",
+    "width": 606,
+    "height": 75
+  },
+  {
+    "id": "c14-e001",
+    "chapter": 14,
+    "number": "1",
+    "page": 395,
+    "src": "formulas/c14-e001.png",
+    "width": 890,
+    "height": 74
+  },
+  {
+    "id": "c14-e002",
+    "chapter": 14,
+    "number": "2",
+    "page": 395,
+    "src": "formulas/c14-e002.png",
+    "width": 891,
+    "height": 96
+  },
+  {
+    "id": "c14-e003",
+    "chapter": 14,
+    "number": "3",
+    "page": 395,
+    "src": "formulas/c14-e003.png",
+    "width": 891,
+    "height": 56
+  },
+  {
+    "id": "c14-e03a",
+    "chapter": 14,
+    "number": "3a",
+    "page": 395,
+    "src": "formulas/c14-e03a.png",
+    "width": 719,
+    "height": 82
+  },
+  {
+    "id": "c14-e03b",
+    "chapter": 14,
+    "number": "3b",
+    "page": 396,
+    "src": "formulas/c14-e03b.png",
+    "width": 756,
+    "height": 46
+  },
+  {
+    "id": "c14-e03c",
+    "chapter": 14,
+    "number": "3c",
+    "page": 396,
+    "src": "formulas/c14-e03c.png",
+    "width": 780,
+    "height": 46
+  },
+  {
+    "id": "c14-e03d",
+    "chapter": 14,
+    "number": "3d",
+    "page": 396,
+    "src": "formulas/c14-e03d.png",
+    "width": 614,
+    "height": 79
+  },
+  {
+    "id": "c14-e03e",
+    "chapter": 14,
+    "number": "3e",
+    "page": 396,
+    "src": "formulas/c14-e03e.png",
+    "width": 592,
+    "height": 80
+  },
+  {
+    "id": "c14-e004",
+    "chapter": 14,
+    "number": "4",
+    "page": 396,
+    "src": "formulas/c14-e004.png",
+    "width": 532,
+    "height": 72
+  },
+  {
+    "id": "c14-e005",
+    "chapter": 14,
+    "number": "5",
+    "page": 396,
+    "src": "formulas/c14-e005.png",
+    "width": 642,
+    "height": 45
+  },
+  {
+    "id": "c14-e006",
+    "chapter": 14,
+    "number": "6",
+    "page": 396,
+    "src": "formulas/c14-e006.png",
+    "width": 575,
+    "height": 74
+  },
+  {
+    "id": "c14-e007",
+    "chapter": 14,
+    "number": "7",
+    "page": 396,
+    "src": "formulas/c14-e007.png",
+    "width": 890,
+    "height": 189
+  },
+  {
+    "id": "c14-e008",
+    "chapter": 14,
+    "number": "8",
+    "page": 397,
+    "src": "formulas/c14-e008.png",
+    "width": 890,
+    "height": 110
+  },
+  {
+    "id": "c14-e009",
+    "chapter": 14,
+    "number": "9",
+    "page": 397,
+    "src": "formulas/c14-e009.png",
+    "width": 890,
+    "height": 81
+  },
+  {
+    "id": "c14-e010",
+    "chapter": 14,
+    "number": "10",
+    "page": 397,
+    "src": "formulas/c14-e010.png",
+    "width": 555,
+    "height": 111
+  },
+  {
+    "id": "c14-e011",
+    "chapter": 14,
+    "number": "11",
+    "page": 397,
+    "src": "formulas/c14-e011.png",
+    "width": 708,
+    "height": 51
+  },
+  {
+    "id": "c14-e012",
+    "chapter": 14,
+    "number": "12",
+    "page": 397,
+    "src": "formulas/c14-e012.png",
+    "width": 564,
+    "height": 51
+  },
+  {
+    "id": "c14-e013",
+    "chapter": 14,
+    "number": "13",
+    "page": 397,
+    "src": "formulas/c14-e013.png",
+    "width": 890,
+    "height": 77
+  },
+  {
+    "id": "c14-e014",
+    "chapter": 14,
+    "number": "14",
+    "page": 397,
+    "src": "formulas/c14-e014.png",
+    "width": 890,
+    "height": 73
+  },
+  {
+    "id": "c14-e015",
+    "chapter": 14,
+    "number": "15",
+    "page": 398,
+    "src": "formulas/c14-e015.png",
+    "width": 890,
+    "height": 50
+  },
+  {
+    "id": "c14-e016",
+    "chapter": 14,
+    "number": "16",
+    "page": 398,
+    "src": "formulas/c14-e016.png",
+    "width": 890,
+    "height": 51
+  },
+  {
+    "id": "c14-e017",
+    "chapter": 14,
+    "number": "17",
+    "page": 398,
+    "src": "formulas/c14-e017.png",
+    "width": 504,
+    "height": 43
+  },
+  {
+    "id": "c14-e018",
+    "chapter": 14,
+    "number": "18",
+    "page": 400,
+    "src": "formulas/c14-e018.png",
+    "width": 590,
+    "height": 51
+  },
+  {
+    "id": "c14-e019",
+    "chapter": 14,
+    "number": "19",
+    "page": 400,
+    "src": "formulas/c14-e019.png",
+    "width": 891,
+    "height": 99
+  },
+  {
+    "id": "c14-e020",
+    "chapter": 14,
+    "number": "20",
+    "page": 400,
+    "src": "formulas/c14-e020.png",
+    "width": 891,
+    "height": 98
+  },
+  {
+    "id": "c14-e021",
+    "chapter": 14,
+    "number": "21",
+    "page": 400,
+    "src": "formulas/c14-e021.png",
+    "width": 627,
+    "height": 51
+  },
+  {
+    "id": "c14-e022",
+    "chapter": 14,
+    "number": "22",
+    "page": 404,
+    "src": "formulas/c14-e022.png",
+    "width": 610,
+    "height": 45
+  },
+  {
+    "id": "c14-e023",
+    "chapter": 14,
+    "number": "23",
+    "page": 404,
+    "src": "formulas/c14-e023.png",
+    "width": 673,
+    "height": 43
+  },
+  {
+    "id": "c14-e024",
+    "chapter": 14,
+    "number": "24",
+    "page": 404,
+    "src": "formulas/c14-e024.png",
+    "width": 577,
+    "height": 47
+  },
+  {
+    "id": "c14-e025",
+    "chapter": 14,
+    "number": "25",
+    "page": 404,
+    "src": "formulas/c14-e025.png",
+    "width": 624,
+    "height": 43
+  },
+  {
+    "id": "c14-e026",
+    "chapter": 14,
+    "number": "26",
+    "page": 404,
+    "src": "formulas/c14-e026.png",
+    "width": 557,
+    "height": 47
+  },
+  {
+    "id": "c14-e027",
+    "chapter": 14,
+    "number": "27",
+    "page": 404,
+    "src": "formulas/c14-e027.png",
+    "width": 572,
+    "height": 71
+  },
+  {
+    "id": "c14-e028",
+    "chapter": 14,
+    "number": "28",
+    "page": 404,
+    "src": "formulas/c14-e028.png",
+    "width": 783,
+    "height": 70
+  },
+  {
+    "id": "c14-e029",
+    "chapter": 14,
+    "number": "29",
+    "page": 405,
+    "src": "formulas/c14-e029.png",
+    "width": 890,
+    "height": 99
+  },
+  {
+    "id": "c14-e030",
+    "chapter": 14,
+    "number": "30",
+    "page": 405,
+    "src": "formulas/c14-e030.png",
+    "width": 582,
+    "height": 71
+  },
+  {
+    "id": "c14-e031",
+    "chapter": 14,
+    "number": "31",
+    "page": 405,
+    "src": "formulas/c14-e031.png",
+    "width": 609,
+    "height": 47
+  },
+  {
+    "id": "c14-e032",
+    "chapter": 14,
+    "number": "32",
+    "page": 405,
+    "src": "formulas/c14-e032.png",
+    "width": 623,
+    "height": 47
+  },
+  {
+    "id": "c14-e033",
+    "chapter": 14,
+    "number": "33",
+    "page": 405,
+    "src": "formulas/c14-e033.png",
+    "width": 637,
+    "height": 78
+  },
+  {
+    "id": "c14-e034",
+    "chapter": 14,
+    "number": "34",
+    "page": 405,
+    "src": "formulas/c14-e034.png",
+    "width": 707,
+    "height": 47
+  },
+  {
+    "id": "c14-e035",
+    "chapter": 14,
+    "number": "35",
+    "page": 405,
+    "src": "formulas/c14-e035.png",
+    "width": 673,
+    "height": 80
+  },
+  {
+    "id": "c14-e036",
+    "chapter": 14,
+    "number": "36",
+    "page": 406,
+    "src": "formulas/c14-e036.png",
+    "width": 558,
+    "height": 46
+  },
+  {
+    "id": "c14-e037",
+    "chapter": 14,
+    "number": "37",
+    "page": 406,
+    "src": "formulas/c14-e037.png",
+    "width": 669,
+    "height": 48
+  },
+  {
+    "id": "c14-e038",
+    "chapter": 14,
+    "number": "38",
+    "page": 406,
+    "src": "formulas/c14-e038.png",
+    "width": 629,
+    "height": 48
+  },
+  {
+    "id": "c14-e039",
+    "chapter": 14,
+    "number": "39",
+    "page": 406,
+    "src": "formulas/c14-e039.png",
+    "width": 890,
+    "height": 117
+  },
+  {
+    "id": "c14-e040",
+    "chapter": 14,
+    "number": "40",
+    "page": 406,
+    "src": "formulas/c14-e040.png",
+    "width": 751,
+    "height": 144
+  },
+  {
+    "id": "c14-e041",
+    "chapter": 14,
+    "number": "41",
+    "page": 407,
+    "src": "formulas/c14-e041.png",
+    "width": 641,
+    "height": 46
+  },
+  {
+    "id": "c14-e042",
+    "chapter": 14,
+    "number": "42",
+    "page": 407,
+    "src": "formulas/c14-e042.png",
+    "width": 547,
+    "height": 46
+  },
+  {
+    "id": "c14-e043",
+    "chapter": 14,
+    "number": "43",
+    "page": 407,
+    "src": "formulas/c14-e043.png",
+    "width": 529,
+    "height": 47
+  },
+  {
+    "id": "c14-e044",
+    "chapter": 14,
+    "number": "44",
+    "page": 407,
+    "src": "formulas/c14-e044.png",
+    "width": 596,
+    "height": 48
+  },
+  {
+    "id": "c14-e045",
+    "chapter": 14,
+    "number": "45",
+    "page": 408,
+    "src": "formulas/c14-e045.png",
+    "width": 579,
+    "height": 45
+  },
+  {
+    "id": "c14-e046",
+    "chapter": 14,
+    "number": "46",
+    "page": 409,
+    "src": "formulas/c14-e046.png",
+    "width": 622,
+    "height": 46
+  },
+  {
+    "id": "c14-e047",
+    "chapter": 14,
+    "number": "47",
+    "page": 409,
+    "src": "formulas/c14-e047.png",
+    "width": 570,
+    "height": 47
+  },
+  {
+    "id": "c14-e048",
+    "chapter": 14,
+    "number": "48",
+    "page": 409,
+    "src": "formulas/c14-e048.png",
+    "width": 600,
+    "height": 80
+  },
+  {
+    "id": "c14-e049",
+    "chapter": 14,
+    "number": "49",
+    "page": 409,
+    "src": "formulas/c14-e049.png",
+    "width": 891,
+    "height": 118
+  },
+  {
+    "id": "c14-e050",
+    "chapter": 14,
+    "number": "50",
+    "page": 409,
+    "src": "formulas/c14-e050.png",
+    "width": 891,
+    "height": 73
+  },
+  {
+    "id": "c14-e051",
+    "chapter": 14,
+    "number": "51",
+    "page": 410,
+    "src": "formulas/c14-e051.png",
+    "width": 618,
+    "height": 69
+  },
+  {
+    "id": "c14-e052",
+    "chapter": 14,
+    "number": "52",
+    "page": 410,
+    "src": "formulas/c14-e052.png",
+    "width": 613,
+    "height": 71
+  },
+  {
+    "id": "c14-e053",
+    "chapter": 14,
+    "number": "53",
+    "page": 410,
+    "src": "formulas/c14-e053.png",
+    "width": 890,
+    "height": 40
+  },
+  {
+    "id": "c14-e054",
+    "chapter": 14,
+    "number": "54",
+    "page": 410,
+    "src": "formulas/c14-e054.png",
+    "width": 597,
+    "height": 49
+  },
+  {
+    "id": "c14-e055",
+    "chapter": 14,
+    "number": "55",
+    "page": 411,
+    "src": "formulas/c14-e055.png",
+    "width": 605,
+    "height": 85
+  },
+  {
+    "id": "c14-e056",
+    "chapter": 14,
+    "number": "56",
+    "page": 411,
+    "src": "formulas/c14-e056.png",
+    "width": 563,
+    "height": 49
+  },
+  {
+    "id": "c14-e057",
+    "chapter": 14,
+    "number": "57",
+    "page": 411,
+    "src": "formulas/c14-e057.png",
+    "width": 649,
+    "height": 87
+  },
+  {
+    "id": "c14-e058",
+    "chapter": 14,
+    "number": "58",
+    "page": 411,
+    "src": "formulas/c14-e058.png",
+    "width": 585,
+    "height": 87
+  },
+  {
+    "id": "c14-e059",
+    "chapter": 14,
+    "number": "59",
+    "page": 412,
+    "src": "formulas/c14-e059.png",
+    "width": 606,
+    "height": 48
+  },
+  {
+    "id": "c14-e060",
+    "chapter": 14,
+    "number": "60",
+    "page": 412,
+    "src": "formulas/c14-e060.png",
+    "width": 891,
+    "height": 168
+  },
+  {
+    "id": "c14-e061",
+    "chapter": 14,
+    "number": "61",
+    "page": 412,
+    "src": "formulas/c14-e061.png",
+    "width": 553,
+    "height": 47
+  },
+  {
+    "id": "c14-e062",
+    "chapter": 14,
+    "number": "62",
+    "page": 414,
+    "src": "formulas/c14-e062.png",
+    "width": 536,
+    "height": 112
+  },
+  {
+    "id": "c14-e063",
+    "chapter": 14,
+    "number": "63",
+    "page": 419,
+    "src": "formulas/c14-e063.png",
+    "width": 548,
+    "height": 45
+  },
+  {
+    "id": "c14-e064",
+    "chapter": 14,
+    "number": "64",
+    "page": 420,
+    "src": "formulas/c14-e064.png",
+    "width": 601,
+    "height": 82
+  },
+  {
+    "id": "c14-e065",
+    "chapter": 14,
+    "number": "65",
+    "page": 420,
+    "src": "formulas/c14-e065.png",
+    "width": 637,
+    "height": 88
+  },
+  {
+    "id": "c14-e066",
+    "chapter": 14,
+    "number": "66",
+    "page": 422,
+    "src": "formulas/c14-e066.png",
+    "width": 600,
+    "height": 70
+  },
+  {
+    "id": "c14-e067",
+    "chapter": 14,
+    "number": "67",
+    "page": 423,
+    "src": "formulas/c14-e067.png",
+    "width": 769,
+    "height": 47
+  },
+  {
+    "id": "c14-e068",
+    "chapter": 14,
+    "number": "68",
+    "page": 423,
+    "src": "formulas/c14-e068.png",
+    "width": 649,
+    "height": 45
+  },
+  {
+    "id": "c14-e069",
+    "chapter": 14,
+    "number": "69",
+    "page": 423,
+    "src": "formulas/c14-e069.png",
+    "width": 669,
+    "height": 48
+  },
+  {
+    "id": "c14-e070",
+    "chapter": 14,
+    "number": "70",
+    "page": 424,
+    "src": "formulas/c14-e070.png",
+    "width": 605,
+    "height": 48
+  },
+  {
+    "id": "c14-e071",
+    "chapter": 14,
+    "number": "71",
+    "page": 425,
+    "src": "formulas/c14-e071.png",
+    "width": 496,
+    "height": 49
+  },
+  {
+    "id": "c15-e001",
+    "chapter": 15,
+    "number": "1",
+    "page": 429,
+    "src": "formulas/c15-e001.png",
+    "width": 675,
+    "height": 46
+  },
+  {
+    "id": "c15-e002",
+    "chapter": 15,
+    "number": "2",
+    "page": 429,
+    "src": "formulas/c15-e002.png",
+    "width": 561,
+    "height": 67
+  },
+  {
+    "id": "c15-e003",
+    "chapter": 15,
+    "number": "3",
+    "page": 429,
+    "src": "formulas/c15-e003.png",
+    "width": 632,
+    "height": 47
+  },
+  {
+    "id": "c15-e004",
+    "chapter": 15,
+    "number": "4",
+    "page": 430,
+    "src": "formulas/c15-e004.png",
+    "width": 620,
+    "height": 48
+  },
+  {
+    "id": "c15-e005",
+    "chapter": 15,
+    "number": "5",
+    "page": 430,
+    "src": "formulas/c15-e005.png",
+    "width": 831,
+    "height": 48
+  },
+  {
+    "id": "c15-e006",
+    "chapter": 15,
+    "number": "6",
+    "page": 430,
+    "src": "formulas/c15-e006.png",
+    "width": 700,
+    "height": 47
+  },
+  {
+    "id": "c15-e007",
+    "chapter": 15,
+    "number": "7",
+    "page": 430,
+    "src": "formulas/c15-e007.png",
+    "width": 890,
+    "height": 79
+  },
+  {
+    "id": "c15-e008",
+    "chapter": 15,
+    "number": "8",
+    "page": 430,
+    "src": "formulas/c15-e008.png",
+    "width": 530,
+    "height": 42
+  },
+  {
+    "id": "c15-e009",
+    "chapter": 15,
+    "number": "9",
+    "page": 431,
+    "src": "formulas/c15-e009.png",
+    "width": 733,
+    "height": 94
+  },
+  {
+    "id": "c15-e010",
+    "chapter": 15,
+    "number": "10",
+    "page": 431,
+    "src": "formulas/c15-e010.png",
+    "width": 599,
+    "height": 73
+  },
+  {
+    "id": "c15-e11a",
+    "chapter": 15,
+    "number": "11a",
+    "page": 432,
+    "src": "formulas/c15-e11a.png",
+    "width": 621,
+    "height": 107
+  },
+  {
+    "id": "c15-e11b",
+    "chapter": 15,
+    "number": "11b",
+    "page": 432,
+    "src": "formulas/c15-e11b.png",
+    "width": 639,
+    "height": 108
+  },
+  {
+    "id": "c15-e012",
+    "chapter": 15,
+    "number": "12",
+    "page": 432,
+    "src": "formulas/c15-e012.png",
+    "width": 600,
+    "height": 44
+  },
+  {
+    "id": "c15-e013",
+    "chapter": 15,
+    "number": "13",
+    "page": 432,
+    "src": "formulas/c15-e013.png",
+    "width": 609,
+    "height": 77
+  },
+  {
+    "id": "c15-e014",
+    "chapter": 15,
+    "number": "14",
+    "page": 432,
+    "src": "formulas/c15-e014.png",
+    "width": 675,
+    "height": 83
+  },
+  {
+    "id": "c15-e015",
+    "chapter": 15,
+    "number": "15",
+    "page": 433,
+    "src": "formulas/c15-e015.png",
+    "width": 892,
+    "height": 221
+  },
+  {
+    "id": "c15-e016",
+    "chapter": 15,
+    "number": "16",
+    "page": 433,
+    "src": "formulas/c15-e016.png",
+    "width": 697,
+    "height": 81
+  },
+  {
+    "id": "c15-e017",
+    "chapter": 15,
+    "number": "17",
+    "page": 433,
+    "src": "formulas/c15-e017.png",
+    "width": 629,
+    "height": 71
+  },
+  {
+    "id": "c15-e018",
+    "chapter": 15,
+    "number": "18",
+    "page": 433,
+    "src": "formulas/c15-e018.png",
+    "width": 730,
+    "height": 45
+  },
+  {
+    "id": "c15-e019",
+    "chapter": 15,
+    "number": "19",
+    "page": 433,
+    "src": "formulas/c15-e019.png",
+    "width": 890,
+    "height": 40
+  },
+  {
+    "id": "c15-e020",
+    "chapter": 15,
+    "number": "20",
+    "page": 433,
+    "src": "formulas/c15-e020.png",
+    "width": 632,
+    "height": 81
+  },
+  {
+    "id": "c15-e021",
+    "chapter": 15,
+    "number": "21",
+    "page": 434,
+    "src": "formulas/c15-e021.png",
+    "width": 562,
+    "height": 45
+  },
+  {
+    "id": "c15-e022",
+    "chapter": 15,
+    "number": "22",
+    "page": 435,
+    "src": "formulas/c15-e022.png",
+    "width": 575,
+    "height": 45
+  },
+  {
+    "id": "c15-e023",
+    "chapter": 15,
+    "number": "23",
+    "page": 438,
+    "src": "formulas/c15-e023.png",
+    "width": 572,
+    "height": 48
+  },
+  {
+    "id": "c15-e024",
+    "chapter": 15,
+    "number": "24",
+    "page": 438,
+    "src": "formulas/c15-e024.png",
+    "width": 610,
+    "height": 47
+  },
+  {
+    "id": "c15-e025",
+    "chapter": 15,
+    "number": "25",
+    "page": 439,
+    "src": "formulas/c15-e025.png",
+    "width": 611,
+    "height": 47
+  },
+  {
+    "id": "c15-e026",
+    "chapter": 15,
+    "number": "26",
+    "page": 439,
+    "src": "formulas/c15-e026.png",
+    "width": 568,
+    "height": 67
+  },
+  {
+    "id": "c15-e027",
+    "chapter": 15,
+    "number": "27",
+    "page": 439,
+    "src": "formulas/c15-e027.png",
+    "width": 735,
+    "height": 68
+  },
+  {
+    "id": "c15-e028",
+    "chapter": 15,
+    "number": "28",
+    "page": 439,
+    "src": "formulas/c15-e028.png",
+    "width": 765,
+    "height": 68
+  },
+  {
+    "id": "c15-e029",
+    "chapter": 15,
+    "number": "29",
+    "page": 439,
+    "src": "formulas/c15-e029.png",
+    "width": 563,
+    "height": 44
+  },
+  {
+    "id": "c15-e030",
+    "chapter": 15,
+    "number": "30",
+    "page": 440,
+    "src": "formulas/c15-e030.png",
+    "width": 707,
+    "height": 46
+  },
+  {
+    "id": "c15-e031",
+    "chapter": 15,
+    "number": "31",
+    "page": 441,
+    "src": "formulas/c15-e031.png",
+    "width": 890,
+    "height": 44
+  },
+  {
+    "id": "c15-e032",
+    "chapter": 15,
+    "number": "32",
+    "page": 441,
+    "src": "formulas/c15-e032.png",
+    "width": 890,
+    "height": 78
+  },
+  {
+    "id": "c15-e033",
+    "chapter": 15,
+    "number": "33",
+    "page": 441,
+    "src": "formulas/c15-e033.png",
+    "width": 535,
+    "height": 65
+  },
+  {
+    "id": "c15-e034",
+    "chapter": 15,
+    "number": "34",
+    "page": 444,
+    "src": "formulas/c15-e034.png",
+    "width": 610,
+    "height": 42
+  },
+  {
+    "id": "c15-e035",
+    "chapter": 15,
+    "number": "35",
+    "page": 444,
+    "src": "formulas/c15-e035.png",
+    "width": 608,
+    "height": 46
+  },
+  {
+    "id": "c15-e036",
+    "chapter": 15,
+    "number": "36",
+    "page": 444,
+    "src": "formulas/c15-e036.png",
+    "width": 790,
+    "height": 46
+  },
+  {
+    "id": "c15-e037",
+    "chapter": 15,
+    "number": "37",
+    "page": 445,
+    "src": "formulas/c15-e037.png",
+    "width": 673,
+    "height": 47
+  },
+  {
+    "id": "c15-e038",
+    "chapter": 15,
+    "number": "38",
+    "page": 445,
+    "src": "formulas/c15-e038.png",
+    "width": 649,
+    "height": 46
+  },
+  {
+    "id": "c15-e039",
+    "chapter": 15,
+    "number": "39",
+    "page": 445,
+    "src": "formulas/c15-e039.png",
+    "width": 675,
+    "height": 79
+  },
+  {
+    "id": "c15-e040",
+    "chapter": 15,
+    "number": "40",
+    "page": 448,
+    "src": "formulas/c15-e040.png",
+    "width": 890,
+    "height": 66
+  },
+  {
+    "id": "c15-e041",
+    "chapter": 15,
+    "number": "41",
+    "page": 448,
+    "src": "formulas/c15-e041.png",
+    "width": 776,
+    "height": 130
+  },
+  {
+    "id": "c15-e042",
+    "chapter": 15,
+    "number": "42",
+    "page": 448,
+    "src": "formulas/c15-e042.png",
+    "width": 890,
+    "height": 69
+  },
+  {
+    "id": "c15-e043",
+    "chapter": 15,
+    "number": "43",
+    "page": 448,
+    "src": "formulas/c15-e043.png",
+    "width": 759,
+    "height": 87
+  },
+  {
+    "id": "c15-e044",
+    "chapter": 15,
+    "number": "44",
+    "page": 449,
+    "src": "formulas/c15-e044.png",
+    "width": 655,
+    "height": 72
+  },
+  {
+    "id": "c15-e045",
+    "chapter": 15,
+    "number": "45",
+    "page": 450,
+    "src": "formulas/c15-e045.png",
+    "width": 605,
+    "height": 69
+  },
+  {
+    "id": "c16-e001",
+    "chapter": 16,
+    "number": "1",
+    "page": 455,
+    "src": "formulas/c16-e001.png",
+    "width": 520,
+    "height": 49
+  },
+  {
+    "id": "c16-e002",
+    "chapter": 16,
+    "number": "2",
+    "page": 455,
+    "src": "formulas/c16-e002.png",
+    "width": 890,
+    "height": 118
+  },
+  {
+    "id": "c16-e003",
+    "chapter": 16,
+    "number": "3",
+    "page": 456,
+    "src": "formulas/c16-e003.png",
+    "width": 788,
+    "height": 77
+  },
+  {
+    "id": "c16-e004",
+    "chapter": 16,
+    "number": "4",
+    "page": 456,
+    "src": "formulas/c16-e004.png",
+    "width": 579,
+    "height": 76
+  },
+  {
+    "id": "c16-e04a",
+    "chapter": 16,
+    "number": "4a",
+    "page": 457,
+    "src": "formulas/c16-e04a.png",
+    "width": 890,
+    "height": 105
+  },
+  {
+    "id": "c16-e005",
+    "chapter": 16,
+    "number": "5",
+    "page": 457,
+    "src": "formulas/c16-e005.png",
+    "width": 890,
+    "height": 133
+  },
+  {
+    "id": "c16-e006",
+    "chapter": 16,
+    "number": "6",
+    "page": 457,
+    "src": "formulas/c16-e006.png",
+    "width": 813,
+    "height": 77
+  },
+  {
+    "id": "c16-e007",
+    "chapter": 16,
+    "number": "7",
+    "page": 458,
+    "src": "formulas/c16-e007.png",
+    "width": 552,
+    "height": 73
+  },
+  {
+    "id": "c16-e008",
+    "chapter": 16,
+    "number": "8",
+    "page": 458,
+    "src": "formulas/c16-e008.png",
+    "width": 890,
+    "height": 151
+  },
+  {
+    "id": "c16-e009",
+    "chapter": 16,
+    "number": "9",
+    "page": 459,
+    "src": "formulas/c16-e009.png",
+    "width": 890,
+    "height": 74
+  },
+  {
+    "id": "c16-e010",
+    "chapter": 16,
+    "number": "10",
+    "page": 459,
+    "src": "formulas/c16-e010.png",
+    "width": 890,
+    "height": 96
+  },
+  {
+    "id": "c16-e011",
+    "chapter": 16,
+    "number": "11",
+    "page": 459,
+    "src": "formulas/c16-e011.png",
+    "width": 890,
+    "height": 164
+  },
+  {
+    "id": "c16-e012",
+    "chapter": 16,
+    "number": "12",
+    "page": 460,
+    "src": "formulas/c16-e012.png",
+    "width": 891,
+    "height": 189
+  },
+  {
+    "id": "c16-e013",
+    "chapter": 16,
+    "number": "13",
+    "page": 460,
+    "src": "formulas/c16-e013.png",
+    "width": 890,
+    "height": 88
+  },
+  {
+    "id": "c16-e014",
+    "chapter": 16,
+    "number": "14",
+    "page": 460,
+    "src": "formulas/c16-e014.png",
+    "width": 625,
+    "height": 67
+  },
+  {
+    "id": "c16-e015",
+    "chapter": 16,
+    "number": "15",
+    "page": 461,
+    "src": "formulas/c16-e015.png",
+    "width": 890,
+    "height": 87
+  },
+  {
+    "id": "c16-e016",
+    "chapter": 16,
+    "number": "16",
+    "page": 462,
+    "src": "formulas/c16-e016.png",
+    "width": 890,
+    "height": 182
+  },
+  {
+    "id": "c16-e017",
+    "chapter": 16,
+    "number": "17",
+    "page": 462,
+    "src": "formulas/c16-e017.png",
+    "width": 890,
+    "height": 167
+  },
+  {
+    "id": "c16-e018",
+    "chapter": 16,
+    "number": "18",
+    "page": 463,
+    "src": "formulas/c16-e018.png",
+    "width": 890,
+    "height": 165
+  },
+  {
+    "id": "c16-e019",
+    "chapter": 16,
+    "number": "19",
+    "page": 463,
+    "src": "formulas/c16-e019.png",
+    "width": 890,
+    "height": 101
+  },
+  {
+    "id": "c16-e020",
+    "chapter": 16,
+    "number": "20",
+    "page": 463,
+    "src": "formulas/c16-e020.png",
+    "width": 890,
+    "height": 126
+  },
+  {
+    "id": "c16-e021",
+    "chapter": 16,
+    "number": "21",
+    "page": 463,
+    "src": "formulas/c16-e021.png",
+    "width": 520,
+    "height": 45
+  },
+  {
+    "id": "c16-e022",
+    "chapter": 16,
+    "number": "22",
+    "page": 463,
+    "src": "formulas/c16-e022.png",
+    "width": 607,
+    "height": 68
+  },
+  {
+    "id": "c16-e023",
+    "chapter": 16,
+    "number": "23",
+    "page": 464,
+    "src": "formulas/c16-e023.png",
+    "width": 890,
+    "height": 106
+  },
+  {
+    "id": "c16-e024",
+    "chapter": 16,
+    "number": "24",
+    "page": 464,
+    "src": "formulas/c16-e024.png",
+    "width": 890,
+    "height": 102
+  },
+  {
+    "id": "c16-e025",
+    "chapter": 16,
+    "number": "25",
+    "page": 465,
+    "src": "formulas/c16-e025.png",
+    "width": 891,
+    "height": 129
+  },
+  {
+    "id": "c16-e026",
+    "chapter": 16,
+    "number": "26",
+    "page": 466,
+    "src": "formulas/c16-e026.png",
+    "width": 572,
+    "height": 47
+  },
+  {
+    "id": "c16-e027",
+    "chapter": 16,
+    "number": "27",
+    "page": 466,
+    "src": "formulas/c16-e027.png",
+    "width": 691,
+    "height": 48
+  },
+  {
+    "id": "c16-e028",
+    "chapter": 16,
+    "number": "28",
+    "page": 466,
+    "src": "formulas/c16-e028.png",
+    "width": 890,
+    "height": 79
+  },
+  {
+    "id": "c16-e029",
+    "chapter": 16,
+    "number": "29",
+    "page": 466,
+    "src": "formulas/c16-e029.png",
+    "width": 890,
+    "height": 91
+  },
+  {
+    "id": "c16-e030",
+    "chapter": 16,
+    "number": "30",
+    "page": 472,
+    "src": "formulas/c16-e030.png",
+    "width": 890,
+    "height": 124
+  },
+  {
+    "id": "c16-e031",
+    "chapter": 16,
+    "number": "31",
+    "page": 472,
+    "src": "formulas/c16-e031.png",
+    "width": 890,
+    "height": 43
+  },
+  {
+    "id": "c16-e032",
+    "chapter": 16,
+    "number": "32",
+    "page": 472,
+    "src": "formulas/c16-e032.png",
+    "width": 890,
+    "height": 43
+  },
+  {
+    "id": "c16-e033",
+    "chapter": 16,
+    "number": "33",
+    "page": 472,
+    "src": "formulas/c16-e033.png",
+    "width": 501,
+    "height": 41
+  },
+  {
+    "id": "c16-e034",
+    "chapter": 16,
+    "number": "34",
+    "page": 472,
+    "src": "formulas/c16-e034.png",
+    "width": 540,
+    "height": 44
+  },
+  {
+    "id": "c16-e035",
+    "chapter": 16,
+    "number": "35",
+    "page": 472,
+    "src": "formulas/c16-e035.png",
+    "width": 526,
+    "height": 76
+  },
+  {
+    "id": "c16-e036",
+    "chapter": 16,
+    "number": "36",
+    "page": 473,
+    "src": "formulas/c16-e036.png",
+    "width": 561,
+    "height": 47
+  },
+  {
+    "id": "c16-e037",
+    "chapter": 16,
+    "number": "37",
+    "page": 475,
+    "src": "formulas/c16-e037.png",
+    "width": 738,
+    "height": 50
+  },
+  {
+    "id": "c16-e038",
+    "chapter": 16,
+    "number": "38",
+    "page": 475,
+    "src": "formulas/c16-e038.png",
+    "width": 674,
+    "height": 73
+  },
+  {
+    "id": "c16-e039",
+    "chapter": 16,
+    "number": "39",
+    "page": 475,
+    "src": "formulas/c16-e039.png",
+    "width": 542,
+    "height": 45
+  },
+  {
+    "id": "c16-e040",
+    "chapter": 16,
+    "number": "40",
+    "page": 475,
+    "src": "formulas/c16-e040.png",
+    "width": 585,
+    "height": 48
+  },
+  {
+    "id": "c16-e041",
+    "chapter": 16,
+    "number": "41",
+    "page": 476,
+    "src": "formulas/c16-e041.png",
+    "width": 590,
+    "height": 48
+  },
+  {
+    "id": "c16-e042",
+    "chapter": 16,
+    "number": "42",
+    "page": 477,
+    "src": "formulas/c16-e042.png",
+    "width": 634,
+    "height": 48
+  },
+  {
+    "id": "c16-e043",
+    "chapter": 16,
+    "number": "43",
+    "page": 477,
+    "src": "formulas/c16-e043.png",
+    "width": 622,
+    "height": 49
+  },
+  {
+    "id": "c16-e044",
+    "chapter": 16,
+    "number": "44",
+    "page": 478,
+    "src": "formulas/c16-e044.png",
+    "width": 890,
+    "height": 84
+  },
+  {
+    "id": "c16-e045",
+    "chapter": 16,
+    "number": "45",
+    "page": 481,
+    "src": "formulas/c16-e045.png",
+    "width": 890,
+    "height": 44
+  },
+  {
+    "id": "c16-e046",
+    "chapter": 16,
+    "number": "46",
+    "page": 481,
+    "src": "formulas/c16-e046.png",
+    "width": 544,
+    "height": 44
+  },
+  {
+    "id": "c17-e001",
+    "chapter": 17,
+    "number": "1",
+    "page": 490,
+    "src": "formulas/c17-e001.png",
+    "width": 641,
+    "height": 85
+  },
+  {
+    "id": "c17-e002",
+    "chapter": 17,
+    "number": "2",
+    "page": 490,
+    "src": "formulas/c17-e002.png",
+    "width": 531,
+    "height": 81
+  },
+  {
+    "id": "c17-e003",
+    "chapter": 17,
+    "number": "3",
+    "page": 490,
+    "src": "formulas/c17-e003.png",
+    "width": 734,
+    "height": 42
+  },
+  {
+    "id": "c17-e004",
+    "chapter": 17,
+    "number": "4",
+    "page": 492,
+    "src": "formulas/c17-e004.png",
+    "width": 528,
+    "height": 46
+  },
+  {
+    "id": "c17-e005",
+    "chapter": 17,
+    "number": "5",
+    "page": 495,
+    "src": "formulas/c17-e005.png",
+    "width": 580,
+    "height": 48
+  },
+  {
+    "id": "c17-e006",
+    "chapter": 17,
+    "number": "6",
+    "page": 495,
+    "src": "formulas/c17-e006.png",
+    "width": 565,
+    "height": 51
+  },
+  {
+    "id": "c17-e007",
+    "chapter": 17,
+    "number": "7",
+    "page": 495,
+    "src": "formulas/c17-e007.png",
+    "width": 563,
+    "height": 47
+  },
+  {
+    "id": "c17-e008",
+    "chapter": 17,
+    "number": "8",
+    "page": 495,
+    "src": "formulas/c17-e008.png",
+    "width": 578,
+    "height": 52
+  },
+  {
+    "id": "c17-e009",
+    "chapter": 17,
+    "number": "9",
+    "page": 495,
+    "src": "formulas/c17-e009.png",
+    "width": 622,
+    "height": 49
+  },
+  {
+    "id": "c17-e010",
+    "chapter": 17,
+    "number": "10",
+    "page": 496,
+    "src": "formulas/c17-e010.png",
+    "width": 574,
+    "height": 41
+  },
+  {
+    "id": "c17-e011",
+    "chapter": 17,
+    "number": "11",
+    "page": 496,
+    "src": "formulas/c17-e011.png",
+    "width": 648,
+    "height": 64
+  },
+  {
+    "id": "c17-e012",
+    "chapter": 17,
+    "number": "12",
+    "page": 496,
+    "src": "formulas/c17-e012.png",
+    "width": 613,
+    "height": 45
+  },
+  {
+    "id": "c17-e013",
+    "chapter": 17,
+    "number": "13",
+    "page": 496,
+    "src": "formulas/c17-e013.png",
+    "width": 537,
+    "height": 45
+  },
+  {
+    "id": "c17-e014",
+    "chapter": 17,
+    "number": "14",
+    "page": 496,
+    "src": "formulas/c17-e014.png",
+    "width": 720,
+    "height": 46
+  },
+  {
+    "id": "c17-e015",
+    "chapter": 17,
+    "number": "15",
+    "page": 496,
+    "src": "formulas/c17-e015.png",
+    "width": 762,
+    "height": 49
+  },
+  {
+    "id": "c17-e016",
+    "chapter": 17,
+    "number": "16",
+    "page": 498,
+    "src": "formulas/c17-e016.png",
+    "width": 670,
+    "height": 66
+  },
+  {
+    "id": "c17-e017",
+    "chapter": 17,
+    "number": "17",
+    "page": 498,
+    "src": "formulas/c17-e017.png",
+    "width": 601,
+    "height": 47
+  },
+  {
+    "id": "c17-e018",
+    "chapter": 17,
+    "number": "18",
+    "page": 498,
+    "src": "formulas/c17-e018.png",
+    "width": 525,
+    "height": 48
+  },
+  {
+    "id": "c17-e18a",
+    "chapter": 17,
+    "number": "18a",
+    "page": 498,
+    "src": "formulas/c17-e18a.png",
+    "width": 568,
+    "height": 47
+  },
+  {
+    "id": "c17-e019",
+    "chapter": 17,
+    "number": "19",
+    "page": 499,
+    "src": "formulas/c17-e019.png",
+    "width": 696,
+    "height": 48
+  },
+  {
+    "id": "c17-e020",
+    "chapter": 17,
+    "number": "20",
+    "page": 499,
+    "src": "formulas/c17-e020.png",
+    "width": 639,
+    "height": 50
+  },
+  {
+    "id": "c17-e021",
+    "chapter": 17,
+    "number": "21",
+    "page": 499,
+    "src": "formulas/c17-e021.png",
+    "width": 529,
+    "height": 44
+  },
+  {
+    "id": "c17-e022",
+    "chapter": 17,
+    "number": "22",
+    "page": 500,
+    "src": "formulas/c17-e022.png",
+    "width": 572,
+    "height": 46
+  },
+  {
+    "id": "c17-e023",
+    "chapter": 17,
+    "number": "23",
+    "page": 502,
+    "src": "formulas/c17-e023.png",
+    "width": 655,
+    "height": 75
+  },
+  {
+    "id": "c17-e024",
+    "chapter": 17,
+    "number": "24",
+    "page": 502,
+    "src": "formulas/c17-e024.png",
+    "width": 521,
+    "height": 45
+  },
+  {
+    "id": "c17-e025",
+    "chapter": 17,
+    "number": "25",
+    "page": 502,
+    "src": "formulas/c17-e025.png",
+    "width": 680,
+    "height": 46
+  },
+  {
+    "id": "c17-e026",
+    "chapter": 17,
+    "number": "26",
+    "page": 503,
+    "src": "formulas/c17-e026.png",
+    "width": 891,
+    "height": 95
+  },
+  {
+    "id": "c17-e27a",
+    "chapter": 17,
+    "number": "27a",
+    "page": 503,
+    "src": "formulas/c17-e27a.png",
+    "width": 617,
+    "height": 46
+  },
+  {
+    "id": "c17-e27b",
+    "chapter": 17,
+    "number": "27b",
+    "page": 504,
+    "src": "formulas/c17-e27b.png",
+    "width": 627,
+    "height": 44
+  },
+  {
+    "id": "c17-e028",
+    "chapter": 17,
+    "number": "28",
+    "page": 504,
+    "src": "formulas/c17-e028.png",
+    "width": 560,
+    "height": 47
+  },
+  {
+    "id": "c17-e029",
+    "chapter": 17,
+    "number": "29",
+    "page": 505,
+    "src": "formulas/c17-e029.png",
+    "width": 657,
+    "height": 48
+  },
+  {
+    "id": "c17-e030",
+    "chapter": 17,
+    "number": "30",
+    "page": 505,
+    "src": "formulas/c17-e030.png",
+    "width": 569,
+    "height": 48
+  },
+  {
+    "id": "c17-e031",
+    "chapter": 17,
+    "number": "31",
+    "page": 505,
+    "src": "formulas/c17-e031.png",
+    "width": 663,
+    "height": 48
+  },
+  {
+    "id": "c17-e032",
+    "chapter": 17,
+    "number": "32",
+    "page": 505,
+    "src": "formulas/c17-e032.png",
+    "width": 586,
+    "height": 48
+  },
+  {
+    "id": "c17-e033",
+    "chapter": 17,
+    "number": "33",
+    "page": 506,
+    "src": "formulas/c17-e033.png",
+    "width": 584,
+    "height": 46
+  },
+  {
+    "id": "c17-e034",
+    "chapter": 17,
+    "number": "34",
+    "page": 506,
+    "src": "formulas/c17-e034.png",
+    "width": 890,
+    "height": 74
+  },
+  {
+    "id": "c17-e035",
+    "chapter": 17,
+    "number": "35",
+    "page": 506,
+    "src": "formulas/c17-e035.png",
+    "width": 890,
+    "height": 77
+  },
+  {
+    "id": "c17-e036",
+    "chapter": 17,
+    "number": "36",
+    "page": 506,
+    "src": "formulas/c17-e036.png",
+    "width": 890,
+    "height": 77
+  },
+  {
+    "id": "c17-e037",
+    "chapter": 17,
+    "number": "37",
+    "page": 507,
+    "src": "formulas/c17-e037.png",
+    "width": 890,
+    "height": 77
+  },
+  {
+    "id": "c17-e038",
+    "chapter": 17,
+    "number": "38",
+    "page": 510,
+    "src": "formulas/c17-e038.png",
+    "width": 530,
+    "height": 47
+  },
+  {
+    "id": "c18-e001",
+    "chapter": 18,
+    "number": "1",
+    "page": 519,
+    "src": "formulas/c18-e001.png",
+    "width": 543,
+    "height": 43
+  },
+  {
+    "id": "c18-e002",
+    "chapter": 18,
+    "number": "2",
+    "page": 519,
+    "src": "formulas/c18-e002.png",
+    "width": 513,
+    "height": 48
+  },
+  {
+    "id": "c18-e003",
+    "chapter": 18,
+    "number": "3",
+    "page": 520,
+    "src": "formulas/c18-e003.png",
+    "width": 564,
+    "height": 65
+  },
+  {
+    "id": "c18-e004",
+    "chapter": 18,
+    "number": "4",
+    "page": 521,
+    "src": "formulas/c18-e004.png",
+    "width": 608,
+    "height": 49
+  },
+  {
+    "id": "c18-e005",
+    "chapter": 18,
+    "number": "5",
+    "page": 521,
+    "src": "formulas/c18-e005.png",
+    "width": 686,
+    "height": 64
+  },
+  {
+    "id": "c18-e006",
+    "chapter": 18,
+    "number": "6",
+    "page": 522,
+    "src": "formulas/c18-e006.png",
+    "width": 803,
+    "height": 64
+  },
+  {
+    "id": "c18-e007",
+    "chapter": 18,
+    "number": "7",
+    "page": 522,
+    "src": "formulas/c18-e007.png",
+    "width": 786,
+    "height": 81
+  },
+  {
+    "id": "c18-e008",
+    "chapter": 18,
+    "number": "8",
+    "page": 524,
+    "src": "formulas/c18-e008.png",
+    "width": 594,
+    "height": 51
+  },
+  {
+    "id": "c18-e009",
+    "chapter": 18,
+    "number": "9",
+    "page": 525,
+    "src": "formulas/c18-e009.png",
+    "width": 664,
+    "height": 81
+  },
+  {
+    "id": "c18-e010",
+    "chapter": 18,
+    "number": "10",
+    "page": 526,
+    "src": "formulas/c18-e010.png",
+    "width": 511,
+    "height": 41
+  },
+  {
+    "id": "c18-e011",
+    "chapter": 18,
+    "number": "11",
+    "page": 527,
+    "src": "formulas/c18-e011.png",
+    "width": 662,
+    "height": 88
+  },
+  {
+    "id": "c18-e012",
+    "chapter": 18,
+    "number": "12",
+    "page": 527,
+    "src": "formulas/c18-e012.png",
+    "width": 862,
+    "height": 60
+  },
+  {
+    "id": "c18-e013",
+    "chapter": 18,
+    "number": "13",
+    "page": 528,
+    "src": "formulas/c18-e013.png",
+    "width": 725,
+    "height": 52
+  },
+  {
+    "id": "c18-e014",
+    "chapter": 18,
+    "number": "14",
+    "page": 528,
+    "src": "formulas/c18-e014.png",
+    "width": 562,
+    "height": 68
+  },
+  {
+    "id": "c18-e015",
+    "chapter": 18,
+    "number": "15",
+    "page": 528,
+    "src": "formulas/c18-e015.png",
+    "width": 810,
+    "height": 92
+  },
+  {
+    "id": "c18-e016",
+    "chapter": 18,
+    "number": "16",
+    "page": 531,
+    "src": "formulas/c18-e016.png",
+    "width": 523,
+    "height": 49
+  },
+  {
+    "id": "c18-e017",
+    "chapter": 18,
+    "number": "17",
+    "page": 532,
+    "src": "formulas/c18-e017.png",
+    "width": 623,
+    "height": 46
+  },
+  {
+    "id": "c18-e018",
+    "chapter": 18,
+    "number": "18",
+    "page": 532,
+    "src": "formulas/c18-e018.png",
+    "width": 550,
+    "height": 46
+  },
+  {
+    "id": "c18-e019",
+    "chapter": 18,
+    "number": "19",
+    "page": 532,
+    "src": "formulas/c18-e019.png",
+    "width": 631,
+    "height": 43
+  },
+  {
+    "id": "c18-e020",
+    "chapter": 18,
+    "number": "20",
+    "page": 533,
+    "src": "formulas/c18-e020.png",
+    "width": 700,
+    "height": 76
+  },
+  {
+    "id": "c18-e021",
+    "chapter": 18,
+    "number": "21",
+    "page": 534,
+    "src": "formulas/c18-e021.png",
+    "width": 700,
+    "height": 51
+  },
+  {
+    "id": "c18-e022",
+    "chapter": 18,
+    "number": "22",
+    "page": 534,
+    "src": "formulas/c18-e022.png",
+    "width": 573,
+    "height": 46
+  },
+  {
+    "id": "c18-e023",
+    "chapter": 18,
+    "number": "23",
+    "page": 535,
+    "src": "formulas/c18-e023.png",
+    "width": 563,
+    "height": 67
+  },
+  {
+    "id": "c18-e024",
+    "chapter": 18,
+    "number": "24",
+    "page": 536,
+    "src": "formulas/c18-e024.png",
+    "width": 723,
+    "height": 97
+  },
+  {
+    "id": "c18-e025",
+    "chapter": 18,
+    "number": "25",
+    "page": 536,
+    "src": "formulas/c18-e025.png",
+    "width": 699,
+    "height": 79
+  },
+  {
+    "id": "c18-e026",
+    "chapter": 18,
+    "number": "26",
+    "page": 536,
+    "src": "formulas/c18-e026.png",
+    "width": 615,
+    "height": 50
+  },
+  {
+    "id": "c18-e027",
+    "chapter": 18,
+    "number": "27",
+    "page": 536,
+    "src": "formulas/c18-e027.png",
+    "width": 685,
+    "height": 45
+  },
+  {
+    "id": "c18-e028",
+    "chapter": 18,
+    "number": "28",
+    "page": 536,
+    "src": "formulas/c18-e028.png",
+    "width": 546,
+    "height": 83
+  },
+  {
+    "id": "c18-e029",
+    "chapter": 18,
+    "number": "29",
+    "page": 536,
+    "src": "formulas/c18-e029.png",
+    "width": 688,
+    "height": 85
+  },
+  {
+    "id": "c18-e030",
+    "chapter": 18,
+    "number": "30",
+    "page": 537,
+    "src": "formulas/c18-e030.png",
+    "width": 615,
+    "height": 43
+  },
+  {
+    "id": "c18-e031",
+    "chapter": 18,
+    "number": "31",
+    "page": 537,
+    "src": "formulas/c18-e031.png",
+    "width": 800,
+    "height": 84
+  },
+  {
+    "id": "c18-e032",
+    "chapter": 18,
+    "number": "32",
+    "page": 537,
+    "src": "formulas/c18-e032.png",
+    "width": 657,
+    "height": 47
+  },
+  {
+    "id": "c18-e033",
+    "chapter": 18,
+    "number": "33",
+    "page": 538,
+    "src": "formulas/c18-e033.png",
+    "width": 775,
+    "height": 82
+  },
+  {
+    "id": "c18-e034",
+    "chapter": 18,
+    "number": "34",
+    "page": 538,
+    "src": "formulas/c18-e034.png",
+    "width": 891,
+    "height": 93
+  },
+  {
+    "id": "c18-e035",
+    "chapter": 18,
+    "number": "35",
+    "page": 538,
+    "src": "formulas/c18-e035.png",
+    "width": 573,
+    "height": 81
+  },
+  {
+    "id": "c18-e036",
+    "chapter": 18,
+    "number": "36",
+    "page": 538,
+    "src": "formulas/c18-e036.png",
+    "width": 684,
+    "height": 46
+  },
+  {
+    "id": "c18-e037",
+    "chapter": 18,
+    "number": "37",
+    "page": 539,
+    "src": "formulas/c18-e037.png",
+    "width": 575,
+    "height": 75
+  },
+  {
+    "id": "c18-e038",
+    "chapter": 18,
+    "number": "38",
+    "page": 539,
+    "src": "formulas/c18-e038.png",
+    "width": 629,
+    "height": 46
+  },
+  {
+    "id": "c18-e039",
+    "chapter": 18,
+    "number": "39",
+    "page": 539,
+    "src": "formulas/c18-e039.png",
+    "width": 615,
+    "height": 51
+  },
+  {
+    "id": "c18-e040",
+    "chapter": 18,
+    "number": "40",
+    "page": 539,
+    "src": "formulas/c18-e040.png",
+    "width": 805,
+    "height": 89
+  },
+  {
+    "id": "c18-e041",
+    "chapter": 18,
+    "number": "41",
+    "page": 539,
+    "src": "formulas/c18-e041.png",
+    "width": 719,
+    "height": 85
+  },
+  {
+    "id": "c18-e042",
+    "chapter": 18,
+    "number": "42",
+    "page": 539,
+    "src": "formulas/c18-e042.png",
+    "width": 590,
+    "height": 50
+  },
+  {
+    "id": "c18-e043",
+    "chapter": 18,
+    "number": "43",
+    "page": 539,
+    "src": "formulas/c18-e043.png",
+    "width": 619,
+    "height": 50
+  },
+  {
+    "id": "c18-e044",
+    "chapter": 18,
+    "number": "44",
+    "page": 540,
+    "src": "formulas/c18-e044.png",
+    "width": 649,
+    "height": 63
+  },
+  {
+    "id": "c18-e045",
+    "chapter": 18,
+    "number": "45",
+    "page": 541,
+    "src": "formulas/c18-e045.png",
+    "width": 569,
+    "height": 121
+  },
+  {
+    "id": "c18-e046",
+    "chapter": 18,
+    "number": "46",
+    "page": 541,
+    "src": "formulas/c18-e046.png",
+    "width": 600,
+    "height": 82
+  },
+  {
+    "id": "c18-e047",
+    "chapter": 18,
+    "number": "47",
+    "page": 541,
+    "src": "formulas/c18-e047.png",
+    "width": 725,
+    "height": 48
+  },
+  {
+    "id": "c18-e048",
+    "chapter": 18,
+    "number": "48",
+    "page": 543,
+    "src": "formulas/c18-e048.png",
+    "width": 890,
+    "height": 211
+  },
+  {
+    "id": "c18-e049",
+    "chapter": 18,
+    "number": "49",
+    "page": 543,
+    "src": "formulas/c18-e049.png",
+    "width": 890,
+    "height": 70
+  },
+  {
+    "id": "c18-e050",
+    "chapter": 18,
+    "number": "50",
+    "page": 545,
+    "src": "formulas/c18-e050.png",
+    "width": 696,
+    "height": 46
+  },
+  {
+    "id": "c18-e051",
+    "chapter": 18,
+    "number": "51",
+    "page": 545,
+    "src": "formulas/c18-e051.png",
+    "width": 630,
+    "height": 96
+  },
+  {
+    "id": "c18-e052",
+    "chapter": 18,
+    "number": "52",
+    "page": 546,
+    "src": "formulas/c18-e052.png",
+    "width": 617,
+    "height": 75
+  },
+  {
+    "id": "c18-e053",
+    "chapter": 18,
+    "number": "53",
+    "page": 546,
+    "src": "formulas/c18-e053.png",
+    "width": 550,
+    "height": 49
+  },
+  {
+    "id": "c18-e054",
+    "chapter": 18,
+    "number": "54",
+    "page": 546,
+    "src": "formulas/c18-e054.png",
+    "width": 580,
+    "height": 75
+  },
+  {
+    "id": "c18-e055",
+    "chapter": 18,
+    "number": "55",
+    "page": 547,
+    "src": "formulas/c18-e055.png",
+    "width": 590,
+    "height": 43
+  },
+  {
+    "id": "c18-e056",
+    "chapter": 18,
+    "number": "56",
+    "page": 547,
+    "src": "formulas/c18-e056.png",
+    "width": 890,
+    "height": 140
+  },
+  {
+    "id": "c18-e057",
+    "chapter": 18,
+    "number": "57",
+    "page": 548,
+    "src": "formulas/c18-e057.png",
+    "width": 889,
+    "height": 62
+  },
+  {
+    "id": "c18-e058",
+    "chapter": 18,
+    "number": "58",
+    "page": 548,
+    "src": "formulas/c18-e058.png",
+    "width": 890,
+    "height": 164
+  },
+  {
+    "id": "c18-e059",
+    "chapter": 18,
+    "number": "59",
+    "page": 549,
+    "src": "formulas/c18-e059.png",
+    "width": 535,
+    "height": 47
+  },
+  {
+    "id": "c18-e060",
+    "chapter": 18,
+    "number": "60",
+    "page": 549,
+    "src": "formulas/c18-e060.png",
+    "width": 676,
+    "height": 47
+  },
+  {
+    "id": "c18-e061",
+    "chapter": 18,
+    "number": "61",
+    "page": 549,
+    "src": "formulas/c18-e061.png",
+    "width": 638,
+    "height": 50
+  },
+  {
+    "id": "c18-e062",
+    "chapter": 18,
+    "number": "62",
+    "page": 550,
+    "src": "formulas/c18-e062.png",
+    "width": 632,
+    "height": 50
+  },
+  {
+    "id": "c18-e063",
+    "chapter": 18,
+    "number": "63",
+    "page": 550,
+    "src": "formulas/c18-e063.png",
+    "width": 890,
+    "height": 106
+  },
+  {
+    "id": "c18-e064",
+    "chapter": 18,
+    "number": "64",
+    "page": 551,
+    "src": "formulas/c18-e064.png",
+    "width": 650,
+    "height": 44
+  },
+  {
+    "id": "c18-e065",
+    "chapter": 18,
+    "number": "65",
+    "page": 551,
+    "src": "formulas/c18-e065.png",
+    "width": 645,
+    "height": 45
+  },
+  {
+    "id": "c18-e066",
+    "chapter": 18,
+    "number": "66",
+    "page": 552,
+    "src": "formulas/c18-e066.png",
+    "width": 494,
+    "height": 45
+  },
+  {
+    "id": "c18-e067",
+    "chapter": 18,
+    "number": "67",
+    "page": 554,
+    "src": "formulas/c18-e067.png",
+    "width": 561,
+    "height": 49
+  },
+  {
+    "id": "c18-e068",
+    "chapter": 18,
+    "number": "68",
+    "page": 555,
+    "src": "formulas/c18-e068.png",
+    "width": 650,
+    "height": 49
+  },
+  {
+    "id": "c18-e069",
+    "chapter": 18,
+    "number": "69",
+    "page": 558,
+    "src": "formulas/c18-e069.png",
+    "width": 711,
+    "height": 47
+  },
+  {
+    "id": "c18-e070",
+    "chapter": 18,
+    "number": "70",
+    "page": 558,
+    "src": "formulas/c18-e070.png",
+    "width": 546,
+    "height": 75
+  },
+  {
+    "id": "c18-e071",
+    "chapter": 18,
+    "number": "71",
+    "page": 558,
+    "src": "formulas/c18-e071.png",
+    "width": 541,
+    "height": 71
+  },
+  {
+    "id": "c18-e072",
+    "chapter": 18,
+    "number": "72",
+    "page": 558,
+    "src": "formulas/c18-e072.png",
+    "width": 678,
+    "height": 65
+  },
+  {
+    "id": "c18-e073",
+    "chapter": 18,
+    "number": "73",
+    "page": 558,
+    "src": "formulas/c18-e073.png",
+    "width": 717,
+    "height": 85
+  },
+  {
+    "id": "c18-e074",
+    "chapter": 18,
+    "number": "74",
+    "page": 559,
+    "src": "formulas/c18-e074.png",
+    "width": 588,
+    "height": 48
+  },
+  {
+    "id": "c18-e075",
+    "chapter": 18,
+    "number": "75",
+    "page": 559,
+    "src": "formulas/c18-e075.png",
+    "width": 717,
+    "height": 97
+  },
+  {
+    "id": "c18-e076",
+    "chapter": 18,
+    "number": "76",
+    "page": 559,
+    "src": "formulas/c18-e076.png",
+    "width": 556,
+    "height": 53
+  },
+  {
+    "id": "c18-e077",
+    "chapter": 18,
+    "number": "77",
+    "page": 561,
+    "src": "formulas/c18-e077.png",
+    "width": 575,
+    "height": 47
+  },
+  {
+    "id": "c18-e078",
+    "chapter": 18,
+    "number": "78",
+    "page": 561,
+    "src": "formulas/c18-e078.png",
+    "width": 572,
+    "height": 48
+  },
+  {
+    "id": "c19-e001",
+    "chapter": 19,
+    "number": "1",
+    "page": 568,
+    "src": "formulas/c19-e001.png",
+    "width": 622,
+    "height": 63
+  },
+  {
+    "id": "c19-e002",
+    "chapter": 19,
+    "number": "2",
+    "page": 568,
+    "src": "formulas/c19-e002.png",
+    "width": 712,
+    "height": 63
+  },
+  {
+    "id": "c19-e003",
+    "chapter": 19,
+    "number": "3",
+    "page": 568,
+    "src": "formulas/c19-e003.png",
+    "width": 661,
+    "height": 63
+  },
+  {
+    "id": "c19-e004",
+    "chapter": 19,
+    "number": "4",
+    "page": 568,
+    "src": "formulas/c19-e004.png",
+    "width": 751,
+    "height": 156
+  },
+  {
+    "id": "c19-e005",
+    "chapter": 19,
+    "number": "5",
+    "page": 568,
+    "src": "formulas/c19-e005.png",
+    "width": 640,
+    "height": 63
+  },
+  {
+    "id": "c19-e006",
+    "chapter": 19,
+    "number": "6",
+    "page": 568,
+    "src": "formulas/c19-e006.png",
+    "width": 662,
+    "height": 87
+  },
+  {
+    "id": "c19-e007",
+    "chapter": 19,
+    "number": "7",
+    "page": 568,
+    "src": "formulas/c19-e007.png",
+    "width": 700,
+    "height": 87
+  },
+  {
+    "id": "c19-e008",
+    "chapter": 19,
+    "number": "8",
+    "page": 569,
+    "src": "formulas/c19-e008.png",
+    "width": 880,
+    "height": 126
+  },
+  {
+    "id": "c19-e009",
+    "chapter": 19,
+    "number": "9",
+    "page": 569,
+    "src": "formulas/c19-e009.png",
+    "width": 532,
+    "height": 47
+  },
+  {
+    "id": "c19-e010",
+    "chapter": 19,
+    "number": "10",
+    "page": 569,
+    "src": "formulas/c19-e010.png",
+    "width": 706,
+    "height": 75
+  },
+  {
+    "id": "c19-e011",
+    "chapter": 19,
+    "number": "11",
+    "page": 569,
+    "src": "formulas/c19-e011.png",
+    "width": 533,
+    "height": 45
+  },
+  {
+    "id": "c19-e012",
+    "chapter": 19,
+    "number": "12",
+    "page": 569,
+    "src": "formulas/c19-e012.png",
+    "width": 703,
+    "height": 151
+  },
+  {
+    "id": "c19-e013",
+    "chapter": 19,
+    "number": "13",
+    "page": 569,
+    "src": "formulas/c19-e013.png",
+    "width": 712,
+    "height": 159
+  },
+  {
+    "id": "c19-e014",
+    "chapter": 19,
+    "number": "14",
+    "page": 574,
+    "src": "formulas/c19-e014.png",
+    "width": 514,
+    "height": 48
+  },
+  {
+    "id": "c19-e015",
+    "chapter": 19,
+    "number": "15",
+    "page": 574,
+    "src": "formulas/c19-e015.png",
+    "width": 646,
+    "height": 49
+  },
+  {
+    "id": "c19-e016",
+    "chapter": 19,
+    "number": "16",
+    "page": 574,
+    "src": "formulas/c19-e016.png",
+    "width": 547,
+    "height": 46
+  },
+  {
+    "id": "c19-e017",
+    "chapter": 19,
+    "number": "17",
+    "page": 575,
+    "src": "formulas/c19-e017.png",
+    "width": 649,
+    "height": 46
+  },
+  {
+    "id": "c19-e018",
+    "chapter": 19,
+    "number": "18",
+    "page": 575,
+    "src": "formulas/c19-e018.png",
+    "width": 540,
+    "height": 47
+  },
+  {
+    "id": "c19-e019",
+    "chapter": 19,
+    "number": "19",
+    "page": 575,
+    "src": "formulas/c19-e019.png",
+    "width": 667,
+    "height": 51
+  },
+  {
+    "id": "c19-e020",
+    "chapter": 19,
+    "number": "20",
+    "page": 578,
+    "src": "formulas/c19-e020.png",
+    "width": 705,
+    "height": 46
+  },
+  {
+    "id": "c19-e021",
+    "chapter": 19,
+    "number": "21",
+    "page": 578,
+    "src": "formulas/c19-e021.png",
+    "width": 573,
+    "height": 46
+  },
+  {
+    "id": "c19-e022",
+    "chapter": 19,
+    "number": "22",
+    "page": 578,
+    "src": "formulas/c19-e022.png",
+    "width": 678,
+    "height": 45
+  },
+  {
+    "id": "c19-e023",
+    "chapter": 19,
+    "number": "23",
+    "page": 578,
+    "src": "formulas/c19-e023.png",
+    "width": 671,
+    "height": 160
+  },
+  {
+    "id": "c19-e024",
+    "chapter": 19,
+    "number": "24",
+    "page": 579,
+    "src": "formulas/c19-e024.png",
+    "width": 544,
+    "height": 46
+  },
+  {
+    "id": "c19-e025",
+    "chapter": 19,
+    "number": "25",
+    "page": 579,
+    "src": "formulas/c19-e025.png",
+    "width": 549,
+    "height": 46
+  },
+  {
+    "id": "c19-e026",
+    "chapter": 19,
+    "number": "26",
+    "page": 579,
+    "src": "formulas/c19-e026.png",
+    "width": 644,
+    "height": 49
+  },
+  {
+    "id": "c19-e027",
+    "chapter": 19,
+    "number": "27",
+    "page": 579,
+    "src": "formulas/c19-e027.png",
+    "width": 890,
+    "height": 137
+  },
+  {
+    "id": "c19-e028",
+    "chapter": 19,
+    "number": "28",
+    "page": 579,
+    "src": "formulas/c19-e028.png",
+    "width": 551,
+    "height": 47
+  },
+  {
+    "id": "c19-e029",
+    "chapter": 19,
+    "number": "29",
+    "page": 580,
+    "src": "formulas/c19-e029.png",
+    "width": 514,
+    "height": 47
+  },
+  {
+    "id": "c19-e030",
+    "chapter": 19,
+    "number": "30",
+    "page": 582,
+    "src": "formulas/c19-e030.png",
+    "width": 608,
+    "height": 46
+  },
+  {
+    "id": "c20-e001",
+    "chapter": 20,
+    "number": "1",
+    "page": 585,
+    "src": "formulas/c20-e001.png",
+    "width": 588,
+    "height": 61
+  },
+  {
+    "id": "c20-e002",
+    "chapter": 20,
+    "number": "2",
+    "page": 585,
+    "src": "formulas/c20-e002.png",
+    "width": 575,
+    "height": 46
+  },
+  {
+    "id": "c20-e003",
+    "chapter": 20,
+    "number": "3",
+    "page": 586,
+    "src": "formulas/c20-e003.png",
+    "width": 572,
+    "height": 49
+  },
+  {
+    "id": "c20-e004",
+    "chapter": 20,
+    "number": "4",
+    "page": 586,
+    "src": "formulas/c20-e004.png",
+    "width": 614,
+    "height": 49
+  },
+  {
+    "id": "c20-e005",
+    "chapter": 20,
+    "number": "5",
+    "page": 588,
+    "src": "formulas/c20-e005.png",
+    "width": 554,
+    "height": 46
+  },
+  {
+    "id": "c20-e006",
+    "chapter": 20,
+    "number": "6",
+    "page": 588,
+    "src": "formulas/c20-e006.png",
+    "width": 578,
+    "height": 46
+  },
+  {
+    "id": "c20-e007",
+    "chapter": 20,
+    "number": "7",
+    "page": 590,
+    "src": "formulas/c20-e007.png",
+    "width": 568,
+    "height": 46
+  },
+  {
+    "id": "c20-e008",
+    "chapter": 20,
+    "number": "8",
+    "page": 590,
+    "src": "formulas/c20-e008.png",
+    "width": 563,
+    "height": 49
+  },
+  {
+    "id": "c20-e009",
+    "chapter": 20,
+    "number": "9",
+    "page": 590,
+    "src": "formulas/c20-e009.png",
+    "width": 596,
+    "height": 79
+  },
+  {
+    "id": "c20-e010",
+    "chapter": 20,
+    "number": "10",
+    "page": 590,
+    "src": "formulas/c20-e010.png",
+    "width": 619,
+    "height": 49
+  },
+  {
+    "id": "c20-e011",
+    "chapter": 20,
+    "number": "11",
+    "page": 590,
+    "src": "formulas/c20-e011.png",
+    "width": 670,
+    "height": 48
+  },
+  {
+    "id": "c20-e012",
+    "chapter": 20,
+    "number": "12",
+    "page": 590,
+    "src": "formulas/c20-e012.png",
+    "width": 566,
+    "height": 48
+  },
+  {
+    "id": "c21-e001",
+    "chapter": 21,
+    "number": "1",
+    "page": 599,
+    "src": "formulas/c21-e001.png",
+    "width": 514,
+    "height": 42
+  },
+  {
+    "id": "c21-e002",
+    "chapter": 21,
+    "number": "2",
+    "page": 599,
+    "src": "formulas/c21-e002.png",
+    "width": 599,
+    "height": 42
+  },
+  {
+    "id": "c21-e003",
+    "chapter": 21,
+    "number": "3",
+    "page": 599,
+    "src": "formulas/c21-e003.png",
+    "width": 533,
+    "height": 44
+  },
+  {
+    "id": "c21-e004",
+    "chapter": 21,
+    "number": "4",
+    "page": 605,
+    "src": "formulas/c21-e004.png",
+    "width": 560,
+    "height": 42
+  },
+  {
+    "id": "c21-e005",
+    "chapter": 21,
+    "number": "5",
+    "page": 606,
+    "src": "formulas/c21-e005.png",
+    "width": 540,
+    "height": 71
+  },
+  {
+    "id": "c21-e006",
+    "chapter": 21,
+    "number": "6",
+    "page": 606,
+    "src": "formulas/c21-e006.png",
+    "width": 769,
+    "height": 73
+  },
+  {
+    "id": "c21-e007",
+    "chapter": 21,
+    "number": "7",
+    "page": 606,
+    "src": "formulas/c21-e007.png",
+    "width": 570,
+    "height": 75
+  },
+  {
+    "id": "c21-e008",
+    "chapter": 21,
+    "number": "8",
+    "page": 606,
+    "src": "formulas/c21-e008.png",
+    "width": 605,
+    "height": 89
+  },
+  {
+    "id": "c21-e009",
+    "chapter": 21,
+    "number": "9",
+    "page": 606,
+    "src": "formulas/c21-e009.png",
+    "width": 605,
+    "height": 77
+  },
+  {
+    "id": "c21-e010",
+    "chapter": 21,
+    "number": "10",
+    "page": 614,
+    "src": "formulas/c21-e010.png",
+    "width": 520,
+    "height": 42
+  },
+  {
+    "id": "c22-e001",
+    "chapter": 22,
+    "number": "1",
+    "page": 629,
+    "src": "formulas/c22-e001.png",
+    "width": 607,
+    "height": 48
+  },
+  {
+    "id": "c22-e002",
+    "chapter": 22,
+    "number": "2",
+    "page": 629,
+    "src": "formulas/c22-e002.png",
+    "width": 631,
+    "height": 50
+  },
+  {
+    "id": "c22-e003",
+    "chapter": 22,
+    "number": "3",
+    "page": 630,
+    "src": "formulas/c22-e003.png",
+    "width": 638,
+    "height": 44
+  },
+  {
+    "id": "c22-e004",
+    "chapter": 22,
+    "number": "4",
+    "page": 630,
+    "src": "formulas/c22-e004.png",
+    "width": 732,
+    "height": 155
+  },
+  {
+    "id": "c22-e005",
+    "chapter": 22,
+    "number": "5",
+    "page": 631,
+    "src": "formulas/c22-e005.png",
+    "width": 560,
+    "height": 46
+  },
+  {
+    "id": "c22-e006",
+    "chapter": 22,
+    "number": "6",
+    "page": 631,
+    "src": "formulas/c22-e006.png",
+    "width": 778,
+    "height": 44
+  },
+  {
+    "id": "c22-e007",
+    "chapter": 22,
+    "number": "7",
+    "page": 631,
+    "src": "formulas/c22-e007.png",
+    "width": 635,
+    "height": 92
+  },
+  {
+    "id": "c22-e008",
+    "chapter": 22,
+    "number": "8",
+    "page": 631,
+    "src": "formulas/c22-e008.png",
+    "width": 781,
+    "height": 43
+  },
+  {
+    "id": "c22-e009",
+    "chapter": 22,
+    "number": "9",
+    "page": 631,
+    "src": "formulas/c22-e009.png",
+    "width": 611,
+    "height": 67
+  },
+  {
+    "id": "c22-e010",
+    "chapter": 22,
+    "number": "10",
+    "page": 631,
+    "src": "formulas/c22-e010.png",
+    "width": 532,
+    "height": 45
+  },
+  {
+    "id": "c22-e011",
+    "chapter": 22,
+    "number": "11",
+    "page": 631,
+    "src": "formulas/c22-e011.png",
+    "width": 529,
+    "height": 51
+  },
+  {
+    "id": "c22-e012",
+    "chapter": 22,
+    "number": "12",
+    "page": 639,
+    "src": "formulas/c22-e012.png",
+    "width": 689,
+    "height": 87
+  },
+  {
+    "id": "c22-e013",
+    "chapter": 22,
+    "number": "13",
+    "page": 639,
+    "src": "formulas/c22-e013.png",
+    "width": 597,
+    "height": 46
+  },
+  {
+    "id": "c22-e014",
+    "chapter": 22,
+    "number": "14",
+    "page": 640,
+    "src": "formulas/c22-e014.png",
+    "width": 605,
+    "height": 45
+  },
+  {
+    "id": "c22-e015",
+    "chapter": 22,
+    "number": "15",
+    "page": 640,
+    "src": "formulas/c22-e015.png",
+    "width": 554,
+    "height": 46
+  }
+]

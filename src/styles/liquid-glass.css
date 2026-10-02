@@ -66,19 +66,19 @@
 html[data-theme="dark"] [data-liquid-glass="shared-webgl2"] {
   z-index: 2;
   border-color: rgba(255, 255, 255, 0.014) !important;
-  background: rgba(7, 8, 10, 0.24) !important;
+  background: rgba(7, 8, 10, 0.10) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.020),
     inset 0 -1px 0 rgba(255,255,255,.006),
     0 16px 48px rgba(0,0,0,.18) !important;
-  backdrop-filter: blur(18px) saturate(118%) brightness(.90) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(118%) brightness(.90) !important;
+  backdrop-filter: blur(11px) saturate(112%) brightness(.94) !important;
+  -webkit-backdrop-filter: blur(11px) saturate(112%) brightness(.94) !important;
 }
 
 /* No neon outline: the WebGL layer itself provides the directional rim. */
 html[data-theme="dark"] .liquid-button.primary[data-liquid-glass="shared-webgl2"] {
   color: rgba(226, 241, 255, .96) !important;
-  background: rgba(58, 135, 214, .20) !important;
+  background: rgba(58, 135, 214, .10) !important;
   border-color: rgba(112, 184, 255, .12) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08) !important;
 }
@@ -227,7 +227,7 @@ html[data-theme="dark"] .top-action[data-liquid-glass="shared-webgl2"] {
 /* Clear light-mode buttons while preserving their semantic tint. */
 :root[data-theme="light"] .liquid-button.primary[data-liquid-glass="shared-webgl2"],
 :root[data-theme="light"] .hero-start-glass[data-liquid-glass="shared-webgl2"] {
-  background: rgba(125, 190, 255, .16) !important;
+  background: rgba(125, 190, 255, .10) !important;
   border-color: rgba(80, 150, 220, .15) !important;
   color: #315f89 !important;
   backdrop-filter: none !important;

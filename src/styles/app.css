@@ -2187,6 +2187,11 @@ html[data-theme="dark"] .lab-visual .measure-label {
 .dispersion { fill:none; stroke-width:2; }.dispersion.acoustic { stroke:var(--accent); }.dispersion.optical { stroke:var(--text-secondary); stroke-dasharray:7 6; }
 .cursor { stroke:var(--text-tertiary); stroke-dasharray:3 5; }.legend-dot { display:inline-block; width:14px; height:2px; margin-right:7px; vertical-align:middle; background:var(--accent); }.legend-dot.optical { background:var(--text-secondary); }
 .thermal-stage circle { fill:var(--surface-strong); stroke:var(--text-tertiary); }.phonon-path { fill:none; stroke:var(--accent); stroke-width:2; stroke-dasharray:7 6; animation:dash-flow 2.8s linear infinite; }
+.fermi-stage .fermi-fill { fill:color-mix(in srgb,var(--accent) 17%,transparent); }
+.fermi-stage .fermi-rim { fill:none; stroke:var(--accent); stroke-width:2; }
+.fermi-stage line,.hall-stage .hall-orbit { fill:none; stroke:var(--accent); stroke-width:1.8; }
+.fermi-stage text,.hall-stage text { fill:var(--text-tertiary); font:11px ui-monospace,monospace; }
+.hall-stage circle { fill:var(--accent); }
 
 /* Root and both full-screen canvases overdraw by two pixels to avoid a
    sub-pixel seam at the viewport edge on high-DPI mobile browsers. */
@@ -2394,8 +2399,8 @@ html[data-theme="light"] :where(
   .symbol-card
 ) {
   background-color: rgba(255,255,255,.10) !important;
-  backdrop-filter: blur(3.5px) saturate(104%) !important;
-  -webkit-backdrop-filter: blur(3.5px) saturate(104%) !important;
+  backdrop-filter: blur(6.5px) saturate(106%) !important;
+  -webkit-backdrop-filter: blur(6.5px) saturate(106%) !important;
   border-color: rgba(35,45,58,.065) !important;
   box-shadow: none !important;
 }
@@ -2524,8 +2529,8 @@ html[data-theme="light"] #overview :where(.hero-lead,.hero-lead-glass) {
 html:root[data-theme="light"] body [data-liquid-glass="shared-webgl2"],
 html:root[data-theme="light"] body [data-liquid-glass="frosted"] {
   background-color: rgba(255,255,255,.10) !important;
-  backdrop-filter: blur(3.5px) saturate(104%) !important;
-  -webkit-backdrop-filter: blur(3.5px) saturate(104%) !important;
+  backdrop-filter: blur(6.5px) saturate(106%) !important;
+  -webkit-backdrop-filter: blur(6.5px) saturate(106%) !important;
 }
 
 /* Persistent chrome stays clearer than reading modules. */

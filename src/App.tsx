@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useRef, useState } from "react";
-import { Fragment } from "react";
+import { Fragment, lazy, Suspense } from "react";
 import { derivations, exercises, sectionCopy, sections } from "./content/chapter3";
 import { Derivation } from "./components/Derivation";
 import { Formula, FormulaCard } from "./components/Formula";
@@ -8,9 +8,11 @@ import { BondingStage, DensityBonding, ElasticConstantsLab, ElasticWaveExplorer,
 import { LatticeAtmosphere } from "./components/LatticeAtmosphere";
 import { useLiquidGlassSystem } from "./lib/liquidGlass";
 import { ChapterSwitcher } from "./components/ChapterSwitcher";
-import { CompanionChapterPage } from "./components/CompanionChapterPage";
-import { companionChapters } from "./content/companionChapters";
 import { CHAPTER_CHANGE_EVENT, readChapter } from "./lib/chapterNavigation";
+import { EquationAtlas } from "./components/EquationAtlas";
+import { ScientificDeepDive } from "./components/ScientificLearning";
+import { chapterEnhancements } from "./content/chapterEnhancements";
+const CompanionRoute=lazy(()=>import("./components/CompanionRoute"));
 
 const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "arrow" }) => {
   const paths = {
@@ -135,7 +137,7 @@ function ChapterThreeApp() {
         </section>
 
         <section id="inert-gas" className="section-shell content-section">
-          <SectionHeader section={sections[2]}/>{prose(sectionCopy.inert)}
+          <SectionHeader section={sections[2]}/><ScientificDeepDive data={chapterEnhancements["3:inert-gas"]}/>{prose(sectionCopy.inert)}
           <LondonInteraction/><Derivation data={derivations.london}/><PauliLab/><LennardJonesLab/><Derivation data={derivations.lennardJones}/>
           <div className="split-explanation"><div><span className="overline">FROM PAIR TO CRYSTAL</span><h3>孤立原子对 ≠ fcc 晶体</h3><p>晶体中的每个原子同时与多壳层原子作用。把几何信息压缩进晶格和之后，平衡最近邻距从双原子势的 1.122σ 变为约 1.09σ。</p></div><div className="number-stack"><span><b>S₁₂</b>12.13188</span><span><b>S₆</b>14.45392</span><small>Kittel Eq. (12) · fcc lattice sums</small></div></div>
           <Derivation data={derivations.fcc}/>
@@ -144,7 +146,7 @@ function ChapterThreeApp() {
         </section>
 
         <section id="ionic" className="section-shell content-section">
-          <SectionHeader section={sections[3]}/>{prose(sectionCopy.ionic)}
+          <SectionHeader section={sections[3]}/><ScientificDeepDive data={chapterEnhancements["3:ionic"]}/>{prose(sectionCopy.ionic)}
           <div className="unit-switch-panel"><div><span className="overline">SI DEFAULT · CGS TRACE</span><h3>同一物理，两套单位制</h3><p>本站默认使用现代 SI。Kittel 原书本节采用 CGS，因此原书的 q²/r 在 SI 中必须补上 1/(4πε₀)。</p></div><div><Formula latex={`U_{ij}^{\\rm SI}=\\pm\\frac{q^2}{4\\pi\\varepsilon_0r_{ij}}`}/><Formula latex={`U_{ij}^{\\rm CGS}=\\pm\\frac{q^2}{r_{ij}}`}/></div></div>
           <FormulaCard latex={`U_{\\rm tot}^{\\rm SI}=N\\left[z\\lambda e^{-R/\\rho}-\\frac{\\alpha q^2}{4\\pi\\varepsilon_0R}\\right]`} meaning="最近邻短程排斥与全晶格长程库仑能的竞争给出平衡距离。N 是离子对数，z 是最近邻配位数。" variables={["λ、ρ：经验排斥势参数","α：Madelung constant","R：最近邻距离"]}/>
           <MadelungChain/><Derivation data={derivations.madelung}/><IonicLattice/>
@@ -174,13 +176,13 @@ function ChapterThreeApp() {
         </section>
 
         <section id="elasticity" className="section-shell content-section">
-          <SectionHeader section={sections[7]}/>{prose(sectionCopy.elasticity)}<Derivation data={derivations.stiffness}/><ElasticConstantsLab/><Derivation data={derivations.bulk}/>
+          <SectionHeader section={sections[7]}/><ScientificDeepDive data={chapterEnhancements["3:elasticity"]}/>{prose(sectionCopy.elasticity)}<Derivation data={derivations.stiffness}/><ElasticConstantsLab/><Derivation data={derivations.bulk}/>
           <ConceptCheck id="c44-role" question="在 C₁₁ 与 C₁₂ 不变时，单独增大 C₄₄ 最直接改变哪种响应？" choices={[{label:"静水压缩",feedback:"B=(C₁₁+2C₁₂)/3，不含 C₄₄。"},{label:"纯剪切",correct:true,feedback:"C₄₄ 是立方晶体的剪切刚度，直接提高剪切能量和相应横波声速。"},{label:"体积模量",feedback:"体积模量不含 C₄₄。"}]} onComplete={complete}/>
           <SourceNote>{sections[7].reference}；刚度矩阵、能量密度与 B 的系数已按 Kittel Eqs. (43), (50), (54) 核对。</SourceNote>
         </section>
 
         <section id="waves" className="section-shell content-section">
-          <SectionHeader section={sections[8]}/>{prose(sectionCopy.waves)}
+          <SectionHeader section={sections[8]}/><ScientificDeepDive data={chapterEnhancements["3:waves"]}/>{prose(sectionCopy.waves)}
           <FormulaCard latex={`\\rho\\,\\ddot u_i=\\partial_j\\sigma_{ij},\\qquad \\det\\left(\\Gamma_{ik}-\\rho v^2\\delta_{ik}\\right)=0`} meaning="动量守恒给出连续介质运动方程；把平面波代入后得到 Christoffel 本征值问题。" variables={["Γᵢₖ=Cᵢⱼₖₗnⱼnₗ：Christoffel matrix","n=K/|K|：传播方向","本征向量：极化方向"]}/>
           <ElasticWaveExplorer onDerive={openDerivation}/><Derivation data={derivations.wave100}/><Derivation data={derivations.wave110}/><Derivation data={derivations.wave111}/><InverseElasticLab/>
           <ConceptCheck id="wave-polarization" question="[110] 方向 T₂ 模式的粒子位移方向是什么？" choices={[{label:"[110]",feedback:"这与 K 平行，是纵波 L。"},{label:"[001]",feedback:"这是面外横波 T₁。"},{label:"[1 −1 0]",correct:true,feedback:"[1 −1 0]·[110]=0，所以它是面内横向极化 T₂。"}]} onComplete={complete}/>
@@ -193,6 +195,7 @@ function ChapterThreeApp() {
           <SourceNote>{sections[9].reference}</SourceNote>
         </section>
 
+        <EquationAtlas chapter={3}/>
         <section id="exercises" className="section-shell content-section">
           <SectionHeader section={sections[10]}/><div className="exercise-list">{exercises.map((exercise) => <Exercise key={exercise.id} exercise={exercise}/>)}</div>
           <div className="completion-panel"><span className="overline">CHAPTER COMPLETE</span><h3>{progress === 100 ? "六个概念检查已全部完成。" : `你已完成 ${completed.size} / 6 个概念检查。`}</h3><p>真正的掌握标准不是记住公式，而是能从势能、对称性和运动方程重新推回公式。</p><div className="completion-bar"><i style={{width:`${progress}%`}}/></div><button className="text-button" type="button" onClick={() => go("overview")}>回到章首页 ↑</button></div>
@@ -216,8 +219,8 @@ function App() {
     window.addEventListener(CHAPTER_CHANGE_EVENT, update);
     return () => { window.removeEventListener("popstate", update); window.removeEventListener(CHAPTER_CHANGE_EVENT, update); };
   }, []);
-  if (requested === 1 || requested === 2 || requested === 4 || requested === 5) {
-    return <Fragment key={`${requested}-${routeKey}`}><CompanionChapterPage chapter={companionChapters[requested]}/></Fragment>;
+  if (requested !== 3) {
+    return <Suspense fallback={<main className="section-shell"><p role="status">正在载入本章课程…</p></main>}><CompanionRoute key={requested+"-"+routeKey} chapter={requested}/></Suspense>;
   }
   return <Fragment key={`3-${routeKey}`}><ChapterThreeApp/></Fragment>;
 }

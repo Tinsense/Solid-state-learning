@@ -132,12 +132,13 @@ test("章节封面使用课程内容驱动的互动图而非静态编号", async
 
 test("章节切换保留同一文档并支持浏览器历史", async ({ page }) => {
   await page.goto("/?chapter=1");
+  await expect(page.getByTestId("chapter-hero-1")).toBeVisible();
   await page.evaluate(() => ((window as typeof window & { __routeMarker?: string }).__routeMarker = "alive"));
   if (await page.getByRole("button", { name: "章节目录" }).isVisible()) {
     await page.getByRole("button", { name: "章节目录" }).click();
-    await page.locator("#chapter-rail > .chapter-switcher a").filter({ hasText: "02" }).click();
+    await page.locator("#chapter-rail .chapter-switcher a").filter({ hasText: "02" }).click();
   } else {
-    await page.locator(".site-header .chapter-switcher a").filter({ hasText: "02" }).click();
+    await page.locator(".site-header").getByLabel("选择全部章节").selectOption("2");
   }
   await expect(page).toHaveURL(/chapter=2/);
   await expect(page.getByTestId("chapter-hero-2")).toBeVisible();
@@ -152,7 +153,7 @@ test("手机正文安全边距充足且目录章节条不随纵向滚动错位",
   const left = await page.locator(".companion-hero-copy").evaluate(element => element.getBoundingClientRect().left);
   expect(left).toBeGreaterThanOrEqual(24);
   await page.getByRole("button", { name: "章节目录" }).click();
-  const switcher = page.locator("#chapter-rail > .chapter-switcher");
+  const switcher = page.locator("#chapter-rail .chapter-switcher");
   const before = await switcher.evaluate(element => element.getBoundingClientRect().top);
   await page.locator("#chapter-rail > nav:not(.chapter-switcher)").evaluate(element => { element.scrollTop = 260; element.dispatchEvent(new Event("scroll")); });
   const after = await switcher.evaluate(element => element.getBoundingClientRect().top);
@@ -164,6 +165,7 @@ test("手机各章首模块与固定顶栏保持真实间距", async ({ page }, 
   test.skip(testInfo.project.name !== "mobile", "仅验证手机固定栏避让");
   for (const chapter of [1, 3]) {
     await page.goto(chapter === 3 ? "/" : `/?chapter=${chapter}`);
+    await expect(page.locator(".hero-module")).toBeVisible();
     const geometry = await page.evaluate(() => {
       const header = document.querySelector(".site-header")!.getBoundingClientRect();
       const hero = document.querySelector("#overview.hero-module, .companion-hero.hero-module")!.getBoundingClientRect();
@@ -182,6 +184,7 @@ test("手机各章首模块与固定顶栏保持真实间距", async ({ page }, 
 test("页面四边与根背景连续，没有默认白边", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
   await page.goto("/?chapter=1");
+  await expect(page.locator(".lattice-atmosphere")).toBeVisible();
   const root = await page.evaluate(() => ({
     htmlMargin: getComputedStyle(document.documentElement).margin,
     bodyMargin: getComputedStyle(document.body).margin,
@@ -230,7 +233,7 @@ test("手机目录打开后保持页面亮度并增强目录可读性", async ({
   test.skip(testInfo.project.name !== "mobile", "仅验证手机目录交互");
   await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
   await page.goto("/?chapter=2");
-  expect(await page.locator("#bragg .prose").evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(3.5px)");
+  expect(await page.locator("#bragg .prose").evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(6.5px)");
   await page.getByRole("button", { name: "章节目录" }).click();
 
   const scrim = page.locator(".rail-scrim");
@@ -257,4 +260,32 @@ test("正文中的行内方程由 KaTeX 排版而非显示源码", async ({ page
     const box = item.getBoundingClientRect();
     return box.width > 0 && box.height > 0 && getComputedStyle(item).display === "inline";
   }))).toBe(true);
+});
+
+test("第 6 章费米球、守恒分布与霍尔模型可交互且数值自洽", async ({ page }) => {
+  await page.goto("/?chapter=6");
+  await expect(page.getByTestId("chapter-hero-6")).toBeVisible();
+  await expect(page.locator(".derivation")).toHaveCount(4);
+  await expect(page.locator(".companion-lab")).toHaveCount(3);
+  await expect(page.locator(".katex-error")).toHaveCount(0);
+
+  const sphere = page.locator("#fermi-surface .companion-lab");
+  await sphere.locator("input[type=range]").evaluate((element: HTMLInputElement) => {
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(element, "8");
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(sphere).toContainText("n=8.0×10²⁸ m⁻³");
+  await expect(sphere).toContainText("费米波矢 kF");
+
+  const occupation = page.locator("#heat-capacity .companion-lab");
+  await expect(occupation).toContainText("粒子数数值校验 N/N₀1.000000");
+
+  const hall = page.locator("#transport .companion-lab");
+  await expect(hall).toContainText("Hall 系数 RH-");
+  await hall.locator("input[type=range]").nth(2).evaluate((element: HTMLInputElement) => {
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(element, "0");
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(hall).toContainText("|tan θH|=ωcτ0.0000");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
 });

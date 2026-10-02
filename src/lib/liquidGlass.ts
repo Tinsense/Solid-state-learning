@@ -207,7 +207,13 @@ void main() {
     vec4 sampleR = texture(u_background, uvR);
     vec4 sampleG = texture(u_background, uvG);
     vec4 sampleB = texture(u_background, uvB);
-    sampledAlpha = max(sampleR.a, max(sampleG.a, sampleB.a));
+    /* A small tangent-space aperture scatters actual lattice pixels at the
+       lens edge. It vanishes toward the panel centre, where equations live. */
+    vec2 tangent = vec2(-bendDir.y, bendDir.x);
+    vec2 aperture = tangent * (2.8 * refractField) * pxToUV;
+    vec4 scatterA = texture(u_background, clamp(uvG + aperture, vec2(0.001), vec2(0.999)));
+    vec4 scatterB = texture(u_background, clamp(uvG - aperture, vec2(0.001), vec2(0.999)));
+    sampledAlpha = max(max(sampleR.a, sampleG.a), max(sampleB.a, max(scatterA.a, scatterB.a)));
 
     /*
      * Do NOT premultiply the separated RGB by sampledAlpha here.
@@ -220,7 +226,8 @@ void main() {
     /* Boost only the chromatic difference created by spatially-separated
        R/G/B samples; neutral grey areas remain neutral. */
     float neutral = dot(separatedRGB, vec3(0.299, 0.587, 0.114));
-    refracted = clamp(mix(vec3(neutral), separatedRGB, 1.85), 0.0, 1.0);
+    vec3 scattered = (scatterA.rgb + scatterB.rgb) * 0.5;
+    refracted = clamp(mix(mix(vec3(neutral), separatedRGB, 1.65), scattered, 0.24 * refractField), 0.0, 1.0);
   }
 
   /*
@@ -476,8 +483,8 @@ class SharedGlassRenderer {
        * - buttons / compact controls: modest
        * - large teaching modules: visible but still local to the edge
        */
-      let refractionPx = 11.2;
-      let refractionRange = 19.0;
+      let refractionPx = 13.0;
+      let refractionRange = 22.0;
       let fresnelRange = 1.95;
       let glareRange = 1.18;
 
@@ -762,4 +769,3 @@ export function useLiquidGlassSystem() {
     };
   }, []);
 }
-
