@@ -110,7 +110,7 @@ for (const chapter of [1, 2, 4, 5]) {
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
     await page.goto(`/?chapter=${chapter}`);
     await expect(page.locator(".companion-hero h1")).toBeVisible();
-    await expect(page.locator(".chapter-switcher a.is-current").first()).toContainText(String(chapter).padStart(2, "0"));
+    await expect(page.getByRole("button", {name:`切换章节，当前第 ${chapter} 章`})).toBeVisible();
     const derivation = page.locator(".derivation").first();
     await derivation.getByRole("button", { name: /逐步展开推导/ }).click();
     await expect(derivation.locator(".derivation-step")).toBeVisible();
@@ -134,12 +134,8 @@ test("章节切换保留同一文档并支持浏览器历史", async ({ page }) 
   await page.goto("/?chapter=1");
   await expect(page.getByTestId("chapter-hero-1")).toBeVisible();
   await page.evaluate(() => ((window as typeof window & { __routeMarker?: string }).__routeMarker = "alive"));
-  if (await page.getByRole("button", { name: "章节目录" }).isVisible()) {
-    await page.getByRole("button", { name: "章节目录" }).click();
-    await page.locator("#chapter-rail .chapter-switcher a").filter({ hasText: "02" }).click();
-  } else {
-    await page.locator(".site-header").getByLabel("选择全部章节").selectOption("2");
-  }
+  await page.getByRole("button", {name:/切换章节，当前/}).click();
+  await page.getByRole("dialog").getByRole("link", {name:/02.*衍射与倒格子/}).click();
   await expect(page).toHaveURL(/chapter=2/);
   await expect(page.getByTestId("chapter-hero-2")).toBeVisible();
   expect(await page.evaluate(() => (window as typeof window & { __routeMarker?: string }).__routeMarker)).toBe("alive");
@@ -153,12 +149,13 @@ test("手机正文安全边距充足且目录章节条不随纵向滚动错位",
   const left = await page.locator(".companion-hero-copy").evaluate(element => element.getBoundingClientRect().left);
   expect(left).toBeGreaterThanOrEqual(24);
   await page.getByRole("button", { name: "章节目录" }).click();
-  const switcher = page.locator("#chapter-rail .chapter-switcher");
-  const before = await switcher.evaluate(element => element.getBoundingClientRect().top);
-  await page.locator("#chapter-rail > nav:not(.chapter-switcher)").evaluate(element => { element.scrollTop = 260; element.dispatchEvent(new Event("scroll")); });
-  const after = await switcher.evaluate(element => element.getBoundingClientRect().top);
+  await expect(page.locator("#chapter-rail .chapter-picker")).toHaveCount(0);
+  const label = page.locator("#chapter-rail .rail-label");
+  const before = await label.evaluate(element => element.getBoundingClientRect().top);
+  await page.locator("#chapter-rail > nav").evaluate(element => { element.scrollTop = 260; element.dispatchEvent(new Event("scroll")); });
+  const after = await label.evaluate(element => element.getBoundingClientRect().top);
   expect(Math.abs(after - before)).toBeLessThanOrEqual(1);
-  expect(await switcher.evaluate(element => getComputedStyle(element).touchAction)).toBe("pan-x");
+  await expect(page.locator("#chapter-rail .rail-item").first()).toContainText("章概览");
 });
 
 test("手机各章首模块与固定顶栏保持真实间距", async ({ page }, testInfo) => {
@@ -195,9 +192,9 @@ test("页面四边与根背景连续，没有默认白边", async ({ page }) => 
   expect(root.htmlMargin).toBe("0px");
   expect(root.bodyMargin).toBe("0px");
   expect(Math.abs(root.rootWidth - root.viewport)).toBeLessThanOrEqual(1);
-  expect(root.lattice.left).toBeLessThanOrEqual(-1);
-  expect(root.lattice.top).toBeLessThanOrEqual(-1);
-  expect(root.lattice.right).toBeGreaterThanOrEqual(root.viewport + 1);
+  expect(root.lattice.left).toBe(0);
+  expect(root.lattice.top).toBe(0);
+  expect(root.lattice.right).toBe(root.viewport);
 });
 
 test("科学互动模型通过解析值与极限检查", async ({ page }) => {

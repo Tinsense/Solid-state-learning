@@ -32,8 +32,11 @@ test("滚动时不显示滞后的折射遮罩，停稳后几何与模块同步",
  await page.goto("/?chapter=6");
  const canvas=page.locator(".studio-glass-shared-canvas");
  await expect(canvas).toBeVisible();
- await page.evaluate(()=>{window.scrollTo({top:800,behavior:"instant"});window.dispatchEvent(new Event("scroll"));});
- expect(await canvas.evaluate(element=>element.style.visibility)).toBe("hidden");
+ const scrollingVisibility=await page.evaluate(()=>{
+  window.scrollTo({top:800,behavior:"instant"});window.dispatchEvent(new Event("scroll"));
+  return document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!.style.visibility;
+ });
+ expect(scrollingVisibility).toBe("hidden");
  await expect(canvas).toBeVisible();
  const values=await page.evaluate(()=>{
   const canvas=document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!;

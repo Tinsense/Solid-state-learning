@@ -91,8 +91,8 @@ for(let chapter=1;chapter<=6;chapter++)test("第 "+chapter+" 章公式索引在�
 test("章节选择使用同页路由，手机目录不压暗正文",async({page},info)=>{
  await page.goto("/?chapter=7");
  await page.evaluate(()=>{(window as unknown as {sentinel:number}).sentinel=723;});
- if(info.project.name==="mobile")await page.getByRole("button",{name:"章节目录"}).click();
- await page.getByLabel("选择全部章节").filter({visible:true}).first().selectOption("22");
+ await page.getByRole("button",{name:/切换章节，当前/}).click();
+ await page.getByRole("dialog").getByRole("link",{name:/22.*合金/}).click();
  await expect(page.getByTestId("chapter-hero-22")).toBeVisible();
  expect(await page.evaluate(()=>(window as unknown as {sentinel:number}).sentinel)).toBe(723);
  if(info.project.name==="mobile"){

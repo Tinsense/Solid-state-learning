@@ -108,7 +108,6 @@ function ChapterThreeApp() {
 
       <aside className={`chapter-rail ${railOpen ? "is-open" : ""}`} id="chapter-rail" aria-label="第三章目录">
         <div className="rail-label"><span>CH.</span><strong>03</strong><button className="drawer-close" type="button" aria-label="关闭章节目录" onClick={()=>setRailOpen(false)}>×</button></div>
-        <ChapterSwitcher current={3}/>
         <nav>{sections.map((item) => <button key={item.id} type="button" className={`rail-item ${active === item.id ? "is-active" : ""}`} onClick={() => go(item.id)}><span>{item.index}</span><span>{item.title}<small>{item.english}</small></span></button>)}</nav>
         <div className="rail-footer"><span>Based on</span><strong>Kittel · 8th ed.</strong><small>pp. 47–89</small></div>
       </aside>

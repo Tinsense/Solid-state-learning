@@ -14,7 +14,9 @@ try {
   const response=await page.goto(main+"?chapter="+chapter,{waitUntil:"domcontentloaded"});
   await page.locator(".hero-module").waitFor({state:"visible"});
   await page.waitForFunction(()=>{const gl=document.querySelector(".studio-glass-shared-canvas")?.getContext("webgl2");return !!gl?.getParameter(gl.CURRENT_PROGRAM);});
-  const count=await page.getByLabel("选择全部章节").first().locator("option").count();
+  await page.getByRole("button",{name:/切换章节，当前/}).click();
+  const count=await page.locator(".chapter-menu-list a").count();
+  await page.getByRole("button",{name:"关闭章节切换菜单"}).click();
   const data=await page.evaluate(()=>{
    const gl=document.querySelector(".studio-glass-shared-canvas")?.getContext("webgl2");
    return {overflow:document.documentElement.scrollWidth-innerWidth,program:!!gl?.getParameter(gl.CURRENT_PROGRAM),glError:gl?.getError(),formulaFallbacks:document.querySelectorAll(".formula code").length};
@@ -28,7 +30,7 @@ try {
   const nestedSurfaces=await page.locator('[data-glass-layer="surface"]').evaluateAll(elements=>elements.filter(element=>element.parentElement?.closest('[data-glass-layer="surface"]')).length);
   await page.getByRole("button",{name:"章节目录",exact:true}).click();
   const drawer=page.getByRole("dialog");await drawer.waitFor({state:"visible"});
-  const drawerWorks=await page.locator("main").evaluate(element=>element.inert)&&await drawer.locator("optgroup").count()===4;
+  const drawerWorks=await page.locator("main").evaluate(element=>element.inert)&&await drawer.locator(".chapter-picker").count()===0;
   if(chapter===6){
    for(const theme of ["light","dark"]){
     await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);

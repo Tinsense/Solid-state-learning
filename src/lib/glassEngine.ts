@@ -1,0 +1,794 @@
+/*
+ * Shared WebGL2 liquid-glass renderer adapted from Charles Yin's
+ * Liquid Glass Studio (MIT): https://github.com/iyinchao/liquid-glass-studio
+ *
+ * Key change from the previous site implementation:
+ * ONE WebGL2 context renders every visible glass surface in both themes.
+ * V3.0: stronger but restrained chromatic dispersion, slightly broader thin rim,
+ * v3.1 fixes light-theme transparent-background alpha and strengthens real RGB dispersion.
+ * The shared shader renders clear refraction without DOM blur, plus a thin
+ * Fresnel rim, compact directional glare and restrained chromatic dispersion.
+ */
+
+const SURFACE_SELECTOR = [
+  ".site-header",
+  ".chapter-rail",
+  ".mobile-rail-toggle",
+  ".hero-module",
+  ".chapter-hero-visual",
+  ".liquid-panel",
+  ".liquid-button",
+  ".top-action",
+  ".rail-item",
+  ".segmented",
+  ".derivation-controls",
+  ".search-panel",
+  ".section-header",
+  ".content-section > .prose",
+  ".feature-figure",
+  ".formula-card",
+  ".derivation",
+  ".reading-callout",
+  ".concept-check",
+  ".unit-switch-panel",
+  ".split-explanation",
+  ".inverse-lab",
+  ".knowledge-map",
+  ".chapter-summary",
+  ".exercise-card",
+  ".completion-panel",
+  ".source-note",
+  ".lab-grid",
+  ".compact-lab",
+  ".lj-lab",
+  ".companion-lab",
+  ".learning-contract",
+  ".reasoning-chain",
+  ".worked-example",
+  ".pitfall-card",
+  ".symbol-card",
+  ".chapter-menu",
+  ".chapter-menu-trigger",
+  ".text-button"
+].join(",");
+
+const MAX_SURFACES = 40;
+
+const VERTEX_SHADER = `#version 300 es
+in vec2 a_position;
+void main() {
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+
+const SHARED_GLASS_SHADER = `#version 300 es
+precision highp float;
+#define MAX_SURFACES ${MAX_SURFACES}
+#define PI 3.14159265359
+
+out vec4 fragColor;
+uniform vec2 u_viewport;
+uniform float u_dpr;
+uniform int u_count;
+uniform vec4 u_rects[MAX_SURFACES];
+uniform float u_radii[MAX_SURFACES];
+uniform vec4 u_optics[MAX_SURFACES];
+uniform float u_flags[MAX_SURFACES];
+uniform vec2 u_pointer;
+uniform float u_time;
+
+/* Actual background-canvas sampling for visible refraction. */
+uniform sampler2D u_background;
+uniform float u_hasBackground;
+uniform float u_theme;
+
+float roundedRectSDF(vec2 p, vec2 halfSize, float radius) {
+  vec2 q = abs(p) - halfSize + radius;
+  return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - radius;
+}
+
+float surfaceSDF(vec2 cssPoint, vec4 rect, float radius) {
+  vec2 center = rect.xy + rect.zw * 0.5;
+  vec2 halfSize = max(rect.zw * 0.5 - vec2(1.0), vec2(1.0));
+  float r = min(radius, min(halfSize.x, halfSize.y));
+  return roundedRectSDF(cssPoint - center, halfSize, r);
+}
+
+vec2 safeNormalize(vec2 v) {
+  float l = length(v);
+  return l > 0.0001 ? v / l : vec2(1.0, 0.0);
+}
+
+void main() {
+  vec2 cssPoint = vec2(
+    gl_FragCoord.x / u_dpr,
+    u_viewport.y - gl_FragCoord.y / u_dpr
+  );
+
+  int chosen = -1;
+  float chosenDistance = 1e6;
+  float bestScore = 1e6;
+  float chosenPriority = -1.0;
+
+  for (int i = 0; i < MAX_SURFACES; i++) {
+    if (i >= u_count) break;
+    float d = surfaceSDF(cssPoint, u_rects[i], u_radii[i]);
+    if (d <= 0.75) {
+      float score = abs(d);
+      float priority = u_flags[i];
+      if (priority > chosenPriority || (priority == chosenPriority && score < bestScore)) {
+        bestScore = score;
+        chosenPriority = priority;
+        chosenDistance = d;
+        chosen = i;
+      }
+    }
+  }
+
+  if (chosen < 0) {
+    fragColor = vec4(0.0);
+    return;
+  }
+
+  vec4 rect = u_rects[chosen];
+  float radius = u_radii[chosen];
+  vec4 optics = u_optics[chosen];
+  float surfaceFlag = u_flags[chosen];
+  float depth = max(-chosenDistance, 0.0);
+
+  /* SDF normal. */
+  float eps = 0.8;
+  float dx = surfaceSDF(cssPoint + vec2(eps, 0.0), rect, radius)
+           - surfaceSDF(cssPoint - vec2(eps, 0.0), rect, radius);
+  float dy = surfaceSDF(cssPoint + vec2(0.0, eps), rect, radius)
+           - surfaceSDF(cssPoint - vec2(0.0, eps), rect, radius);
+  vec2 normal = safeNormalize(vec2(dx, dy));
+
+  /*
+   * Flag 1 = site header. Suppress the bottom-facing optical rim entirely so
+   * light mode does not show a long pale divider below the top bar.
+   */
+  float opticalEdgeMask = 1.0;
+  if (surfaceFlag > 0.5 && surfaceFlag < 1.5) {
+    float bottomFacing = smoothstep(0.38, 0.82, normal.y);
+    opticalEdgeMask = 1.0 - bottomFacing;
+  }
+
+  vec2 center = rect.xy + rect.zw * 0.5;
+  vec2 centerDir = safeNormalize(cssPoint - center);
+  vec2 bendDir = safeNormalize(mix(centerDir, normal, 0.78));
+
+  float normalAngle = atan(normal.y, normal.x);
+  float pointerAngle = atan(center.y - u_pointer.y, u_pointer.x - center.x);
+
+  /*
+   * Per-surface optics. The large content panels remain expressive, while the
+   * site header, chapter rail and controls use much smaller optical ranges.
+   * optics = vec4(refractionPx, refractionRangePx, fresnelRangePx, glareRangePx)
+   */
+  float fresnel = 1.0 - smoothstep(0.0, max(optics.z, 0.35), depth);
+  fresnel = pow(fresnel, 2.10) * opticalEdgeMask;
+
+  float facing = 0.5 + 0.5 * cos(normalAngle - pointerAngle);
+  float opposite = 0.5 + 0.5 * cos(normalAngle - pointerAngle - PI);
+  float directional = pow(max(facing, opposite * 0.22), 3.8);
+  float glare = directional * (1.0 - smoothstep(0.0, max(optics.w, 0.25), depth));
+  glare *= (0.97 + 0.03 * sin(u_time * 0.42 + normalAngle * 1.9 + float(chosen) * 0.41)) * opticalEdgeMask;
+
+  /* Refraction is now local to the edge instead of spanning ~46 px inward. */
+  float refractField = 1.0 - smoothstep(0.8, max(optics.y, 2.0), depth);
+  refractField = pow(refractField, 1.30) * opticalEdgeMask;
+
+  float refractionPx = optics.x * refractField;
+  vec2 pxToUV = vec2(1.0 / max(u_viewport.x, 1.0), 1.0 / max(u_viewport.y, 1.0));
+  vec2 refractionUV = bendDir * refractionPx * pxToUV;
+
+  /*
+   * Canvas texture is uploaded with UNPACK_FLIP_Y_WEBGL=true,
+   * therefore gl_FragCoord-normalized UV aligns directly to the viewport.
+   */
+  vec2 baseUV = vec2(
+    gl_FragCoord.x / (u_dpr * max(u_viewport.x, 1.0)),
+    gl_FragCoord.y / (u_dpr * max(u_viewport.y, 1.0))
+  );
+  baseUV = clamp(baseUV, vec2(0.001), vec2(0.999));
+
+  vec3 refracted = vec3(0.0);
+  vec3 environment = mix(vec3(0.08), vec3(0.92), u_theme);
+  float sampledAlpha = 0.0;
+  if (u_hasBackground > 0.5) {
+    /*
+     * Real RGB dispersion. The channels sample three genuinely different
+     * background positions, so the split is visible on lattice lines/atoms
+     * without creating a synthetic coloured outline around empty glass.
+     */
+    float dispersionPx = min(1.15, optics.x * 0.055) * refractField;
+    vec2 dispersionUV = bendDir * dispersionPx * pxToUV;
+
+    vec2 uvR = clamp(baseUV + refractionUV * 1.035 + dispersionUV, vec2(0.001), vec2(0.999));
+    vec2 uvG = clamp(baseUV + refractionUV,                  vec2(0.001), vec2(0.999));
+    vec2 uvB = clamp(baseUV + refractionUV * 0.965 - dispersionUV, vec2(0.001), vec2(0.999));
+
+    vec4 sampleR = texture(u_background, uvR);
+    vec4 sampleG = texture(u_background, uvG);
+    environment = sampleG.rgb;
+    vec4 sampleB = texture(u_background, uvB);
+    /* A small tangent-space aperture scatters actual lattice pixels at the
+       lens edge. It vanishes toward the panel centre, where equations live. */
+    vec2 tangent = vec2(-bendDir.y, bendDir.x);
+    vec2 aperture = tangent * (2.8 * refractField) * pxToUV;
+    vec4 scatterA = texture(u_background, clamp(uvG + aperture, vec2(0.001), vec2(0.999)));
+    vec4 scatterB = texture(u_background, clamp(uvG - aperture, vec2(0.001), vec2(0.999)));
+    sampledAlpha = max(max(sampleR.a, sampleG.a), max(sampleB.a, max(scatterA.a, scatterB.a)));
+
+    /*
+     * Do NOT premultiply the separated RGB by sampledAlpha here.
+     * Alpha is applied exactly once below through refractedAlpha.
+     * Premultiplying twice was suppressing chromatic separation on the
+     * semi-transparent lattice lines / atom halos.
+     */
+    vec3 separatedRGB = vec3(sampleR.r, sampleG.g, sampleB.b);
+
+    /* Boost only the chromatic difference created by spatially-separated
+       R/G/B samples; neutral grey areas remain neutral. */
+    float neutral = dot(separatedRGB, vec3(0.299, 0.587, 0.114));
+    vec3 scattered = (scatterA.rgb + scatterB.rgb) * 0.5;
+    refracted = clamp(mix(mix(vec3(neutral), separatedRGB, 1.05), scattered, 0.32 * refractField), 0.0, 1.0);
+  }
+
+  /*
+   * Critical light-theme fix: transparent regions of the lattice canvas must
+   * contribute ZERO refracted alpha. Previously only RGB was alpha-gated, so
+   * transparent black pixels still produced a broad grey/black optical band.
+   */
+  float refractedAlpha = u_hasBackground * refractField * sampledAlpha * mix(0.58, 0.52, u_theme);
+
+  vec3 cool = vec3(0.42, 0.69, 1.00);
+  vec3 warm = vec3(1.00, 0.80, 0.48);
+  vec3 rimDispersion = mix(cool, warm, clamp(0.5 + normal.x * 0.42, 0.0, 1.0));
+
+  /* Small range, clean specular response. */
+  float environmentLuma = dot(environment, vec3(0.2126, 0.7152, 0.0722));
+  vec3 reflectedLight = mix(vec3(1.0), environment, 0.16);
+  vec3 highlight = reflectedLight * fresnel * mix(0.052, 0.025, environmentLuma);
+  highlight += reflectedLight * glare * mix(0.115, 0.052, environmentLuma);
+  highlight += rimDispersion * fresnel * (0.0045 + 0.0080 * glare);
+
+  /* Light mode has no glass body tint. Dark mode retains only a trace. */
+  vec3 darkTint = vec3(0.025, 0.030, 0.038);
+  float darkTintStrength = (1.0 - u_theme) * 0.024;
+
+  vec3 color = refracted * refractedAlpha;
+  color += darkTint * darkTintStrength;
+  color += highlight;
+
+  float edgeAlpha = fresnel * mix(0.034, 0.014, u_theme) + glare * mix(0.05, 0.025, u_theme);
+  float alpha = refractedAlpha + darkTintStrength * 0.45 + edgeAlpha;
+  alpha = clamp(alpha, 0.0, mix(0.78, 0.50, u_theme));
+
+  fragColor = vec4(color, alpha);
+}`;
+
+// Kept for compatibility with the original LatticeAtmosphere implementation.
+const BACKGROUND_SHADER = `#version 300 es
+precision highp float;
+in vec2 v_uv;
+out vec4 fragColor;
+uniform vec2 u_resolution;
+uniform vec2 u_origin;
+uniform vec2 u_viewport;
+uniform float u_dpr;
+uniform float u_theme;
+uniform float u_time;
+void main() {
+  vec2 cssPixel = gl_FragCoord.xy / u_dpr;
+  vec2 cssSize = u_resolution / u_dpr;
+  vec2 globalPixel = vec2(cssPixel.x + u_origin.x, u_origin.y + cssSize.y - cssPixel.y);
+  float spacing = clamp(min(u_viewport.x, u_viewport.y) / 8.6, 58.0, 82.0);
+  float t = u_time;
+  vec2 wave = vec2(
+    sin(globalPixel.y * 0.008 + t * 0.26) * 6.0,
+    cos(globalPixel.x * 0.007 - t * 0.22) * 6.0
+  );
+  vec2 lattice = (globalPixel + wave) / spacing;
+  vec2 cell = floor(lattice);
+  vec2 latticePoint = (fract(lattice) - 0.5) * spacing;
+  float distanceToPoint = length(latticePoint);
+  float ionicParity = mod(cell.x + cell.y, 2.0);
+  float pulse = 0.92 + 0.08 * sin(t * 0.48 + cell.x * 0.61 + cell.y * 0.43);
+  float ionRadius = mix(2.0, 3.7, ionicParity) * pulse;
+  float ion = 1.0 - smoothstep(ionRadius, ionRadius + 1.25, distanceToPoint);
+  float halo = 1.0 - smoothstep(ionRadius + 1.0, ionRadius + mix(4.0, 7.0, ionicParity), distanceToPoint);
+  float horizontalBond = 1.0 - smoothstep(0.28, 0.82, abs(latticePoint.y));
+  float verticalBond = 1.0 - smoothstep(0.28, 0.82, abs(latticePoint.x));
+  float bond = max(horizontalBond, verticalBond);
+  float bondFade = smoothstep(ionRadius + 2.0, spacing * 0.42, distanceToPoint);
+  bond *= bondFade;
+  vec3 darkBase = vec3(0.006, 0.006, 0.007);
+  vec3 lightBase = vec3(0.972, 0.974, 0.978);
+  vec3 base = mix(darkBase, lightBase, u_theme);
+  vec3 latticeColor = mix(vec3(0.86), vec3(0.08), u_theme);
+  float ionStrength = mix(0.62, 0.88, ionicParity);
+  base = mix(base, latticeColor, bond * mix(0.095, 0.075, u_theme));
+  base = mix(base, latticeColor, halo * mix(0.035, 0.026, u_theme));
+  base = mix(base, latticeColor, ion * ionStrength);
+  fragColor = vec4(base, 1.0);
+}`;
+
+type ProgramInfo = {
+  program: WebGLProgram;
+  uniforms: Map<string, WebGLUniformLocation | null>;
+};
+
+function compileProgram(gl: WebGL2RenderingContext, fragment: string, vertexSource = VERTEX_SHADER): ProgramInfo {
+  const compile = (type: number, source: string) => {
+    const shader = gl.createShader(type);
+    if (!shader) throw new Error("Unable to create WebGL shader");
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      const message = gl.getShaderInfoLog(shader) || "Unknown shader compilation error";
+      gl.deleteShader(shader);
+      throw new Error(message);
+    }
+    return shader;
+  };
+
+  const vertex = compile(gl.VERTEX_SHADER, vertexSource);
+  const pixel = compile(gl.FRAGMENT_SHADER, fragment);
+  const program = gl.createProgram();
+  if (!program) throw new Error("Unable to create WebGL program");
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, pixel);
+  gl.linkProgram(program);
+  gl.deleteShader(vertex);
+  gl.deleteShader(pixel);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    const message = gl.getProgramInfoLog(program) || "Unknown WebGL link error";
+    gl.deleteProgram(program);
+    throw new Error(message);
+  }
+  return { program, uniforms: new Map() };
+}
+
+function uniform(gl: WebGL2RenderingContext, info: ProgramInfo, name: string) {
+  if (!info.uniforms.has(name)) info.uniforms.set(name, gl.getUniformLocation(info.program, name));
+  return info.uniforms.get(name) ?? null;
+}
+
+let supportCache: boolean | undefined;
+export function supportsStudioGlass() {
+  if (supportCache !== undefined) return supportCache;
+  try {
+    const probe = document.createElement("canvas");
+    const gl = probe.getContext("webgl2");
+    supportCache = Boolean(gl);
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
+  } catch {
+    supportCache = false;
+  }
+  return supportCache;
+}
+
+class SharedGlassRenderer {
+  readonly canvas: HTMLCanvasElement;
+  private gl: WebGL2RenderingContext;
+  private program: ProgramInfo;
+  private vao: WebGLVertexArrayObject;
+  private buffer: WebGLBuffer;
+  private backgroundTexture: WebGLTexture;
+  private pointerX = window.innerWidth * 0.72;
+  private pointerY = window.innerHeight * 0.18;
+
+  constructor() {
+    const canvas = document.createElement("canvas");
+    canvas.className = "studio-glass-shared-canvas";
+    canvas.dataset.opticsVersion = "lattice-shared-4";
+    canvas.setAttribute("aria-hidden", "true");
+    document.body.appendChild(canvas);
+    this.canvas = canvas;
+
+    const gl = canvas.getContext("webgl2", {
+      alpha: true,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      premultipliedAlpha: true,
+      powerPreference: "high-performance"
+    });
+    if (!gl) {
+      canvas.remove();
+      throw new Error("WebGL2 is unavailable");
+    }
+    this.gl = gl;
+    this.program = compileProgram(gl, SHARED_GLASS_SHADER);
+
+    const vao = gl.createVertexArray();
+    const buffer = gl.createBuffer();
+    if (!vao || !buffer) throw new Error("Unable to create shared WebGL geometry");
+    this.vao = vao;
+    this.buffer = buffer;
+
+    const backgroundTexture = gl.createTexture();
+    if (!backgroundTexture) throw new Error("Unable to create background texture");
+    this.backgroundTexture = backgroundTexture;
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+    /* 1x1 transparent fallback until the actual lattice canvas is available. */
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA,
+      1,
+      1,
+      0,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
+      new Uint8Array([0, 0, 0, 0])
+    );
+
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const location = gl.getAttribLocation(this.program.program, "a_position");
+    gl.useProgram(this.program.program);
+    gl.enableVertexAttribArray(location);
+    gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
+    gl.bindVertexArray(null);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+  }
+
+  setPointer(x: number, y: number) {
+    this.pointerX = x;
+    this.pointerY = y;
+  }
+
+  render(elements: HTMLElement[], time: number) {
+    const gl = this.gl;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+    const width = Math.max(1, Math.round(window.innerWidth * dpr));
+    const height = Math.max(1, Math.round(window.innerHeight * dpr));
+    if (this.canvas.width !== width || this.canvas.height !== height) {
+      this.canvas.width = width;
+      this.canvas.height = height;
+      this.canvas.style.width = `${window.innerWidth}px`;
+      this.canvas.style.height = `${window.innerHeight}px`;
+    }
+
+    const visible = elements
+      .map((element) => ({ element, rect: element.getBoundingClientRect() }))
+      .filter(({ rect }) =>
+        rect.width > 3 && rect.height > 3 &&
+        rect.bottom > -40 && rect.top < window.innerHeight + 40 &&
+        rect.right > -40 && rect.left < window.innerWidth + 40
+      )
+      .slice(0, MAX_SURFACES);
+
+    const rectData = new Float32Array(MAX_SURFACES * 4);
+    const radiusData = new Float32Array(MAX_SURFACES);
+    const opticsData = new Float32Array(MAX_SURFACES * 4);
+    const flagData = new Float32Array(MAX_SURFACES);
+
+    visible.forEach(({ element, rect }, index) => {
+      rectData[index * 4] = rect.left;
+      rectData[index * 4 + 1] = rect.top;
+      rectData[index * 4 + 2] = rect.width;
+      rectData[index * 4 + 3] = rect.height;
+      const cssRadius = Number.parseFloat(getComputedStyle(element).borderRadius) || 18;
+      radiusData[index] = Math.max(2, Math.min(cssRadius, rect.width * 0.5, rect.height * 0.5));
+
+      /*
+       * Optical hierarchy:
+       * - header / chapter rail: deliberately restrained
+       * - buttons / compact controls: modest
+       * - large teaching modules: visible but still local to the edge
+       */
+      let refractionPx = 19.0;
+      let refractionRange = 28.0;
+      let fresnelRange = 1.95;
+      let glareRange = 1.18;
+
+      if (element.matches(".site-header, .header-wrapper, .chapter-rail, .mobile-rail-toggle")) {
+        refractionPx = 10.0;
+        refractionRange = 18;
+        fresnelRange = 1.05;
+        glareRange = 0.64;
+      } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls")) {
+        refractionPx = 8.0;
+        refractionRange = 10.3;
+        fresnelRange = 1.30;
+        glareRange = 0.82;
+      } else if (element.matches(".source-note")) {
+        refractionPx = 6.9;
+        refractionRange = 11.8;
+        fresnelRange = 1.40;
+        glareRange = 0.88;
+      }
+
+      opticsData[index * 4] = refractionPx;
+      opticsData[index * 4 + 1] = refractionRange;
+      opticsData[index * 4 + 2] = fresnelRange;
+      opticsData[index * 4 + 3] = glareRange;
+      flagData[index] = element.matches(".chapter-menu") ? 5 : element.matches(".search-panel") ? 4 : element.matches(".mobile-rail-toggle") ? 3 : element.matches(".chapter-rail") ? 2 : element.matches(".site-header,.header-wrapper") ? 1 : 0;
+    });
+
+    /*
+     * Upload the actual full-screen lattice/background canvas as a texture.
+     * This is what makes refraction real rather than a simulated bright rim.
+     */
+    const backgroundCanvas = document.querySelector<HTMLCanvasElement>(
+      "canvas.lattice-atmosphere, canvas[data-testid='lattice-atmosphere']"
+    );
+    let hasBackground = 0;
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.backgroundTexture);
+    if (
+      backgroundCanvas &&
+      backgroundCanvas !== this.canvas &&
+      backgroundCanvas.width > 1 &&
+      backgroundCanvas.height > 1
+    ) {
+      try {
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(
+          gl.TEXTURE_2D,
+          0,
+          gl.RGBA,
+          gl.RGBA,
+          gl.UNSIGNED_BYTE,
+          backgroundCanvas
+        );
+        hasBackground = 1;
+      } catch {
+        hasBackground = 0;
+      }
+    }
+
+    gl.viewport(0, 0, width, height);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(this.program.program);
+    gl.bindVertexArray(this.vao);
+    gl.uniform2f(uniform(gl, this.program, "u_viewport"), window.innerWidth, window.innerHeight);
+    gl.uniform1f(uniform(gl, this.program, "u_dpr"), dpr);
+    gl.uniform1i(uniform(gl, this.program, "u_count"), visible.length);
+    gl.uniform4fv(uniform(gl, this.program, "u_rects[0]"), rectData);
+    gl.uniform1fv(uniform(gl, this.program, "u_radii[0]"), radiusData);
+    gl.uniform4fv(uniform(gl, this.program, "u_optics[0]"), opticsData);
+    gl.uniform1fv(uniform(gl, this.program, "u_flags[0]"), flagData);
+    gl.uniform2f(uniform(gl, this.program, "u_pointer"), this.pointerX, this.pointerY);
+    gl.uniform1f(uniform(gl, this.program, "u_time"), time);
+    gl.uniform1i(uniform(gl, this.program, "u_background"), 0);
+    gl.uniform1f(uniform(gl, this.program, "u_hasBackground"), hasBackground);
+    gl.uniform1f(
+      uniform(gl, this.program, "u_theme"),
+      document.documentElement.dataset.theme === "light" ? 1 : 0
+    );
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.bindVertexArray(null);
+  }
+
+  dispose() {
+    const gl = this.gl;
+    gl.deleteProgram(this.program.program);
+    gl.deleteBuffer(this.buffer);
+    gl.deleteVertexArray(this.vao);
+    gl.deleteTexture(this.backgroundTexture);
+    this.canvas.remove();
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+  }
+}
+
+export function mountLatticeScene(canvas: HTMLCanvasElement) {
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let frame = 0;
+  let stopped = false;
+
+  if (!supportsStudioGlass()) {
+    canvas.dataset.sceneEngine = "css-fallback";
+    return () => { delete canvas.dataset.sceneEngine; };
+  }
+
+  const gl = canvas.getContext("webgl2", {
+    alpha: false,
+    antialias: false,
+    depth: false,
+    stencil: false,
+    powerPreference: "high-performance"
+  });
+  if (!gl) {
+    canvas.dataset.sceneEngine = "css-fallback";
+    return () => { delete canvas.dataset.sceneEngine; };
+  }
+
+  // BACKGROUND_SHADER originally expects v_uv, so provide a compatible vertex shader.
+  const backgroundVertex = `#version 300 es
+  in vec2 a_position;
+  out vec2 v_uv;
+  void main(){
+    v_uv = (a_position + 1.0) * 0.5;
+    gl_Position = vec4(a_position,0.0,1.0);
+  }`;
+  const scene = compileProgram(gl, BACKGROUND_SHADER, backgroundVertex);
+  const vao = gl.createVertexArray();
+  const buffer = gl.createBuffer();
+  if (!vao || !buffer) {
+    canvas.dataset.sceneEngine = "css-fallback";
+    return () => { delete canvas.dataset.sceneEngine; };
+  }
+  gl.bindVertexArray(vao);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  const location = gl.getAttribLocation(scene.program, "a_position");
+  gl.useProgram(scene.program);
+  gl.enableVertexAttribArray(location);
+  gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
+  canvas.dataset.sceneEngine = "webgl2-shared-scene";
+
+  const render = (timestamp: number) => {
+    frame = 0;
+    if (stopped) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+    const width = Math.max(1, Math.round(window.innerWidth * dpr));
+    const height = Math.max(1, Math.round(window.innerHeight * dpr));
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+    gl.viewport(0, 0, width, height);
+    gl.useProgram(scene.program);
+    gl.bindVertexArray(vao);
+    gl.uniform2f(uniform(gl, scene, "u_resolution"), width, height);
+    gl.uniform2f(uniform(gl, scene, "u_origin"), 0, 0);
+    gl.uniform2f(uniform(gl, scene, "u_viewport"), window.innerWidth, window.innerHeight);
+    gl.uniform1f(uniform(gl, scene, "u_dpr"), dpr);
+    gl.uniform1f(uniform(gl, scene, "u_theme"), document.documentElement.dataset.theme === "light" ? 1 : 0);
+    gl.uniform1f(uniform(gl, scene, "u_time"), motion.matches ? 0 : timestamp / 1000);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.bindVertexArray(null);
+    if (!motion.matches) frame = requestAnimationFrame(render);
+  };
+
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(render); };
+  const theme = new MutationObserver(schedule);
+  theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  window.addEventListener("resize", schedule, { passive: true });
+  motion.addEventListener("change", schedule);
+  schedule();
+
+  return () => {
+    stopped = true;
+    cancelAnimationFrame(frame);
+    theme.disconnect();
+    window.removeEventListener("resize", schedule);
+    motion.removeEventListener("change", schedule);
+    gl.deleteProgram(scene.program);
+    gl.deleteBuffer(buffer);
+    gl.deleteVertexArray(vao);
+    delete canvas.dataset.sceneEngine;
+  };
+}
+
+export function startGlassSystem(selector = SURFACE_SELECTOR) {
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let renderer: SharedGlassRenderer | null = null;
+    let elements: HTMLElement[] = [];
+    let frame = 0;
+    let lastPaint = -Infinity;
+    let scrollActiveUntil = 0;
+    let scrollTimer = 0;
+    let disposed = false;
+
+    const syncElements = () => {
+      const candidates = Array.from(document.querySelectorAll<HTMLElement>(selector))
+        .filter((element) => !element.matches(".hero-lead, .hero-lead-glass"));
+      const roots = new Set(candidates.filter(element=>!element.matches(".section-header,.source-note,.text-button")));
+      candidates.forEach((element) => {
+        element.dataset.liquidGlass = renderer ? "shared-webgl2" : "frosted";
+        let parent=element.parentElement;
+        while(parent&&!roots.has(parent))parent=parent.parentElement;
+        element.dataset.glassLayer=!roots.has(element)?"plain":parent?"embedded":"surface";
+      });
+      elements=candidates.filter(element=>element.dataset.glassLayer==="surface");
+      document.documentElement.dataset.glassEngine = renderer ? "shared-webgl2" : "frosted";
+    };
+
+    if (supportsStudioGlass()) {
+      try {
+        renderer = new SharedGlassRenderer();
+      } catch (error) {
+        console.warn("Liquid Glass Studio shared WebGL2 fallback:", error);
+        renderer = null;
+      }
+    }
+
+    const render = (timestamp: number) => {
+      frame = 0;
+      if (disposed) return;
+      if (renderer) renderer.canvas.style.display = "block";
+
+      if (renderer) {
+        /*
+         * Normal animation is deliberately capped near 25 fps to limit the
+         * full-screen texture upload cost. Scrolling is different: DOM
+         * surfaces move on the compositor every frame, so their WebGL masks
+         * must be sampled every frame too or a stale horizontal slice appears.
+         */
+        const scrolling = timestamp <= scrollActiveUntil;
+        if (renderer.canvas.style.visibility!=="hidden" && (motion.matches || scrolling || timestamp - lastPaint >= 40)) {
+          lastPaint = timestamp;
+          renderer.render(elements, motion.matches ? 0 : timestamp / 1000);
+        }
+        if (!motion.matches) frame = requestAnimationFrame(render);
+      }
+    };
+
+    const schedule = () => {
+      syncElements();
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(render);
+    };
+
+    const onScroll = () => {
+      scrollActiveUntil = performance.now() + 180;
+      // Compositor scrolling can advance before JS receives its new geometry.
+      // Native DOM glass stays attached; suppress stale fixed-canvas lens rims.
+      if(renderer)renderer.canvas.style.visibility="hidden";
+      window.clearTimeout(scrollTimer);
+      scrollTimer=window.setTimeout(()=>{
+        if(disposed)return;
+        renderer?.render(elements,motion.matches?0:performance.now()/1000);
+        if(renderer)renderer.canvas.style.visibility="visible";
+        if(!frame)frame=requestAnimationFrame(render);
+      },140);
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      renderer?.setPointer(event.clientX, event.clientY);
+      if (!frame) frame = requestAnimationFrame(render);
+    };
+
+    const mutation = new MutationObserver(schedule);
+    mutation.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
+    const theme = new MutationObserver(schedule);
+    theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+    window.addEventListener("resize", schedule, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true, capture: true });
+    window.visualViewport?.addEventListener("resize", schedule, { passive: true });
+    window.visualViewport?.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    motion.addEventListener("change", schedule);
+
+    syncElements();
+    frame = requestAnimationFrame(render);
+
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      window.clearTimeout(scrollTimer);
+      mutation.disconnect();
+      theme.disconnect();
+      window.removeEventListener("resize", schedule);
+      window.removeEventListener("scroll", onScroll, true);
+      window.visualViewport?.removeEventListener("resize", schedule);
+      window.visualViewport?.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pointermove", onPointerMove);
+      motion.removeEventListener("change", schedule);
+      document.querySelectorAll<HTMLElement>("[data-liquid-glass]").forEach((element) => {
+        delete element.dataset.liquidGlass;
+        delete element.dataset.glassLayer;
+      });
+      renderer?.dispose();
+      delete document.documentElement.dataset.glassEngine;
+    };
+}

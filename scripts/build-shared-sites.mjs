@@ -1,0 +1,11 @@
+import { build } from "vite";
+import fs from "node:fs/promises";
+import path from "node:path";
+const target=process.env.SITE_REPO;
+if(!target)throw new Error("Set SITE_REPO to the independent-sites checkout.");
+if(!await fs.stat(path.join(target,"js","site-glass.js")).catch(()=>null))throw new Error("Expected existing sites checkout.");
+await build({configFile:false,publicDir:false,build:{target:"es2020",minify:false,emptyOutDir:false,outDir:path.join(target,"js"),lib:{entry:path.resolve("src/standalone/siteGlass.ts"),name:"LatticeMaterial",formats:["iife"],fileName:()=>"site-glass.js"},rollupOptions:{output:{banner:"/* Generated from Solid-state-learning shared optics and wallpaper. Liquid Glass Studio: MIT, Charles Yin. */"}}}});
+const css=await Promise.all(["src/standalone/siteAdapter.css","src/styles/shared-material.css"].map(file=>fs.readFile(file,"utf8")));
+await fs.writeFile(path.join(target,"css","site-glass.css"),"/* Generated shared material: do not edit independently. */\n"+css.join("\n"));
+await fs.copyFile("public/THIRD_PARTY_NOTICES.txt",path.join(target,"js","THIRD_PARTY_NOTICES.txt"));
+console.log("Built identical glass engine, wallpaper and material for "+target);

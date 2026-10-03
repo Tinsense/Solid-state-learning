@@ -1,0 +1,39 @@
+.site-header { grid-template-columns:minmax(120px,214px) minmax(150px,240px) 1fr; }
+.site-header .header-actions { justify-self:end; }
+.site-header > .chapter-title { display:none; }
+.site-header .chapter-picker { display:block !important; min-width:0; }
+.chapter-menu-trigger { display:flex; gap:12px; align-items:center; width:100%; min-height:46px; padding:10px 16px; border:1px solid var(--hairline); border-radius:16px; color:var(--text); background:var(--surface); cursor:pointer; font-size:13px; }
+.chapter-trigger-number { font-variant-numeric:tabular-nums; color:var(--text-secondary); }
+.chapter-trigger-label { flex:1; text-align:left; }
+.chapter-trigger-mobile { display:none; }
+.chapter-menu-scrim { position:fixed; inset:0; z-index:600; background:transparent; }
+.chapter-menu { position:fixed !important; top:90px; z-index:610 !important; width:540px; max-height:calc(100dvh - 112px); padding:24px; display:flex; flex-direction:column; color:var(--text); border-radius:24px; }
+.chapter-menu-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 4px 20px; flex:none; }
+.chapter-menu-heading span { font-size:10px; letter-spacing:.16em; color:var(--text-secondary); }
+.chapter-menu-heading h2 { font-size:21px; letter-spacing:0; margin:7px 0 0; line-height:1.3; }
+.chapter-menu-heading button { border:1px solid var(--hairline); border-radius:16px; width:44px; height:44px; background:var(--surface); color:inherit; font-size:22px; cursor:pointer; }
+.chapter-menu-list { overflow-y:auto; min-height:0; overscroll-behavior:contain; scrollbar-width:none; padding:0 4px 4px; }
+.chapter-menu-group + .chapter-menu-group { margin-top:22px; }
+.chapter-menu-group h3 { margin:0 0 8px; display:flex; justify-content:space-between; font-size:12px; font-weight:500; color:var(--text-secondary); }
+.chapter-menu-group h3 span { font-size:10px; font-variant-numeric:tabular-nums; }
+.chapter-menu-group > div { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.chapter-menu-group a { display:flex; gap:10px; align-items:center; min-height:48px; padding:10px 12px; border:1px solid transparent; border-radius:14px; color:var(--text); text-decoration:none; transition:background-color 160ms; }
+.chapter-menu-group a > span { font-size:10px; color:var(--text-secondary); }
+.chapter-menu-group strong { font-size:13px; font-weight:500; }
+.chapter-menu-group i { margin-left:auto; font-style:normal; font-size:12px; }
+.chapter-menu-group a:hover,.chapter-menu-group a[aria-current="page"] { background:var(--surface-strong); border-color:var(--hairline); }
+.chapter-menu :is(a,button):focus-visible,.chapter-menu-trigger:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.chapter-rail > nav { min-height:0; flex:1; }
+@media(max-width:900px){
+ .site-header { grid-template-columns:auto minmax(0,1fr) auto !important; gap:12px; }
+ .site-header .chapter-picker { justify-self:end; }
+ .chapter-menu-trigger { width:auto; padding:10px 12px; gap:8px; min-height:44px; }
+ .chapter-trigger-label { display:none; }
+ .chapter-trigger-mobile { display:inline; font-size:12px; }
+ .chapter-menu { top:84px; left:12px !important; right:12px; width:auto; max-height:calc(100dvh - 104px); padding:20px; }
+ .chapter-menu-group > div { gap:4px; }
+ .chapter-menu-group a { padding:10px 8px; gap:8px; }
+ .chapter-menu-heading { padding-bottom:20px; }
+ .site-header .chapter-title,.site-header [aria-label="搜索知识点"],.site-header .progress-chip { display:none; }
+}
+@media(max-width:360px){.chapter-trigger-number{display:none}.site-header{gap:6px}}

@@ -1,0 +1,25 @@
+/* Layout adapters only. Material and optics are identical to the course. */
+:root { --text:#f5f5f7; --text-secondary:rgba(245,245,247,.70); --text-tertiary:rgba(245,245,247,.53); --hairline:rgba(255,255,255,.13); --surface:rgba(255,255,255,.055); --surface-strong:rgba(255,255,255,.12); --accent:#a8d8ff; }
+:root[data-theme="light"] { --text:#111113; --text-secondary:rgba(17,17,19,.75); --text-tertiary:rgba(17,17,19,.58); --hairline:rgba(0,0,0,.13); --surface:rgba(0,0,0,.045); --surface-strong:rgba(0,0,0,.11); --accent:#0066cc; }
+html,body { min-width:320px; }
+body { background:#050608 !important; background-image:none !important; color:var(--text); }
+html[data-theme="light"] body { background:#f5f5f7 !important; }
+:is(.page-container,.page-main-content,.page-main-content-middle,.first-screen-container) { background:transparent !important; }
+.page-container,body > main { position:relative; z-index:2; }
+[data-liquid-glass] { position:relative; }
+html body [data-glass-layer="surface"] { transform:none !important; transition:background-color 140ms ease,border-color 140ms ease; }
+.site-header { position:fixed !important; }
+.page-main-content-middle .main-content { padding:clamp(18px,3vw,38px); }
+:is(.liquid-button,.top-action,.header-link,button,input,select) { border-radius:16px; }
+:is(button,a,input,select):focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+@media(max-width:680px){
+ .site-header { left:12px !important; right:12px !important; }
+ #hero-title { font-size:clamp(2rem,9.5vw,2.5rem); line-height:1.18; }
+ .page-main-content-middle .main-content { padding:18px; }
+ .phase-columns > div { min-width:0; overflow-x:auto; }
+ .phase-row { grid-template-columns:minmax(62px,1fr) 45px 58px 58px !important; gap:4px !important; font-size:.58rem !important; }
+ .phase-row > * { min-width:0; overflow-wrap:anywhere; }
+ .hm-layout,.hm-layout > .card,.hm-wrap { min-width:0; max-width:100%; }
+ .hm-wrap { overflow-x:auto; }
+ .layout > .card { min-width:0; }
+}
