@@ -134,6 +134,8 @@ void main() {
   vec4 optics = u_optics[chosen];
   float surfaceFlag = u_flags[chosen];
   float depth = max(-chosenDistance, 0.0);
+  // Keep the whole reading area untouched, not just almost transparent.
+  if (depth > optics.y) { fragColor = vec4(0.0); return; }
 
   /* SDF normal. */
   float eps = 0.8;
@@ -174,7 +176,7 @@ void main() {
   float glare = directional * (1.0 - smoothstep(0.0, max(optics.w, 0.25), depth));
   glare *= (0.97 + 0.03 * sin(u_time * 0.42 + normalAngle * 1.9 + float(chosen) * 0.41)) * opticalEdgeMask;
 
-  /* Refraction is now local to the edge instead of spanning ~46 px inward. */
+  /* A narrow 5–8 CSS-pixel lens rim, independent of panel dimensions. */
   float refractField = 1.0 - smoothstep(0.8, max(optics.y, 2.0), depth);
   refractField = pow(refractField, 1.30) * opticalEdgeMask;
 
@@ -215,7 +217,7 @@ void main() {
     /* A small tangent-space aperture scatters actual lattice pixels at the
        lens edge. It vanishes toward the panel centre, where equations live. */
     vec2 tangent = vec2(-bendDir.y, bendDir.x);
-    vec2 aperture = tangent * (2.8 * refractField) * pxToUV;
+    vec2 aperture = tangent * (1.2 * refractField) * pxToUV;
     vec4 scatterA = texture(u_background, clamp(uvG + aperture, vec2(0.001), vec2(0.999)));
     vec4 scatterB = texture(u_background, clamp(uvG - aperture, vec2(0.001), vec2(0.999)));
     sampledAlpha = max(max(sampleR.a, sampleG.a), max(sampleB.a, max(scatterA.a, scatterB.a)));
@@ -255,7 +257,7 @@ void main() {
 
   /* Light mode has no glass body tint. Dark mode retains only a trace. */
   vec3 darkTint = vec3(0.025, 0.030, 0.038);
-  float darkTintStrength = (1.0 - u_theme) * 0.024;
+  float darkTintStrength = 0.0;
 
   vec3 color = refracted * refractedAlpha;
   color += darkTint * darkTintStrength;
@@ -378,11 +380,13 @@ class SharedGlassRenderer {
   private backgroundTexture: WebGLTexture;
   private pointerX = window.innerWidth * 0.72;
   private pointerY = window.innerHeight * 0.18;
+  private backgroundFrame = "";
+  private backgroundCanvas: HTMLCanvasElement | null = null;
 
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "lattice-shared-4";
+    canvas.dataset.opticsVersion = "lattice-live-5";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
     this.canvas = canvas;
@@ -491,24 +495,24 @@ class SharedGlassRenderer {
        * - buttons / compact controls: modest
        * - large teaching modules: visible but still local to the edge
        */
-      let refractionPx = 19.0;
-      let refractionRange = 28.0;
+      let refractionPx = window.innerWidth <= 700 ? 3.0 : 4.5;
+      let refractionRange = window.innerWidth <= 700 ? 6.0 : 8.0;
       let fresnelRange = 1.95;
       let glareRange = 1.18;
 
       if (element.matches(".site-header, .header-wrapper, .chapter-rail, .mobile-rail-toggle")) {
-        refractionPx = 10.0;
-        refractionRange = 18;
+        refractionPx = 3.0;
+        refractionRange = 6.0;
         fresnelRange = 1.05;
         glareRange = 0.64;
       } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls")) {
-        refractionPx = 8.0;
-        refractionRange = 10.3;
+        refractionPx = 2.5;
+        refractionRange = 5.0;
         fresnelRange = 1.30;
         glareRange = 0.82;
       } else if (element.matches(".source-note")) {
-        refractionPx = 6.9;
-        refractionRange = 11.8;
+        refractionPx = 2.5;
+        refractionRange = 5.0;
         fresnelRange = 1.40;
         glareRange = 0.88;
       }
@@ -538,15 +542,22 @@ class SharedGlassRenderer {
       backgroundCanvas.height > 1
     ) {
       try {
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(
-          gl.TEXTURE_2D,
-          0,
-          gl.RGBA,
-          gl.RGBA,
-          gl.UNSIGNED_BYTE,
-          backgroundCanvas
-        );
+        // Scrolling changes masks every frame, not the fixed wallpaper. Avoid
+        // uploading the same full-screen texture twice at 60/120 Hz.
+        const backgroundFrame = backgroundCanvas.dataset.wallpaperFrame;
+        if (!backgroundFrame || backgroundFrame !== this.backgroundFrame || backgroundCanvas !== this.backgroundCanvas) {
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+          gl.texImage2D(
+            gl.TEXTURE_2D,
+            0,
+            gl.RGBA,
+            gl.RGBA,
+            gl.UNSIGNED_BYTE,
+            backgroundCanvas
+          );
+          this.backgroundFrame = backgroundFrame || "";
+          this.backgroundCanvas = backgroundCanvas;
+        }
         hasBackground = 1;
       } catch {
         hasBackground = 0;
@@ -685,7 +696,6 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
     let frame = 0;
     let lastPaint = -Infinity;
     let scrollActiveUntil = 0;
-    let scrollTimer = 0;
     let disposed = false;
 
     const syncElements = () => {
@@ -713,22 +723,22 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
 
     const render = (timestamp: number) => {
       frame = 0;
-      if (disposed) return;
+      if (disposed || document.hidden) return;
       if (renderer) renderer.canvas.style.display = "block";
 
       if (renderer) {
         /*
-         * Normal animation is deliberately capped near 25 fps to limit the
+         * Normal animation is deliberately capped near 30 fps to limit the
          * full-screen texture upload cost. Scrolling is different: DOM
          * surfaces move on the compositor every frame, so their WebGL masks
          * must be sampled every frame too or a stale horizontal slice appears.
          */
         const scrolling = timestamp <= scrollActiveUntil;
-        if (renderer.canvas.style.visibility!=="hidden" && (motion.matches || scrolling || timestamp - lastPaint >= 40)) {
+        if (motion.matches || scrolling || timestamp - lastPaint >= 33) {
           lastPaint = timestamp;
           renderer.render(elements, motion.matches ? 0 : timestamp / 1000);
         }
-        if (!motion.matches) frame = requestAnimationFrame(render);
+        if (!motion.matches || scrolling) frame = requestAnimationFrame(render);
       }
     };
 
@@ -739,17 +749,13 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
     };
 
     const onScroll = () => {
-      scrollActiveUntil = performance.now() + 180;
-      // Compositor scrolling can advance before JS receives its new geometry.
-      // Native DOM glass stays attached; suppress stale fixed-canvas lens rims.
-      if(renderer)renderer.canvas.style.visibility="hidden";
-      window.clearTimeout(scrollTimer);
-      scrollTimer=window.setTimeout(()=>{
-        if(disposed)return;
-        renderer?.render(elements,motion.matches?0:performance.now()/1000);
-        if(renderer)renderer.canvas.style.visibility="visible";
-        if(!frame)frame=requestAnimationFrame(render);
-      },140);
+      const now = performance.now();
+      scrollActiveUntil = now + 180;
+      // Synchronize before this scroll event's paint. Do not hide the lens or
+      // debounce until scrolling stops; keep sampling DOM bounds each frame.
+      if (!document.hidden) renderer?.render(elements, motion.matches ? 0 : now / 1000);
+      lastPaint = now;
+      if (!frame) frame = requestAnimationFrame(render);
     };
 
     const onPointerMove = (event: PointerEvent) => {
@@ -768,6 +774,7 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
     window.visualViewport?.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     motion.addEventListener("change", schedule);
+    document.addEventListener("visibilitychange", schedule);
 
     syncElements();
     frame = requestAnimationFrame(render);
@@ -775,7 +782,6 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
     return () => {
       disposed = true;
       cancelAnimationFrame(frame);
-      window.clearTimeout(scrollTimer);
       mutation.disconnect();
       theme.disconnect();
       window.removeEventListener("resize", schedule);
@@ -784,6 +790,7 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
       window.visualViewport?.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointerMove);
       motion.removeEventListener("change", schedule);
+      document.removeEventListener("visibilitychange", schedule);
       document.querySelectorAll<HTMLElement>("[data-liquid-glass]").forEach((element) => {
         delete element.dataset.liquidGlass;
         delete element.dataset.glassLayer;

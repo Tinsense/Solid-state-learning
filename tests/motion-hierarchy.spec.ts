@@ -28,16 +28,38 @@ test("阅读与推导只有一层主要玻璃，嵌套内容不再重复模糊",
  expect(await page.locator('[data-glass-layer="surface"]').evaluateAll(elements=>elements.some(element=>!!element.parentElement?.closest('[data-glass-layer="surface"]')))).toBe(false);
 });
 
-test("滚动时不显示滞后的折射遮罩，停稳后几何与模块同步",async({page})=>{
+test("连续滚动时折射始终可见，移动模块逐帧对齐且折射限制在窄边缘",async({page})=>{
  await page.goto("/?chapter=6");
  const canvas=page.locator(".studio-glass-shared-canvas");
  await expect(canvas).toBeVisible();
- const scrollingVisibility=await page.evaluate(()=>{
-  window.scrollTo({top:800,behavior:"instant"});window.dispatchEvent(new Event("scroll"));
-  return document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!.style.visibility;
- });
- expect(scrollingVisibility).toBe("hidden");
- await expect(canvas).toBeVisible();
+ for(const reducedMotion of ["no-preference","reduce"] as const){
+  await page.emulateMedia({reducedMotion});
+  const frames=await page.evaluate(async()=>{
+   const canvas=document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!;
+   const gl=canvas.getContext("webgl2")!;
+   const samples=[];
+   for(let step=0;step<24;step++){
+    window.scrollTo({top:40+step*9,behavior:"instant"});
+    await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
+    const program=gl.getParameter(gl.CURRENT_PROGRAM);
+    const count=gl.getUniform(program,gl.getUniformLocation(program,"u_count"));
+    const rects=Array.from({length:count},(_,i)=>Array.from(gl.getUniform(program,gl.getUniformLocation(program,`u_rects[${i}]`)) as Float32Array)).flat();
+    const optics=Array.from({length:count},(_,i)=>Array.from(gl.getUniform(program,gl.getUniformLocation(program,`u_optics[${i}]`)) as Float32Array)).flat();
+    const rect=document.querySelector(".hero-module")!.getBoundingClientRect();
+    const expected=[rect.left,rect.top,rect.width,rect.height];
+    let error=Infinity;
+    for(let i=0;i<count;i++)error=Math.min(error,Math.max(...expected.map((value,j)=>Math.abs(value-rects[4*i+j]))));
+    samples.push({error,visibility:getComputedStyle(canvas).visibility,range:Math.max(...optics.filter((_,i)=>i%4===1)),y:rect.top});
+   }
+   return samples;
+  });
+  expect(frames.at(-1)!.y).toBeLessThan(frames[0].y-100);
+  for(const sample of frames){
+   expect(sample.visibility).toBe("visible");
+   expect(sample.error).toBeLessThan(.3);
+   expect(sample.range).toBeLessThanOrEqual(8);
+  }
+ }
  const values=await page.evaluate(()=>{
   const canvas=document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!;
   const gl=canvas.getContext("webgl2")!;

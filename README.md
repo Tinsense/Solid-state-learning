@@ -17,7 +17,7 @@
 
 WebGL2 用圆角距离场计算边缘法线，采样背景画布完成折射、边缘散射和轻微色散；原生 backdrop-filter 对模块下面的实际 DOM 内容进行模糊。WebGL 并未截图或折射任意 DOM，也不是原生 iOS 的光学实现。无 WebGL2 时退化为透明毛玻璃，减少动态效果设置会停止背景动画。
 
-阅读或实验单元采用一层主要光学表面；其内的公式、按钮、来源说明不会再重复模糊和投影。快速滚动期间暂时隐藏固定画布上的折射边缘，保留随 DOM 合成的毛玻璃，停稳 140 ms 后先校准几何再恢复折射，以避免浏览器合成滚动与 JS 画布之间的错位。固定目录与顶部栏的光学优先级高于正文。
+阅读或实验单元采用一层主要光学表面；其内的公式、按钮、来源说明不会再重复模糊和投影。正文折射带限制为手机 6 CSS px、桌面 8 CSS px，内部不绘制额外光学遮罩。滚动事件立即更新几何，滚动期间逐帧跟随，不隐藏折射或等待停稳；背景纹理仅在壁纸帧更新时上传。固定目录与顶部栏的光学优先级高于正文。
 
 章节切换使用同页路由，支持浏览器前进/后退。手机目录保持正文亮度，主题、学习进度保存在本地。KaTeX 和字体随网站打包，不依赖外部公式 CDN。
 
@@ -53,6 +53,6 @@ main 分支推送后由 GitHub Actions 构建并发布到 https://tinsense.githu
 
 学习站、个人主页和独立工具共用 src/lib/glassEngine.ts、src/lib/latticeWallpaper.ts 和 src/styles/shared-material.css。设置 SITE_REPO 为 Tinsense.github.io 本地仓库路径后，运行 node scripts/build-shared-sites.mjs 生成该站的 js/site-glass.js 与 css/site-glass.css，再提交两个仓库。不要单独编辑生成文件。scripts/check-material-parity.mjs 对照两站的着色器源码、透明度、模糊和圆角，并保存明暗主题截图。
 
-跨章节导航位于顶部玻璃菜单，支持全部 22 章、方向键、Home/End 与 Escape；侧栏只列本章内容。共享壁纸以透视旋转的离子点阵、低饱和光场和稀疏波纹显示玻璃边缘折射，遵循减少动态效果设置，后台标签页暂停动画。高光随背景取样的亮度和色彩变化，采用统一圆角和克制的边缘反射，参照 Apple Liquid Glass 设计方向而非原生系统材质的像素级复制。WebGL 对壁纸取样折射，DOM 后方内容由 backdrop-filter 散射；这不是对任意网页元素进行光线追踪。
+跨章节导航位于顶部玻璃菜单，支持全部 22 章、方向键、Home/End 与 Escape；侧栏只列本章内容。共享壁纸为 50 节点的稀疏旋转离子晶格和低饱和光场，不叠加波纹或光晕，阅读中心对比度更低。遵循减少动态效果设置，后台标签页暂停动画。高光随背景取样的亮度和色彩变化，采用统一圆角和克制的边缘反射，参照 Apple Liquid Glass 设计方向而非原生系统材质的像素级复制。WebGL 对壁纸取样折射，DOM 后方内容由 backdrop-filter 散射；这不是对任意网页元素进行光线追踪。
 
 光学设计参考 Liquid Glass Studio（MIT）：https://github.com/iyinchao/liquid-glass-studio 。按其许可保留项目内已有版权声明；本站实现针对长文阅读和移动设备做了性能、对比度和动画限制。

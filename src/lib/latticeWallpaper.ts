@@ -3,7 +3,7 @@ export function startLatticeWallpaper(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext("2d", {alpha:false});
   if (!ctx) return () => {};
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
-  let width=0,height=0,frame=0,last=-Infinity;
+  let width=0,height=0,frame=0,last=-Infinity,revision=0;
   const resize=()=>{
     width=innerWidth;height=innerHeight;
     const dpr=Math.min(devicePixelRatio||1,1.5);
@@ -27,26 +27,26 @@ export function startLatticeWallpaper(canvas: HTMLCanvasElement) {
       const x=width*(.5+.46*Math.cos(phase));
       const y=height*(.5+.4*Math.sin(phase));
       const glow=ctx.createRadialGradient(x,y,0,x,y,Math.max(width,height)*.65);
-      glow.addColorStop(0,`hsla(${hues[k]},35%,${light?72:49}%,${light?.25:.15})`);
+      glow.addColorStop(0,`hsla(${hues[k]},30%,${light?72:49}%,${light?.18:.11})`);
       glow.addColorStop(1,`hsla(${hues[k]},35%,50%,0)`);
       ctx.fillStyle=glow;ctx.fillRect(0,0,width,height);
     }
-    const count=9,depth=3,step=Math.max(width/8,height/7);
-    const yaw=.34+time*.035,tilt=.3+.12*Math.sin(time*.027),roll=-.16;
+    const count=5,depth=2,step=Math.max(width/4.5,height/4.5);
+    const yaw=.34+time*.02,tilt=.3+.09*Math.sin(time*.02),roll=-.16;
     const cy=Math.cos(yaw),sy=Math.sin(yaw),ct=Math.cos(tilt),st=Math.sin(tilt);
     const cr=Math.cos(roll),sr=Math.sin(roll),camera=step*16;
     type Node={x:number;y:number;z:number;scale:number;alpha:number;parity:number;hue:number};
     const nodes:Node[]=[];
     const index=(i:number,j:number,k:number)=>(k*count+j)*count+i;
     for(let k=0;k<depth;k++)for(let j=0;j<count;j++)for(let i=0;i<count;i++){
-      const x0=(i-4)*step,y0=(j-4)*step,z0=(k-1)*step;
+      const x0=(i-2)*step,y0=(j-2)*step,z0=(k-.5)*step;
       const x1=x0*cy+z0*sy,z1=-x0*sy+z0*cy;
       const y1=y0*ct-z1*st,z=y0*st+z1*ct;
       const scale=camera/(camera-z);
       const x=width*.52+(x1*cr-y1*sr)*scale;
       const y=height*.51+(x1*sr+y1*cr)*scale;
       const edge=Math.min(1,Math.abs(x-width*.5)/(width*.5));
-      nodes.push({x,y,z,scale,alpha:(.48+.3*edge)*Math.min(1.2,scale),parity:(i+j+k)%2,hue:hues[(i+2*j+k)%hues.length]});
+      nodes.push({x,y,z,scale,alpha:(.24+.32*edge)*Math.min(1.2,scale),parity:(i+j+k)%2,hue:hues[(i+2*j+k)%hues.length]});
     }
     const bonds:{a:Node;b:Node}[]=[];
     for(let k=0;k<depth;k++)for(let j=0;j<count;j++)for(let i=0;i<count;i++){
@@ -57,32 +57,21 @@ export function startLatticeWallpaper(canvas: HTMLCanvasElement) {
     }
     bonds.sort((a,b)=>a.a.z+a.b.z-b.a.z-b.b.z);
     for(const {a,b} of bonds){
-      ctx.strokeStyle=`hsla(${a.hue},20%,${light?40:76}%,${(a.alpha+b.alpha)*(light?.065:.075)})`;
+      ctx.strokeStyle=`hsla(${a.hue},20%,${light?40:76}%,${(a.alpha+b.alpha)*(light?.045:.05)})`;
       ctx.lineWidth=Math.max(.6,(a.scale+b.scale)*.4);
       ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
     }
     for(const p of [...nodes].sort((a,b)=>a.z-b.z)){
-      const radius=(p.parity?3.3:5.1)*p.scale;
+      const radius=(p.parity?2.4:3.6)*p.scale;
       if(p.x < -radius*3||p.x>width+radius*3||p.y < -radius*3||p.y>height+radius*3)continue;
-      ctx.fillStyle=`hsla(${p.hue},30%,${light?44:74}%,${p.alpha*.055})`;
-      ctx.beginPath();ctx.arc(p.x,p.y,radius*2.5,0,Math.PI*2);ctx.fill();
       const sphere=ctx.createRadialGradient(p.x-radius*.28,p.y-radius*.35,.1,p.x,p.y,radius);
       sphere.addColorStop(0,`hsla(${p.hue},25%,${light?73:88}%,${p.alpha*.78})`);
       sphere.addColorStop(1,`hsla(${p.hue},25%,${light?34:57}%,${p.alpha*.55})`);
       ctx.fillStyle=sphere;ctx.beginPath();ctx.arc(p.x,p.y,radius,0,Math.PI*2);ctx.fill();
     }
-    // Sparse wavefronts leave the reading area calm; their movement also
-    // makes the shared glass shader's refracted samples easy to compare.
-    for(let k=0;k<3;k++){
-      ctx.beginPath();
-      for(let x=-10;x<=width+10;x+=8){
-        const y=height*.54+k*29+49*Math.sin(x*.006-time*.22)+17*Math.sin(x*.012-time*.14);
-        if(x===-10)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-      }
-      ctx.strokeStyle=`hsla(${hues[k]},25%,${light?40:76}%,${light?.09:.12})`;
-      ctx.lineWidth=k===1?1.6:.8;ctx.stroke();
-    }
-    canvas.dataset.wallpaperVersion="rotating-lattice-5";
+    // No wave overlay or atom halos: one sparse lattice is enough.
+    canvas.dataset.wallpaperVersion="quiet-lattice-6";
+    canvas.dataset.wallpaperFrame=String(++revision);
     if(!motion.matches)frame=requestAnimationFrame(draw);
   };
   const refresh=()=>{cancelAnimationFrame(frame);resize();last=-Infinity;frame=requestAnimationFrame(draw);};

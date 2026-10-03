@@ -28,7 +28,7 @@ test("玻璃章节菜单支持键盘、同页切章，侧栏只含本章目录",
 test("壁纸真实变化，减少动态效果时冻结",async({page})=>{
  await page.goto("/");
  const canvas=page.locator("canvas.lattice-atmosphere");
- await expect(canvas).toHaveAttribute("data-wallpaper-version","rotating-lattice-5");
+ await expect(canvas).toHaveAttribute("data-wallpaper-version","quiet-lattice-6");
  const sample=()=>canvas.evaluate(el=>{
   const canvas=el as HTMLCanvasElement;
   const data=canvas.getContext("2d")!.getImageData(0,0,canvas.width,canvas.height).data;
