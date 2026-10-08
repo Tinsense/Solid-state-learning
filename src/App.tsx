@@ -88,11 +88,11 @@ function ChapterThreeApp() {
     <>
       <LatticeAtmosphere />
       <header className="site-header liquid-panel">
+        <ChapterSwitcher current={3} compact/>
         <button className="brand" type="button" onClick={() => go("overview")} aria-label="返回章首页">
           <span className="brand-glyph" aria-hidden="true"><i/><i/><i/><i/></span>
           <span><strong>晶格</strong><small>KITTEL · CHAPTER 03</small></span>
         </button>
-        <ChapterSwitcher current={3} compact/>
         <div className="chapter-title"><span>03</span><p>Crystal Binding<br/>and Elastic Constants</p></div>
         <div className="header-actions">
           <button className="top-action" type="button" onClick={() => setSearchOpen(true)} aria-label="搜索知识点"><Icon name="search"/><span>搜索</span><kbd>⌘ K</kbd></button>

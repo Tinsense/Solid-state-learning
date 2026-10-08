@@ -1,12 +1,12 @@
 /* Canonical material: imported by the course and built into every other site. */
 :root {
- --material-fill:rgba(7,8,10,.10); --material-border:rgba(235,242,255,.11);
- --material-frost:blur(11px) saturate(108%); --material-shadow:0 12px 36px rgba(0,0,0,.12);
+ --material-fill:rgba(7,8,10,.10); --material-border:rgba(235,242,255,.17);
+ --material-frost:blur(7px) saturate(110%); --material-shadow:0 12px 36px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.055);
  --material-radius:24px; --material-control-radius:16px;
 }
 :root[data-theme="light"] {
- --material-fill:rgba(255,255,255,.10); --material-border:rgba(28,38,48,.10);
- --material-frost:blur(6.5px) saturate(106%); --material-shadow:0 12px 36px rgba(30,40,55,.045);
+ --material-fill:rgba(255,255,255,.10); --material-border:rgba(255,255,255,.42);
+ --material-frost:blur(5px) saturate(108%); --material-shadow:0 12px 36px rgba(30,40,55,.055),inset 0 1px 0 rgba(255,255,255,.18);
 }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"] {
  background:var(--material-fill) !important; background-image:none !important;

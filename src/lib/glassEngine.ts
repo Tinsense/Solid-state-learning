@@ -251,8 +251,8 @@ void main() {
   /* Small range, clean specular response. */
   float environmentLuma = dot(environment, vec3(0.2126, 0.7152, 0.0722));
   vec3 reflectedLight = mix(vec3(1.0), environment, 0.16);
-  vec3 highlight = reflectedLight * fresnel * mix(0.052, 0.025, environmentLuma);
-  highlight += reflectedLight * glare * mix(0.115, 0.052, environmentLuma);
+  vec3 highlight = reflectedLight * fresnel * mix(0.085, 0.038, environmentLuma);
+  highlight += reflectedLight * glare * mix(0.16, 0.075, environmentLuma);
   highlight += rimDispersion * fresnel * (0.0045 + 0.0080 * glare);
 
   /* Light mode has no glass body tint. Dark mode retains only a trace. */
@@ -386,7 +386,7 @@ class SharedGlassRenderer {
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "lattice-live-5";
+    canvas.dataset.opticsVersion = "crystal-glass-6";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
     this.canvas = canvas;
@@ -734,11 +734,12 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
          * must be sampled every frame too or a stale horizontal slice appears.
          */
         const scrolling = timestamp <= scrollActiveUntil;
-        if (motion.matches || scrolling || timestamp - lastPaint >= 33) {
+        const animating = elements.some(element=>element.matches(".chapter-menu")&&element.getAnimations().some(animation=>animation.playState==="running"));
+        if (motion.matches || scrolling || animating || timestamp - lastPaint >= 33) {
           lastPaint = timestamp;
           renderer.render(elements, motion.matches ? 0 : timestamp / 1000);
         }
-        if (!motion.matches || scrolling) frame = requestAnimationFrame(render);
+        if (!motion.matches || scrolling || animating) frame = requestAnimationFrame(render);
       }
     };
 

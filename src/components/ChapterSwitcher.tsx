@@ -6,29 +6,35 @@ const labels=["晶体结构","衍射与倒格子","晶体结合","晶格振动",
 const groups=[{label:"结构与晶格",start:0,end:5},{label:"电子与超导",start:5,end:10},{label:"磁性、光学与介电",start:10,end:16},{label:"低维、无序与缺陷",start:16,end:22}];
 
 export function ChapterSwitcher({current,compact=false}:{current:number;compact?:boolean}) {
-  const [open,setOpen]=useState(false);
+  const [open,setOpen]=useState(false),[closing,setClosing]=useState(false);
+  const closeTimer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
   const trigger=useRef<HTMLButtonElement>(null),panel=useRef<HTMLElement>(null);
   const id=useId();
-  const [left,setLeft]=useState(250);
-  useEffect(()=>setOpen(false),[current]);
+  useEffect(()=>{setOpen(false);setClosing(false);clearTimeout(closeTimer.current);},[current]);
+  useEffect(()=>()=>clearTimeout(closeTimer.current),[]);
+  const close=()=>{
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches){setOpen(false);return;}
+    setClosing(true);clearTimeout(closeTimer.current);
+    closeTimer.current=setTimeout(()=>{setOpen(false);setClosing(false);},180);
+  };
   useEffect(()=>{
     if(!open)return;
-    const align=()=>setLeft(Math.max(16,Math.min(trigger.current?.getBoundingClientRect().left??250,innerWidth-556)));
-    align();addEventListener("resize",align);
     const previousOverflow=document.documentElement.style.overflowY;
     document.documentElement.style.overflowY="hidden";
     const background=[...document.querySelectorAll<HTMLElement>("#root > *, .studio-glass-shared-canvas")].filter(el=>!el.matches(".studio-glass-shared-canvas,.lattice-atmosphere"));
     const inert=background.map(el=>el.inert);background.forEach(el=>el.inert=true);
-    panel.current?.querySelector<HTMLElement>('[aria-current="page"]')?.focus({preventScroll:true});
+    const active=panel.current?.querySelector<HTMLElement>('[aria-current="page"]');
+    active?.focus({preventScroll:true});
+    const list=panel.current?.querySelector<HTMLElement>("nav");
+    if(active&&list)list.scrollTop=Math.max(0,active.offsetTop-list.offsetTop-list.clientHeight/2);
     return()=>{
-      removeEventListener("resize",align);
       document.documentElement.style.overflowY=previousOverflow;
       background.forEach((el,i)=>el.inert=inert[i]);
       trigger.current?.focus({preventScroll:true});
     };
   },[open]);
   const keyboard=(event:KeyboardEvent<HTMLElement>)=>{
-    if(event.key==="Escape"){event.preventDefault();setOpen(false);return;}
+    if(event.key==="Escape"){event.preventDefault();close();return;}
     const items=[...panel.current!.querySelectorAll<HTMLElement>("button,a[href]")];
     const index=items.indexOf(document.activeElement as HTMLElement);
     if(event.key==="Tab"){
@@ -45,11 +51,11 @@ export function ChapterSwitcher({current,compact=false}:{current:number;compact?
   };
   return <div className={"chapter-picker "+(compact?"is-compact":"")}>
     <button ref={trigger} type="button" className="chapter-menu-trigger" aria-label={`切换章节，当前第 ${current} 章`} aria-haspopup="dialog" aria-expanded={open} aria-controls={id} onClick={()=>setOpen(!open)}>
-      <span className="chapter-trigger-number">{String(current).padStart(2,"0")}</span><span className="chapter-trigger-label">{labels[current-1]}</span><span className="chapter-trigger-mobile">切换章节</span><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="m5 7 5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.5"/></svg>
+      <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg><span>总目录</span>
     </button>
-    {open&&createPortal(<><div className="chapter-menu-scrim" onClick={()=>setOpen(false)} aria-hidden="true"/>
-      <section ref={panel} id={id} className="chapter-menu" role="dialog" aria-modal="true" aria-labelledby={id+"-title"} style={{left}} onKeyDown={keyboard}>
-        <div className="chapter-menu-heading"><div><span>EXPLORE KITTEL</span><h2 id={id+"-title"}>选择学习章节</h2></div><button type="button" aria-label="关闭章节切换菜单" onClick={()=>setOpen(false)}>×</button></div>
+    {open&&createPortal(<><div className="chapter-menu-scrim" onClick={close} aria-hidden="true"/>
+      <section ref={panel} id={id} className={`chapter-menu ${closing?"is-closing":""}`} role="dialog" aria-modal="true" aria-labelledby={id+"-title"} onKeyDown={keyboard}>
+        <div className="chapter-menu-heading"><div><span>EXPLORE KITTEL · 全部 22 章</span><h2 id={id+"-title"}>选择学习章节</h2></div><button type="button" aria-label="关闭章节切换菜单" onClick={close}>×</button></div>
         <nav className="chapter-menu-list" aria-label="全部 22 章">{groups.map(group=><section className="chapter-menu-group" key={group.label}><h3>{group.label}<span>{String(group.start+1).padStart(2,"0")}—{group.end}</span></h3><div>{labels.slice(group.start,group.end).map((label,index)=>{const chapter=group.start+index+1;return <a key={chapter} href={chapterHref(chapter)} aria-current={current===chapter?"page":undefined} onClick={event=>change(event,chapter)}><span>{String(chapter).padStart(2,"0")}</span><strong>{label}</strong>{current===chapter&&<i aria-hidden="true">✓</i>}</a>;})}</div></section>)}</nav>
       </section></>,document.body)}
   </div>;
