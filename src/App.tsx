@@ -8,12 +8,13 @@ import { BondingStage, DensityBonding, ElasticConstantsLab, ElasticWaveExplorer,
 import { LatticeAtmosphere } from "./components/LatticeAtmosphere";
 import { useLiquidGlassSystem } from "./lib/liquidGlass";
 import { ChapterSwitcher } from "./components/ChapterSwitcher";
-import { CHAPTER_CHANGE_EVENT, readChapter, sectionScrollBehavior } from "./lib/chapterNavigation";
+import { cancelChapterNavigation, CHAPTER_CHANGE_EVENT, readChapter, sectionScrollBehavior } from "./lib/chapterNavigation";
 import { EquationAtlas } from "./components/EquationAtlas";
 import { ScientificDeepDive } from "./components/ScientificLearning";
 import { chapterEnhancements } from "./content/chapterEnhancements";
 import { useChapterDrawer } from "./lib/chapterDrawer";
-const CompanionRoute=lazy(()=>import("./components/CompanionRoute"));
+import { loadCompanionRoute, loadedCompanionRoute } from "./lib/chapterRouteLoader";
+const CompanionRoute=lazy(loadCompanionRoute);
 
 const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "arrow" }) => {
   const paths = {
@@ -30,7 +31,6 @@ const Icon = ({ name }: { name: "sun" | "moon" | "menu" | "search" | "close" | "
 const prose = (items: string[]) => <div className="prose">{items.map((text) => <p key={text}>{text}</p>)}</div>;
 
 function ChapterThreeApp() {
-  useLiquidGlassSystem();
   const [theme, setTheme] = useState<"dark" | "light">(() => (localStorage.getItem("kittel-theme") as "dark" | "light") || "dark");
   const [active, setActive] = useState("overview");
   const [railOpen, setRailOpen] = useState(false);
@@ -86,7 +86,6 @@ function ChapterThreeApp() {
 
   return (
     <>
-      <LatticeAtmosphere />
       <header className="site-header glass-toolbar">
         <ChapterSwitcher current={3} compact/>
         <button className="brand" type="button" onClick={() => go("overview")} aria-label="返回章首页">
@@ -212,18 +211,20 @@ function ChapterThreeApp() {
 }
 
 function App() {
+  useLiquidGlassSystem();
   const [requested, setRequested] = useState(readChapter);
   const [routeKey, setRouteKey] = useState(0);
   useEffect(() => {
-    const update = () => { setRequested(readChapter()); setRouteKey(value => value + 1); window.scrollTo({ top: 0, behavior: "instant" }); };
+    const update = (event:Event) => { if(event.type==="popstate")cancelChapterNavigation();setRequested(readChapter()); setRouteKey(value => value + 1); window.scrollTo({ top: 0, behavior: "instant" }); };
     window.addEventListener("popstate", update);
     window.addEventListener(CHAPTER_CHANGE_EVENT, update);
     return () => { window.removeEventListener("popstate", update); window.removeEventListener(CHAPTER_CHANGE_EVENT, update); };
   }, []);
   if (requested !== 3) {
-    return <Suspense fallback={<main className="section-shell"><p role="status">正在载入本章课程…</p></main>}><CompanionRoute key={requested+"-"+routeKey} chapter={requested}/></Suspense>;
+    const Route=loadedCompanionRoute()?.default??CompanionRoute;
+    return <><LatticeAtmosphere/><Suspense fallback={<main className="section-shell"><p role="status">正在载入本章课程…</p></main>}><Route key={requested+"-"+routeKey} chapter={requested}/></Suspense></>;
   }
-  return <Fragment key={`3-${routeKey}`}><ChapterThreeApp/></Fragment>;
+  return <><LatticeAtmosphere/><Fragment key={`3-${routeKey}`}><ChapterThreeApp/></Fragment></>;
 }
 
 export default App;

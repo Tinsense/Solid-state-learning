@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("圆角玻璃在四个方向连续折射同一背景，内部与外部保持透明", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-11");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-12");
   const result = await page.evaluate(() => {
     const live = document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!.getContext("webgl2")!;
     const current = live.getParameter(live.CURRENT_PROGRAM) as WebGLProgram;
@@ -110,7 +110,7 @@ test("圆角玻璃在四个方向连续折射同一背景，内部与外部保�
 
 test("小控件保留清晰中心，折射区使用与模块中央相同的模糊参数",async({page})=>{
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-11");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-12");
   for(const theme of ["light","dark"]){
     await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
     await page.waitForTimeout(120);

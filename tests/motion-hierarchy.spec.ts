@@ -32,6 +32,7 @@ test("连续滚动时折射逐帧对齐，加宽透镜仍不覆盖正文中心",
  await page.goto("/?chapter=6");
  const canvas=page.locator(".studio-glass-shared-canvas");
  await expect(canvas).toBeVisible();
+ await expect(page.locator(".hero-module")).toBeVisible();
  for(const reducedMotion of ["no-preference","reduce"] as const){
   await page.emulateMedia({reducedMotion});
   const frames=await page.evaluate(async()=>{

@@ -272,8 +272,8 @@ void main() {
   vec3 reflectedLight = mix(vec3(1.0), environment, 0.32);
   float incident = 0.22 + 0.78 * pow(max(dot(normal, lightDir), 0.0), 2.0);
   float compactGlint = surfaceFlag == 3.0 ? 1.45 : 1.0;
-  vec3 highlight = reflectedLight * fresnel * incident * mix(0.036, 0.019, environmentLuma) * compactGlint;
-  highlight += reflectedLight * glare * mix(0.067, 0.040, environmentLuma) * compactGlint;
+  vec3 highlight = reflectedLight * fresnel * incident * mix(0.052, 0.035, environmentLuma) * compactGlint;
+  highlight += reflectedLight * glare * mix(0.18, 0.12, environmentLuma) * compactGlint;
 
   /* Light mode has no glass body tint. Dark mode retains only a trace. */
   vec3 darkTint = vec3(0.025, 0.030, 0.038);
@@ -283,7 +283,7 @@ void main() {
   color += darkTint * darkTintStrength;
   color += highlight;
 
-  float edgeAlpha = fresnel * incident * mix(0.014, 0.008, u_theme) + glare * mix(0.026, 0.018, u_theme);
+  float edgeAlpha = fresnel * incident * mix(0.020, 0.014, u_theme) + glare * mix(0.09, 0.065, u_theme) * compactGlint;
   float alpha = refractedAlpha + darkTintStrength * 0.45 + edgeAlpha;
   /* Keep premultiplied RGB and alpha together, including subpixel coverage.
      Clamping only alpha made the rounded lens shoulder falsely brighten. */
@@ -407,7 +407,7 @@ class SharedGlassRenderer {
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "crystal-glass-11";
+    canvas.dataset.opticsVersion = "crystal-glass-12";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
     this.canvas = canvas;

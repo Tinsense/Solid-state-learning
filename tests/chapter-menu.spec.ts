@@ -31,9 +31,9 @@ test("玻璃章节菜单支持键盘、同页切章，侧栏只含本章目录",
 test("壁纸真实变化，减少动态效果时冻结",async({page})=>{
  await page.goto("/");
  const canvas=page.locator("canvas.lattice-atmosphere");
- await expect(canvas).toHaveAttribute("data-wallpaper-version","crystal-planes-11");
+ await expect(canvas).toHaveAttribute("data-wallpaper-version","orbital-point-cloud-12");
  await expect(canvas).toHaveAttribute("data-wallpaper-loaded","true");
- await expect(canvas).toHaveAttribute("data-crystal-cells","diamond,hcp");
+ expect(Number(await canvas.getAttribute("data-particle-count"))).toBeGreaterThan(10000);
  const sample=()=>canvas.evaluate(el=>{
   const canvas=el as HTMLCanvasElement;
   const data=canvas.getContext("2d")!.getImageData(0,0,canvas.width,canvas.height).data;
@@ -74,6 +74,10 @@ test("总目录从左向右滑出，减少动态效果时直接打开",async({pa
  await page.goto("/");
  await page.getByRole("button",{name:/切换章节，当前/}).click();
  const samples=await page.evaluate(async()=>{
+  // Start the actual CSS animation at a known time; browser automation may
+  // return from click after most of a fast entrance has already elapsed.
+  const entrance=document.querySelector(".chapter-menu")!.getAnimations()[0];
+  entrance.currentTime=0;entrance.play();
   const points=[];
   for(let i=0;i<20;i++){
    await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));

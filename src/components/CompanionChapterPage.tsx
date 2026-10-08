@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import type { CompanionChapter } from "../content/companionChapters";
-import { useLiquidGlassSystem } from "../lib/liquidGlass";
 import { ChapterSwitcher } from "./ChapterSwitcher";
 import { EquationAtlas } from "./EquationAtlas";
 import { AdvancedExperiment } from "./AdvancedExperiment";
@@ -8,7 +7,6 @@ import { CompanionFigure } from "./CompanionFigures";
 import { Derivation } from "./Derivation";
 import { FormulaCard, RichText } from "./Formula";
 import { ConceptCheck, Exercise, ReadingCallout, SectionHeader, SourceNote } from "./Learning";
-import { LatticeAtmosphere } from "./LatticeAtmosphere";
 import { ScientificDeepDive } from "./ScientificLearning";
 import { chapterDepth } from "../content/chapterDepth";
 import { chapterEnhancements } from "../content/chapterEnhancements";
@@ -19,7 +17,6 @@ import { sectionScrollBehavior } from "../lib/chapterNavigation";
 const ThemeIcon = ({ dark }: { dark: boolean }) => <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">{dark ? <><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2m0 16v2M4.9 4.9l1.5 1.5m11.2 11.2 1.5 1.5M2 12h2m16 0h2M4.9 19.1l1.5-1.5m11.2-11.2 1.5-1.5"/></> : <path d="M20 15.6A8.5 8.5 0 0 1 8.4 4 8.5 8.5 0 1 0 20 15.6Z"/>}</svg>;
 
 export function CompanionChapterPage({ chapter }: { chapter: CompanionChapter }) {
-  useLiquidGlassSystem();
   const [theme, setTheme] = useState<"dark"|"light">(()=>(localStorage.getItem("kittel-theme") as "dark"|"light")||"dark");
   const [active,setActive]=useState("overview");
   const [railOpen,setRailOpen]=useState(false);
@@ -39,7 +36,6 @@ export function CompanionChapterPage({ chapter }: { chapter: CompanionChapter })
   const exerciseIndex=String(chapter.units.length+1).padStart(2,"0");
 
   return <>
-    <LatticeAtmosphere/>
     <header className="site-header companion-header glass-toolbar">
       <ChapterSwitcher current={chapter.number} compact/>
       <button className="brand" type="button" onClick={()=>go("overview")} aria-label="返回本章首页"><span className="brand-glyph" aria-hidden="true"><i/><i/><i/><i/></span><span><strong>晶格</strong><small>KITTEL · CHAPTER {String(chapter.number).padStart(2,"0")}</small></span></button>
