@@ -176,9 +176,9 @@ void main() {
   float glare = directional * (1.0 - smoothstep(0.0, max(optics.w, 0.25), depth));
   glare *= (0.97 + 0.03 * sin(u_time * 0.42 + normalAngle * 1.9 + float(chosen) * 0.41)) * opticalEdgeMask;
 
-  /* A narrow 5–8 CSS-pixel lens rim, independent of panel dimensions. */
-  float refractField = 1.0 - smoothstep(0.8, max(optics.y, 2.0), depth);
-  refractField = pow(refractField, 1.30) * opticalEdgeMask;
+  /* A compact lens shoulder, with a strong bend immediately inside the rim. */
+  float refractField = 1.0 - smoothstep(0.0, max(optics.y, 2.0), depth);
+  refractField = pow(refractField, 1.65) * opticalEdgeMask;
 
   float refractionPx = optics.x * refractField;
   vec2 pxToUV = vec2(1.0 / max(u_viewport.x, 1.0), 1.0 / max(u_viewport.y, 1.0));
@@ -203,7 +203,7 @@ void main() {
      * background positions, so the split is visible on lattice lines/atoms
      * without creating a synthetic coloured outline around empty glass.
      */
-    float dispersionPx = min(1.15, optics.x * 0.055) * refractField;
+    float dispersionPx = min(0.95, optics.x * 0.065) * refractField;
     vec2 dispersionUV = bendDir * dispersionPx * pxToUV;
 
     vec2 uvR = clamp(baseUV + refractionUV * 1.035 + dispersionUV, vec2(0.001), vec2(0.999));
@@ -217,7 +217,7 @@ void main() {
     /* A small tangent-space aperture scatters actual lattice pixels at the
        lens edge. It vanishes toward the panel centre, where equations live. */
     vec2 tangent = vec2(-bendDir.y, bendDir.x);
-    vec2 aperture = tangent * (1.2 * refractField) * pxToUV;
+    vec2 aperture = tangent * (1.6 * refractField) * pxToUV;
     vec4 scatterA = texture(u_background, clamp(uvG + aperture, vec2(0.001), vec2(0.999)));
     vec4 scatterB = texture(u_background, clamp(uvG - aperture, vec2(0.001), vec2(0.999)));
     sampledAlpha = max(max(sampleR.a, sampleG.a), max(sampleB.a, max(scatterA.a, scatterB.a)));
@@ -234,7 +234,7 @@ void main() {
        R/G/B samples; neutral grey areas remain neutral. */
     float neutral = dot(separatedRGB, vec3(0.299, 0.587, 0.114));
     vec3 scattered = (scatterA.rgb + scatterB.rgb) * 0.5;
-    refracted = clamp(mix(mix(vec3(neutral), separatedRGB, 1.05), scattered, 0.32 * refractField), 0.0, 1.0);
+    refracted = clamp(mix(mix(vec3(neutral), separatedRGB, 1.08), scattered, 0.18 * refractField), 0.0, 1.0);
   }
 
   /*
@@ -242,18 +242,20 @@ void main() {
    * contribute ZERO refracted alpha. Previously only RGB was alpha-gated, so
    * transparent black pixels still produced a broad grey/black optical band.
    */
-  float refractedAlpha = u_hasBackground * refractField * sampledAlpha * mix(0.58, 0.52, u_theme);
+  /* Flat areas remain almost invisible; an actual displaced line or colour
+     patch produces the stronger optical response. */
+  float displacedDetail = clamp(length(refracted - environment) * 2.9, 0.0, 0.57);
+  float refractedAlpha = u_hasBackground * refractField * sampledAlpha * (0.22 + displacedDetail);
 
   vec3 cool = vec3(0.42, 0.69, 1.00);
   vec3 warm = vec3(1.00, 0.80, 0.48);
-  vec3 rimDispersion = mix(cool, warm, clamp(0.5 + normal.x * 0.42, 0.0, 1.0));
-
-  /* Small range, clean specular response. */
+  /* The thin reflection follows local environment luminance and surface
+     orientation. No painted white side stripe or coloured outline. */
   float environmentLuma = dot(environment, vec3(0.2126, 0.7152, 0.0722));
-  vec3 reflectedLight = mix(vec3(1.0), environment, 0.16);
-  vec3 highlight = reflectedLight * fresnel * mix(0.085, 0.038, environmentLuma);
-  highlight += reflectedLight * glare * mix(0.16, 0.075, environmentLuma);
-  highlight += rimDispersion * fresnel * (0.0045 + 0.0080 * glare);
+  vec3 reflectedLight = mix(vec3(1.0), environment, 0.32);
+  float incident = 0.42 + 0.58 * max(dot(normal, safeNormalize(vec2(-0.72, -0.69))), 0.0);
+  vec3 highlight = reflectedLight * fresnel * incident * mix(0.070, 0.034, environmentLuma);
+  highlight += reflectedLight * glare * mix(0.055, 0.028, environmentLuma);
 
   /* Light mode has no glass body tint. Dark mode retains only a trace. */
   vec3 darkTint = vec3(0.025, 0.030, 0.038);
@@ -263,9 +265,9 @@ void main() {
   color += darkTint * darkTintStrength;
   color += highlight;
 
-  float edgeAlpha = fresnel * mix(0.034, 0.014, u_theme) + glare * mix(0.05, 0.025, u_theme);
+  float edgeAlpha = fresnel * incident * mix(0.032, 0.017, u_theme) + glare * mix(0.020, 0.012, u_theme);
   float alpha = refractedAlpha + darkTintStrength * 0.45 + edgeAlpha;
-  alpha = clamp(alpha, 0.0, mix(0.78, 0.50, u_theme));
+  alpha = clamp(alpha, 0.0, 0.84);
 
   fragColor = vec4(color, alpha);
 }`;
@@ -386,7 +388,7 @@ class SharedGlassRenderer {
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "crystal-glass-6";
+    canvas.dataset.opticsVersion = "crystal-glass-7";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
     this.canvas = canvas;
@@ -495,24 +497,24 @@ class SharedGlassRenderer {
        * - buttons / compact controls: modest
        * - large teaching modules: visible but still local to the edge
        */
-      let refractionPx = window.innerWidth <= 700 ? 3.0 : 4.5;
-      let refractionRange = window.innerWidth <= 700 ? 6.0 : 8.0;
-      let fresnelRange = 1.95;
-      let glareRange = 1.18;
+      let refractionPx = window.innerWidth <= 700 ? 9.0 : 12.0;
+      let refractionRange = window.innerWidth <= 700 ? 11.0 : 14.0;
+      let fresnelRange = 1.4;
+      let glareRange = 1.0;
 
       if (element.matches(".site-header, .header-wrapper, .chapter-rail, .mobile-rail-toggle")) {
-        refractionPx = 3.0;
-        refractionRange = 6.0;
+        refractionPx = 5.5;
+        refractionRange = 8.0;
         fresnelRange = 1.05;
         glareRange = 0.64;
       } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls")) {
-        refractionPx = 2.5;
-        refractionRange = 5.0;
+        refractionPx = 6.0;
+        refractionRange = 8.0;
         fresnelRange = 1.30;
         glareRange = 0.82;
       } else if (element.matches(".source-note")) {
-        refractionPx = 2.5;
-        refractionRange = 5.0;
+        refractionPx = 5.0;
+        refractionRange = 7.0;
         fresnelRange = 1.40;
         glareRange = 0.88;
       }

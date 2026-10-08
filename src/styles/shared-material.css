@@ -1,12 +1,12 @@
 /* Canonical material: imported by the course and built into every other site. */
 :root {
- --material-fill:rgba(7,8,10,.10); --material-border:rgba(235,242,255,.17);
- --material-frost:blur(7px) saturate(110%); --material-shadow:0 12px 36px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.055);
+ --material-fill:rgba(205,221,239,.075); --material-border:rgba(235,242,255,.10);
+ --material-frost:blur(3px) saturate(112%); --material-shadow:0 10px 30px rgba(0,0,0,.10);
  --material-radius:24px; --material-control-radius:16px;
 }
 :root[data-theme="light"] {
- --material-fill:rgba(255,255,255,.10); --material-border:rgba(255,255,255,.42);
- --material-frost:blur(5px) saturate(108%); --material-shadow:0 12px 36px rgba(30,40,55,.055),inset 0 1px 0 rgba(255,255,255,.18);
+ --material-fill:rgba(255,255,255,.075); --material-border:rgba(255,255,255,.24);
+ --material-frost:blur(2.5px) saturate(112%); --material-shadow:0 10px 30px rgba(30,40,55,.05);
 }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"] {
  background:var(--material-fill) !important; background-image:none !important;
@@ -26,6 +26,9 @@ html:root body [data-glass-layer="embedded"]:is(.liquid-button,.top-action,.chap
 }
 html:root body [data-glass-layer="embedded"].primary { background:rgba(88,154,214,.10) !important; }
 html:root body .rail-item.is-active { background:rgba(128,128,128,.10) !important; }
+/* Legacy painted hero sheen competed with the sampled optical rim. */
+html:root body .hero-module::before,
+html:root body .hero-module::after { content:none !important; display:none !important; }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass].chapter-menu { backdrop-filter:blur(28px) saturate(105%) !important; -webkit-backdrop-filter:blur(28px) saturate(105%) !important; }
 html:root[data-theme="dark"] body :is(#overview,[data-liquid-glass])[data-liquid-glass].chapter-menu { backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important; -webkit-backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important; }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]:is(.site-header,.header-wrapper) { border-radius:22px !important; }
@@ -34,6 +37,7 @@ html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]
 /* Preserve the current page's native DOM frost while geometry is scrolling. */
 @media(max-width:700px){:root{--material-radius:20px}}
 @media(max-width:900px){
+ html:root[data-theme="light"] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"].chapter-rail.is-open { background:rgba(255,255,255,.10) !important; }
  html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass].chapter-rail.is-open { backdrop-filter:blur(20px) saturate(108%) !important; -webkit-backdrop-filter:blur(20px) saturate(108%) !important; }
  html:root[data-theme="dark"] body :is(#overview,[data-liquid-glass])[data-liquid-glass].chapter-rail.is-open { backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important; -webkit-backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important; }
 }

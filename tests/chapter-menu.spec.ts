@@ -31,7 +31,7 @@ test("玻璃章节菜单支持键盘、同页切章，侧栏只含本章目录",
 test("壁纸真实变化，减少动态效果时冻结",async({page})=>{
  await page.goto("/");
  const canvas=page.locator("canvas.lattice-atmosphere");
- await expect(canvas).toHaveAttribute("data-wallpaper-version","crystal-duet-7");
+ await expect(canvas).toHaveAttribute("data-wallpaper-version","crystal-illustration-8");
  await expect(canvas).toHaveAttribute("data-crystal-cells","diamond,hcp");
  const sample=()=>canvas.evaluate(el=>{
   const canvas=el as HTMLCanvasElement;
@@ -67,4 +67,39 @@ test("总目录从左向右滑出，减少动态效果时直接打开",async({pa
  await page.emulateMedia({reducedMotion:"reduce"});
  await page.getByRole("button",{name:/切换章节，当前/}).click();
  expect(await page.locator(".chapter-menu").evaluate(el=>getComputedStyle(el).animationName)).toBe("none");
+});
+
+test("各章标题模块与第三章同宽同留白，标题不会逐字成列",async({page})=>{
+ const measure=async(selector:string)=>page.locator(selector).evaluate(element=>{
+  const card=element.getBoundingClientRect(),heading=element.querySelector("h1")!;
+  const style=getComputedStyle(element),title=getComputedStyle(heading);
+  return {x:Math.round(card.x),width:Math.round(card.width),padding:style.paddingLeft,lines:heading.getBoundingClientRect().height/Number.parseFloat(title.lineHeight)};
+ });
+ await page.goto("/?chapter=3");
+ const reference=await measure("#overview");
+ expect(reference.lines).toBeLessThan(3.5);
+ for(const number of [1,2,4,5,6]){
+  await page.goto(`/?chapter=${number}`);
+  await expect(page.locator(".companion-hero")).toBeVisible();
+  const cover=await measure(".companion-hero");
+  expect(cover.x).toBe(reference.x);
+  expect(cover.width).toBe(reference.width);
+  expect(cover.padding).toBe(reference.padding);
+  expect(cover.lines).toBeLessThan(3.5);
+ }
+});
+
+test("中等桌面宽度的长章节标题仍在正常行数内",async({page},testInfo)=>{
+ test.skip(testInfo.project.name!=="desktop");
+ await page.setViewportSize({width:1280,height:720});
+ for(const number of [2,6]){
+  await page.goto(`/?chapter=${number}`);
+  const heading=page.locator(".companion-hero h1");
+  await expect(heading).toBeVisible();
+  const lines=await heading.evaluate(element=>{
+   const style=getComputedStyle(element);
+   return element.getBoundingClientRect().height/Number.parseFloat(style.lineHeight);
+  });
+  expect(lines).toBeLessThan(3.5);
+ }
 });
