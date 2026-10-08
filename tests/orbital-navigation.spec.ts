@@ -65,9 +65,11 @@ test("黑洞壁纸明暗主题均有点云、中心遮挡、动态冻结且无�
     if(theme==="light"){
       expect(pixels.core[0]).toBeGreaterThan(210);
       expect(pixels.left).toBeLessThan(pixels.right);
+      expect(255-pixels.right).toBeGreaterThan((255-pixels.left)*.6);
     }else{
       expect(pixels.core[0]).toBeLessThan(25);
       expect(pixels.left).toBeGreaterThan(pixels.right);
+      expect(pixels.right).toBeGreaterThan(pixels.left*.6);
     }
   }
   await page.emulateMedia({reducedMotion:"reduce"});await page.waitForTimeout(120);

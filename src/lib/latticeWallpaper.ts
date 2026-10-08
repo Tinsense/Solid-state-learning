@@ -67,12 +67,13 @@ export function startLatticeWallpaper(canvas:HTMLCanvasElement) {
     ctx.save();ctx.translate(cx,cy);ctx.rotate(tilt);ctx.translate(-cx,-cy);
     // Restrained local emission inside the dusty accretion plane, not a
     // fullscreen bloom. The left-hand plume follows the reference's light.
-    ctx.save();ctx.translate(cx-horizon*1.3,cy+horizon*.07);ctx.scale(1,.13);
-    const emission=ctx.createRadialGradient(0,0,0,0,0,horizon*3.6);
-    emission.addColorStop(0,light?"rgba(66,88,104,.08)":"rgba(220,222,186,.25)");
-    emission.addColorStop(.42,light?"rgba(66,88,104,.025)":"rgba(220,222,186,.09)");
+    ctx.save();ctx.translate(cx-horizon*.65,cy+horizon*.07);ctx.scale(1,.145);
+    const emission=ctx.createRadialGradient(0,0,0,0,0,horizon*4.4);
+    emission.addColorStop(0,light?"rgba(66,88,104,.08)":"rgba(220,222,186,.24)");
+    emission.addColorStop(.42,light?"rgba(66,88,104,.04)":"rgba(220,222,186,.12)");
+    emission.addColorStop(.75,light?"rgba(66,88,104,.015)":"rgba(220,222,186,.045)");
     emission.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=emission;
-    ctx.fillRect(-horizon*3.6,-horizon*3.6,horizon*7.2,horizon*7.2);ctx.restore();
+    ctx.fillRect(-horizon*4.4,-horizon*4.4,horizon*8.8,horizon*8.8);ctx.restore();
     const drawDisk=(front:boolean)=>{
       ctx.fillStyle=light?"#435f70":"#f0efd0";
       for(const point of disk){
@@ -83,11 +84,11 @@ export function startLatticeWallpaper(canvas:HTMLCanvasElement) {
         // while the right stream is compressed. Smooth phase-dependent
         // factors keep each point moving continuously through the orbit.
         const ripple=1+.035*Math.sin(angle*3+point.radius*2.7-t*.18);
-        const x=cx+sideAngle*point.radius*horizon*(.92-.20*sideAngle)*ripple;
+        const x=cx+sideAngle*point.radius*horizon*(1.03-.07*sideAngle)*ripple;
         const y=cy+depth*point.radius*horizon*(.13+.035*left)
-          +point.thickness*horizon*(.075+.075*left);
+          +point.thickness*horizon*(.105+.065*left);
         const radial=Math.exp(-(point.radius-1.02)*.30);
-        const side=.25+.75*Math.pow((1-sideAngle)*.5,1.35);
+        const side=.68+.32*Math.pow((1-sideAngle)*.5,1.35);
         const clump=.86+.14*Math.sin(angle*4+point.radius*1.6-t*.12);
         dot(x,y,point,(light?.43:.95)*point.brightness*radial*side*clump);
       }
