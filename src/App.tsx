@@ -87,7 +87,7 @@ function ChapterThreeApp() {
   return (
     <>
       <LatticeAtmosphere />
-      <header className="site-header liquid-panel">
+      <header className="site-header glass-toolbar">
         <ChapterSwitcher current={3} compact/>
         <button className="brand" type="button" onClick={() => go("overview")} aria-label="返回章首页">
           <span className="brand-glyph" aria-hidden="true"><i/><i/><i/><i/></span>

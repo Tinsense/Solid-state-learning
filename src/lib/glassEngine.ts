@@ -19,6 +19,8 @@ const SURFACE_SELECTOR = [
   ".liquid-panel",
   ".liquid-button",
   ".top-action",
+  ".glass-toolbar .brand",
+  ".glass-toolbar .chapter-title",
   ".rail-item",
   ".segmented",
   ".derivation-controls",
@@ -72,6 +74,7 @@ uniform int u_count;
 uniform vec4 u_rects[MAX_SURFACES];
 uniform float u_radii[MAX_SURFACES];
 uniform vec4 u_optics[MAX_SURFACES];
+uniform vec3 u_frost[MAX_SURFACES];
 uniform float u_flags[MAX_SURFACES];
 uniform vec2 u_pointer;
 uniform float u_time;
@@ -88,7 +91,7 @@ float roundedRectSDF(vec2 p, vec2 halfSize, float radius) {
 
 float surfaceSDF(vec2 cssPoint, vec4 rect, float radius) {
   vec2 center = rect.xy + rect.zw * 0.5;
-  vec2 halfSize = max(rect.zw * 0.5 - vec2(1.0), vec2(1.0));
+  vec2 halfSize = max(rect.zw * 0.5, vec2(1.0));
   float r = min(radius, min(halfSize.x, halfSize.y));
   return roundedRectSDF(cssPoint - center, halfSize, r);
 }
@@ -96,6 +99,26 @@ float surfaceSDF(vec2 cssPoint, vec4 rect, float radius) {
 vec2 safeNormalize(vec2 v) {
   float l = length(v);
   return l > 0.0001 ? v / l : vec2(1.0, 0.0);
+}
+
+/* Blur the scene BEFORE bending it. The rim and the central DOM material
+   share the same CSS blur/saturation/brightness, not clear vs frosted glass. */
+vec4 frostSample(vec2 uv, vec3 frost) {
+  float textureScale = float(textureSize(u_background, 0).x) / max(u_viewport.x, 1.0);
+  float lod = max(0.0, log2(max(frost.x * textureScale, 1.0)) - 1.0);
+  vec2 aperture = vec2(1.41421356 * frost.x) / max(u_viewport, vec2(1.0));
+  vec4 sampleValue = textureLod(u_background, clamp(uv, vec2(0.001), vec2(0.999)), lod) * 0.25;
+  sampleValue += textureLod(u_background, clamp(uv + vec2(aperture.x, 0.0), vec2(0.001), vec2(0.999)), lod) * 0.125;
+  sampleValue += textureLod(u_background, clamp(uv - vec2(aperture.x, 0.0), vec2(0.001), vec2(0.999)), lod) * 0.125;
+  sampleValue += textureLod(u_background, clamp(uv + vec2(0.0, aperture.y), vec2(0.001), vec2(0.999)), lod) * 0.125;
+  sampleValue += textureLod(u_background, clamp(uv - vec2(0.0, aperture.y), vec2(0.001), vec2(0.999)), lod) * 0.125;
+  sampleValue += textureLod(u_background, clamp(uv + aperture, vec2(0.001), vec2(0.999)), lod) * 0.0625;
+  sampleValue += textureLod(u_background, clamp(uv - aperture, vec2(0.001), vec2(0.999)), lod) * 0.0625;
+  sampleValue += textureLod(u_background, clamp(uv + vec2(aperture.x, -aperture.y), vec2(0.001), vec2(0.999)), lod) * 0.0625;
+  sampleValue += textureLod(u_background, clamp(uv + vec2(-aperture.x, aperture.y), vec2(0.001), vec2(0.999)), lod) * 0.0625;
+  float luma = dot(sampleValue.rgb, vec3(0.2126, 0.7152, 0.0722));
+  sampleValue.rgb = clamp(mix(vec3(luma), sampleValue.rgb, frost.y) * frost.z, 0.0, 1.0);
+  return sampleValue;
 }
 
 void main() {
@@ -132,6 +155,7 @@ void main() {
   vec4 rect = u_rects[chosen];
   float radius = u_radii[chosen];
   vec4 optics = u_optics[chosen];
+  vec3 frost = u_frost[chosen];
   float surfaceFlag = u_flags[chosen];
   float depth = max(-chosenDistance, 0.0);
   // Keep the whole reading area untouched, not just almost transparent.
@@ -145,15 +169,9 @@ void main() {
            - surfaceSDF(cssPoint - vec2(0.0, eps), rect, radius);
   vec2 normal = safeNormalize(vec2(dx, dy));
 
-  /*
-   * Flag 1 = site header. Suppress the bottom-facing optical rim entirely so
-   * light mode does not show a long pale divider below the top bar.
-   */
+  /* Every side belongs to the same lens: dropping the bottom-facing part
+     interrupted the bend through the lower rounded corners. */
   float opticalEdgeMask = 1.0;
-  if (surfaceFlag > 0.5 && surfaceFlag < 1.5) {
-    float bottomFacing = smoothstep(0.38, 0.82, normal.y);
-    opticalEdgeMask = 1.0 - bottomFacing;
-  }
 
   vec2 center = rect.xy + rect.zw * 0.5;
   vec2 centerDir = safeNormalize(cssPoint - center);
@@ -170,18 +188,24 @@ void main() {
   float fresnel = 1.0 - smoothstep(0.0, max(optics.z, 0.35), depth);
   fresnel = pow(fresnel, 2.10) * opticalEdgeMask;
 
-  float facing = 0.5 + 0.5 * cos(normalAngle - pointerAngle);
-  float opposite = 0.5 + 0.5 * cos(normalAngle - pointerAngle - PI);
-  float directional = pow(max(facing, opposite * 0.22), 3.8);
-  float glare = directional * (1.0 - smoothstep(0.0, max(optics.w, 0.25), depth));
-  glare *= (0.97 + 0.03 * sin(u_time * 0.42 + normalAngle * 1.9 + float(chosen) * 0.41)) * opticalEdgeMask;
+  /* The main glint sits on the rounded corner facing a 45-degree light.
+     Pointer motion only modulates it; it never paints a moving full-side rim. */
+  vec2 lightDir = safeNormalize(vec2(-1.0, -1.0));
+  float diagonalGlint = pow(max(dot(normal, lightDir), 0.0), 6.0);
+  float farGlint = pow(max(dot(normal, -lightDir), 0.0), 8.0) * 0.13;
+  float pointerGlint = 0.5 + 0.5 * cos(normalAngle - pointerAngle);
+  float glare = (diagonalGlint + farGlint) * (0.86 + 0.14 * pointerGlint);
+  glare *= (1.0 - smoothstep(0.0, max(optics.w, 0.25), depth)) * opticalEdgeMask;
 
-  /* A compact lens shoulder, with a strong bend immediately inside the rim. */
+  /* The same frost across the curved shoulder, with continuous displacement
+     falloff into the undistorted native material. */
   float refractField = 1.0 - smoothstep(0.0, max(optics.y, 2.0), depth);
-  refractField = pow(refractField, 1.65) * opticalEdgeMask;
+  refractField = pow(refractField, 0.88) * opticalEdgeMask;
 
   float refractionPx = optics.x * refractField;
-  vec2 pxToUV = vec2(1.0 / max(u_viewport.x, 1.0), 1.0 / max(u_viewport.y, 1.0));
+  /* DOM/SDF y points down; the uploaded texture's UV y points up.
+     Use the same conversion for bend, dispersion and the scatter aperture. */
+  vec2 pxToUV = vec2(1.0 / max(u_viewport.x, 1.0), -1.0 / max(u_viewport.y, 1.0));
   vec2 refractionUV = bendDir * refractionPx * pxToUV;
 
   /*
@@ -210,17 +234,11 @@ void main() {
     vec2 uvG = clamp(baseUV + refractionUV,                  vec2(0.001), vec2(0.999));
     vec2 uvB = clamp(baseUV + refractionUV * 0.965 - dispersionUV, vec2(0.001), vec2(0.999));
 
-    vec4 sampleR = texture(u_background, uvR);
-    vec4 sampleG = texture(u_background, uvG);
-    environment = sampleG.rgb;
-    vec4 sampleB = texture(u_background, uvB);
-    /* A small tangent-space aperture scatters actual lattice pixels at the
-       lens edge. It vanishes toward the panel centre, where equations live. */
-    vec2 tangent = vec2(-bendDir.y, bendDir.x);
-    vec2 aperture = tangent * (1.6 * refractField) * pxToUV;
-    vec4 scatterA = texture(u_background, clamp(uvG + aperture, vec2(0.001), vec2(0.999)));
-    vec4 scatterB = texture(u_background, clamp(uvG - aperture, vec2(0.001), vec2(0.999)));
-    sampledAlpha = max(max(sampleR.a, sampleG.a), max(sampleB.a, max(scatterA.a, scatterB.a)));
+    vec4 sampleR = frostSample(uvR, frost);
+    vec4 sampleG = frostSample(uvG, frost);
+    environment = frostSample(baseUV, frost).rgb;
+    vec4 sampleB = frostSample(uvB, frost);
+    sampledAlpha = max(max(sampleR.a, sampleG.a), sampleB.a);
 
     /*
      * Do NOT premultiply the separated RGB by sampledAlpha here.
@@ -230,11 +248,7 @@ void main() {
      */
     vec3 separatedRGB = vec3(sampleR.r, sampleG.g, sampleB.b);
 
-    /* Boost only the chromatic difference created by spatially-separated
-       R/G/B samples; neutral grey areas remain neutral. */
-    float neutral = dot(separatedRGB, vec3(0.299, 0.587, 0.114));
-    vec3 scattered = (scatterA.rgb + scatterB.rgb) * 0.5;
-    refracted = clamp(mix(mix(vec3(neutral), separatedRGB, 1.08), scattered, 0.18 * refractField), 0.0, 1.0);
+    refracted = separatedRGB;
   }
 
   /*
@@ -244,8 +258,11 @@ void main() {
    */
   /* Flat areas remain almost invisible; an actual displaced line or colour
      patch produces the stronger optical response. */
-  float displacedDetail = clamp(length(refracted - environment) * 2.9, 0.0, 0.57);
-  float refractedAlpha = u_hasBackground * refractField * sampledAlpha * (0.22 + displacedDetail);
+  float displacedDetail = smoothstep(0.006, 0.055, length(refracted - environment));
+  /* A strong sampled lens when a real line moves; nearly absent over a flat
+     scene. Constant high alpha overlaid raw wallpaper on the DOM material
+     and caused a dark inset outline around controls. */
+  float refractedAlpha = min(0.92, u_hasBackground * refractField * sampledAlpha * mix(0.12, 0.92, displacedDetail));
 
   vec3 cool = vec3(0.42, 0.69, 1.00);
   vec3 warm = vec3(1.00, 0.80, 0.48);
@@ -253,9 +270,10 @@ void main() {
      orientation. No painted white side stripe or coloured outline. */
   float environmentLuma = dot(environment, vec3(0.2126, 0.7152, 0.0722));
   vec3 reflectedLight = mix(vec3(1.0), environment, 0.32);
-  float incident = 0.42 + 0.58 * max(dot(normal, safeNormalize(vec2(-0.72, -0.69))), 0.0);
-  vec3 highlight = reflectedLight * fresnel * incident * mix(0.070, 0.034, environmentLuma);
-  highlight += reflectedLight * glare * mix(0.055, 0.028, environmentLuma);
+  float incident = 0.22 + 0.78 * pow(max(dot(normal, lightDir), 0.0), 2.0);
+  float compactGlint = surfaceFlag == 3.0 ? 1.45 : 1.0;
+  vec3 highlight = reflectedLight * fresnel * incident * mix(0.036, 0.019, environmentLuma) * compactGlint;
+  highlight += reflectedLight * glare * mix(0.067, 0.040, environmentLuma) * compactGlint;
 
   /* Light mode has no glass body tint. Dark mode retains only a trace. */
   vec3 darkTint = vec3(0.025, 0.030, 0.038);
@@ -265,11 +283,12 @@ void main() {
   color += darkTint * darkTintStrength;
   color += highlight;
 
-  float edgeAlpha = fresnel * incident * mix(0.032, 0.017, u_theme) + glare * mix(0.020, 0.012, u_theme);
+  float edgeAlpha = fresnel * incident * mix(0.014, 0.008, u_theme) + glare * mix(0.026, 0.018, u_theme);
   float alpha = refractedAlpha + darkTintStrength * 0.45 + edgeAlpha;
-  alpha = clamp(alpha, 0.0, 0.84);
-
-  fragColor = vec4(color, alpha);
+  /* Keep premultiplied RGB and alpha together, including subpixel coverage.
+     Clamping only alpha made the rounded lens shoulder falsely brighten. */
+  float coverage = 1.0 - smoothstep(-0.6, 0.6, chosenDistance);
+  fragColor = vec4(color * coverage, clamp(alpha, 0.0, 1.0) * coverage);
 }`;
 
 // Kept for compatibility with the original LatticeAtmosphere implementation.
@@ -388,7 +407,7 @@ class SharedGlassRenderer {
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "crystal-glass-7";
+    canvas.dataset.opticsVersion = "crystal-glass-11";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
     this.canvas = canvas;
@@ -481,6 +500,7 @@ class SharedGlassRenderer {
     const rectData = new Float32Array(MAX_SURFACES * 4);
     const radiusData = new Float32Array(MAX_SURFACES);
     const opticsData = new Float32Array(MAX_SURFACES * 4);
+    const frostData = new Float32Array(MAX_SURFACES * 3);
     const flagData = new Float32Array(MAX_SURFACES);
 
     visible.forEach(({ element, rect }, index) => {
@@ -490,28 +510,38 @@ class SharedGlassRenderer {
       rectData[index * 4 + 3] = rect.height;
       const cssRadius = Number.parseFloat(getComputedStyle(element).borderRadius) || 18;
       radiusData[index] = Math.max(2, Math.min(cssRadius, rect.width * 0.5, rect.height * 0.5));
+      // Embedded buttons inherit the outer panel's already-applied frost.
+      const materialElement = element.dataset.glassLayer === "control"
+        ? element.parentElement?.closest<HTMLElement>('[data-glass-layer="surface"]') ?? element
+        : element;
+      const filter = getComputedStyle(materialElement).backdropFilter;
+      const filterValue = (name: string, fallback: number) => {
+        const value = filter.match(new RegExp(`${name}\\(([^)]+)\\)`))?.[1];
+        if (!value) return fallback;
+        return Number.parseFloat(value) / (value.includes("%") ? 100 : 1);
+      };
+      frostData.set([filterValue("blur", 0), filterValue("saturate", 1), filterValue("brightness", 1)], index * 3);
 
       /*
        * Optical hierarchy:
-       * - header / chapter rail: deliberately restrained
-       * - buttons / compact controls: modest
-       * - large teaching modules: visible but still local to the edge
+       * Wider shoulders on reading panels; stronger relative curvature on
+       * compact pills. Clamp to geometry so small controls keep a clear core.
        */
-      let refractionPx = window.innerWidth <= 700 ? 9.0 : 12.0;
-      let refractionRange = window.innerWidth <= 700 ? 11.0 : 14.0;
+      let refractionPx = window.innerWidth <= 700 ? 20.0 : 26.0;
+      let refractionRange = window.innerWidth <= 700 ? 16.0 : 22.0;
       let fresnelRange = 1.4;
       let glareRange = 1.0;
 
-      if (element.matches(".site-header, .header-wrapper, .chapter-rail, .mobile-rail-toggle")) {
-        refractionPx = 5.5;
-        refractionRange = 8.0;
-        fresnelRange = 1.05;
-        glareRange = 0.64;
-      } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls")) {
-        refractionPx = 6.0;
-        refractionRange = 8.0;
-        fresnelRange = 1.30;
-        glareRange = 0.82;
+      if (element.matches(".site-header, .header-wrapper, .chapter-rail")) {
+        refractionPx = 18.0;
+        refractionRange = 14.0;
+        fresnelRange = 1.10;
+        glareRange = 1.15;
+      } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls, .brand, .chapter-title, .chapter-menu-trigger, .mobile-rail-toggle, .header-center, .header-link, .tool-strip a")) {
+        refractionPx = 18.0;
+        refractionRange = 11.0;
+        fresnelRange = 1.60;
+        glareRange = 1.60;
       } else if (element.matches(".source-note")) {
         refractionPx = 5.0;
         refractionRange = 7.0;
@@ -519,11 +549,12 @@ class SharedGlassRenderer {
         glareRange = 0.88;
       }
 
+      refractionRange = Math.min(refractionRange, Math.min(rect.width, rect.height) * 0.22);
       opticsData[index * 4] = refractionPx;
       opticsData[index * 4 + 1] = refractionRange;
       opticsData[index * 4 + 2] = fresnelRange;
       opticsData[index * 4 + 3] = glareRange;
-      flagData[index] = element.matches(".chapter-menu") ? 5 : element.matches(".search-panel") ? 4 : element.matches(".mobile-rail-toggle") ? 3 : element.matches(".chapter-rail") ? 2 : element.matches(".site-header,.header-wrapper") ? 1 : 0;
+      flagData[index] = element.matches(".chapter-menu") ? 5 : element.matches(".search-panel") ? 4 : element.matches(".liquid-button,.top-action,.brand,.chapter-title,.chapter-menu-trigger,.mobile-rail-toggle,.header-center,.header-link,.tool-strip a") ? 3 : element.matches(".chapter-rail") ? 2 : element.matches(".site-header,.header-wrapper") ? 1 : 0;
     });
 
     /*
@@ -557,6 +588,7 @@ class SharedGlassRenderer {
             gl.UNSIGNED_BYTE,
             backgroundCanvas
           );
+          gl.generateMipmap(gl.TEXTURE_2D);
           this.backgroundFrame = backgroundFrame || "";
           this.backgroundCanvas = backgroundCanvas;
         }
@@ -577,6 +609,7 @@ class SharedGlassRenderer {
     gl.uniform4fv(uniform(gl, this.program, "u_rects[0]"), rectData);
     gl.uniform1fv(uniform(gl, this.program, "u_radii[0]"), radiusData);
     gl.uniform4fv(uniform(gl, this.program, "u_optics[0]"), opticsData);
+    gl.uniform3fv(uniform(gl, this.program, "u_frost[0]"), frostData);
     gl.uniform1fv(uniform(gl, this.program, "u_flags[0]"), flagData);
     gl.uniform2f(uniform(gl, this.program, "u_pointer"), this.pointerX, this.pointerY);
     gl.uniform1f(uniform(gl, this.program, "u_time"), time);
@@ -702,15 +735,20 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
 
     const syncElements = () => {
       const candidates = Array.from(document.querySelectorAll<HTMLElement>(selector))
-        .filter((element) => !element.matches(".hero-lead, .hero-lead-glass"));
+        .filter((element) => !element.matches(".hero-lead, .hero-lead-glass, .glass-toolbar"));
       const roots = new Set(candidates.filter(element=>!element.matches(".section-header,.source-note,.text-button")));
       candidates.forEach((element) => {
         element.dataset.liquidGlass = renderer ? "shared-webgl2" : "frosted";
         let parent=element.parentElement;
         while(parent&&!roots.has(parent))parent=parent.parentElement;
-        element.dataset.glassLayer=!roots.has(element)?"plain":parent?"embedded":"surface";
+        const control = element.matches(".liquid-button,.top-action,.chapter-menu-trigger,.glass-toolbar .brand,.glass-toolbar .chapter-title");
+        element.dataset.glassLayer=!roots.has(element)?"plain":parent?(control?"control":"embedded"):"surface";
       });
-      elements=candidates.filter(element=>element.dataset.glassLayer==="surface");
+      document.querySelectorAll<HTMLElement>(".glass-toolbar").forEach(element=>{
+        element.dataset.liquidGlass = renderer ? "shared-webgl2" : "frosted";
+        element.dataset.glassLayer = "plain";
+      });
+      elements=candidates.filter(element=>element.dataset.glassLayer==="surface"||element.dataset.glassLayer==="control");
       document.documentElement.dataset.glassEngine = renderer ? "shared-webgl2" : "frosted";
     };
 

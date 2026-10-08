@@ -2458,8 +2458,8 @@ html[data-theme="light"] #overview :where(.hero-lead,.hero-lead-glass) {
    CONTROL GEOMETRY · ONE RADIUS, CLEAN EDGES, SAFE INSETS
    ========================================================= */
 :root {
-  --study-module-radius: 24px;
-  --study-control-radius: 16px;
+  --study-module-radius: 30px;
+  --study-control-radius: 23px;
 }
 
 :where(
@@ -2608,5 +2608,61 @@ html:root[data-theme="light"] body .mobile-rail-toggle[data-liquid-glass] {
     backdrop-filter: blur(20px) saturate(108%) brightness(1.035) !important;
     -webkit-backdrop-filter: blur(20px) saturate(108%) brightness(1.035) !important;
   }
+}
+
+/* Floating controls share a baseline; the toolbar itself is only a layout. */
+.site-header.glass-toolbar {
+ position:fixed !important;
+ display:grid !important; grid-template-columns:auto auto minmax(0,1fr) auto !important;
+ gap:12px; height:60px; padding:0 !important; top:12px;
+ align-items:center; pointer-events:none;
+}
+.glass-toolbar :is(.brand,.chapter-menu-trigger,.top-action,.chapter-title) { pointer-events:auto; }
+.glass-toolbar .brand { min-height:58px; padding:8px 22px; gap:12px; width:fit-content; }
+.glass-toolbar .chapter-menu-trigger { min-height:58px; padding:12px 22px; gap:10px; font-size:13px; }
+.site-header.glass-toolbar > .chapter-title {
+ display:flex; justify-self:center; max-width:340px; min-height:52px; padding:12px 24px; gap:12px;
+}
+.glass-toolbar .header-actions { gap:12px; padding:0; justify-self:end; pointer-events:none; }
+.glass-toolbar .top-action { min-height:54px; padding:10px 20px; }
+.glass-toolbar .top-action.icon-only { width:54px; height:54px; min-width:54px; padding:0; }
+.glass-toolbar .progress-chip { padding:8px 18px 8px 12px; }
+.glass-toolbar .mini-ring { position:relative; background:transparent; }
+.glass-toolbar .mini-ring::after { content:none; }
+.glass-toolbar .mini-ring::before {
+ content:""; position:absolute; inset:0; border-radius:50%;
+ background:conic-gradient(var(--accent) var(--progress),var(--hairline) 0);
+ mask:radial-gradient(circle,transparent 57%,#000 60%);
+ -webkit-mask:radial-gradient(circle,transparent 57%,#000 60%);
+}
+.hero-actions { gap:14px; }
+.hero-actions .liquid-button { min-height:54px; padding:13px 24px; }
+.mobile-rail-toggle.liquid-button { min-height:56px; padding:12px 24px; gap:12px; }
+.drawer-close { width:44px; height:44px; min-width:44px; padding:0; }
+.glass-toolbar :is(.brand,.top-action,.chapter-menu-trigger):hover { filter:brightness(1.06); }
+.glass-toolbar :is(.brand,.top-action,.chapter-menu-trigger):active { filter:brightness(.96); }
+@media(max-width:1200px) {
+ .site-header.glass-toolbar { grid-template-columns:auto auto 1fr !important; }
+ .site-header.glass-toolbar > .chapter-title { display:none; }
+}
+@media(max-width:900px) {
+ .site-header.glass-toolbar {
+  grid-template-columns:auto minmax(0,1fr) auto !important;
+  top:max(10px,env(safe-area-inset-top)); left:16px; right:16px; height:56px; gap:10px;
+ }
+ .glass-toolbar .brand { min-height:54px; padding:8px 18px; gap:10px; justify-self:start; }
+ .glass-toolbar .brand small { display:none; }
+ .glass-toolbar .brand-glyph { width:27px; height:27px; }
+ .glass-toolbar .chapter-menu-trigger { min-height:54px; padding:12px 18px; gap:8px; }
+ .glass-toolbar .top-action.icon-only { width:54px; height:54px; min-width:54px; }
+ .glass-toolbar .header-actions { gap:0; }
+ .glass-toolbar .header-actions > :not(.icon-only) { display:none; }
+ .chapter-rail nav { gap:8px; }
+ .chapter-rail nav .rail-item { min-height:58px; padding:10px 14px; }
+}
+@media(max-width:370px) {
+ .site-header.glass-toolbar { left:12px; right:12px; gap:8px; }
+ .glass-toolbar .brand { padding-inline:14px; gap:8px; }
+ .glass-toolbar .chapter-menu-trigger { padding-inline:14px; }
 }
 

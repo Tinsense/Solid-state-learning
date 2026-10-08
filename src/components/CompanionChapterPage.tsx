@@ -40,10 +40,11 @@ export function CompanionChapterPage({ chapter }: { chapter: CompanionChapter })
 
   return <>
     <LatticeAtmosphere/>
-    <header className="site-header companion-header liquid-panel">
+    <header className="site-header companion-header glass-toolbar">
       <ChapterSwitcher current={chapter.number} compact/>
       <button className="brand" type="button" onClick={()=>go("overview")} aria-label="返回本章首页"><span className="brand-glyph" aria-hidden="true"><i/><i/><i/><i/></span><span><strong>晶格</strong><small>KITTEL · CHAPTER {String(chapter.number).padStart(2,"0")}</small></span></button>
-      <div className="header-actions"><div className="chapter-title"><span>{String(chapter.number).padStart(2,"0")}</span><p>{chapter.english}</p></div><button className="top-action icon-only" type="button" onClick={()=>setTheme(theme==="dark"?"light":"dark")} aria-label="切换明暗主题"><ThemeIcon dark={theme==="dark"}/></button><button className="progress-chip top-action" type="button" onClick={()=>go("exercises")}><span className="mini-ring" style={{"--progress":`${progress*3.6}deg`} as React.CSSProperties}><b>{progress}</b></span><span>学习进度<small>{completed.size} / {checks} checks</small></span></button></div>
+      <div className="chapter-title"><span>{String(chapter.number).padStart(2,"0")}</span><p>{chapter.english}</p></div>
+      <div className="header-actions"><button className="top-action icon-only" type="button" onClick={()=>setTheme(theme==="dark"?"light":"dark")} aria-label="切换明暗主题"><ThemeIcon dark={theme==="dark"}/></button><button className="progress-chip top-action" type="button" onClick={()=>go("exercises")}><span className="mini-ring" style={{"--progress":`${progress*3.6}deg`} as React.CSSProperties}><b>{progress}</b></span><span>学习进度<small>{completed.size} / {checks} checks</small></span></button></div>
     </header>
     <button className="mobile-rail-toggle liquid-button" type="button" onClick={()=>setRailOpen(!railOpen)} aria-expanded={railOpen} aria-controls="chapter-rail"><span aria-hidden="true">{railOpen?"×":"☰"}</span><span>章节目录</span></button>
     {railOpen&&<button className="rail-scrim" type="button" aria-label="关闭目录" onClick={()=>setRailOpen(false)}/>} 

@@ -31,7 +31,8 @@ test("玻璃章节菜单支持键盘、同页切章，侧栏只含本章目录",
 test("壁纸真实变化，减少动态效果时冻结",async({page})=>{
  await page.goto("/");
  const canvas=page.locator("canvas.lattice-atmosphere");
- await expect(canvas).toHaveAttribute("data-wallpaper-version","crystal-illustration-8");
+ await expect(canvas).toHaveAttribute("data-wallpaper-version","crystal-planes-11");
+ await expect(canvas).toHaveAttribute("data-wallpaper-loaded","true");
  await expect(canvas).toHaveAttribute("data-crystal-cells","diamond,hcp");
  const sample=()=>canvas.evaluate(el=>{
   const canvas=el as HTMLCanvasElement;
@@ -41,6 +42,32 @@ test("壁纸真实变化，减少动态效果时冻结",async({page})=>{
  const a=await sample();await page.waitForTimeout(180);expect(await sample()).not.toBe(a);
  await page.emulateMedia({reducedMotion:"reduce"});await page.waitForTimeout(150);
  const b=await sample();await page.waitForTimeout(180);expect(await sample()).toBe(b);
+});
+
+test("顶栏与推导玻璃近透明且保留清晰的文字",async({page})=>{
+ await page.goto("/?chapter=3");
+ for(const theme of ["dark","light"]){
+  await page.evaluate(value=>{localStorage.setItem("kittel-theme",value);document.documentElement.dataset.theme=value;},theme);
+  const material=await page.evaluate(()=>{
+   const read=(selector:string)=>{
+    const element=document.querySelector(selector)!;
+    const style=getComputedStyle(element);
+    return {fill:style.backgroundColor,radius:Number.parseFloat(style.borderRadius),frost:style.backdropFilter,text:style.color};
+   };
+   return {brand:read(".site-header .brand"),derivation:read("#derivation-london"),button:read(".site-header .top-action")};
+  });
+  for(const surface of Object.values(material)){
+   expect(Number(surface.fill.match(/,\s*([\d.]+)\)$/)?.[1]??1)).toBeLessThanOrEqual(.03);
+  }
+  await expect(page.locator(".site-header")).toHaveAttribute("data-glass-layer","plain");
+  expect(await page.locator(".site-header").evaluate(el=>getComputedStyle(el).backdropFilter)).toBe("none");
+  expect(material.brand.frost).toContain("blur(");
+  expect(material.derivation.frost).toContain("blur(");
+  expect(material.derivation.frost).toContain(theme==="dark"?"brightness(0.86)":"brightness(1.06)");
+  expect(material.brand.radius).toBeGreaterThanOrEqual(999);
+  expect(material.derivation.radius).toBeGreaterThanOrEqual(26);
+  expect(material.button.radius).toBeGreaterThanOrEqual(999);
+ }
 });
 
 test("总目录从左向右滑出，减少动态效果时直接打开",async({page})=>{

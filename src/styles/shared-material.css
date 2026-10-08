@@ -1,12 +1,14 @@
 /* Canonical material: imported by the course and built into every other site. */
 :root {
- --material-fill:rgba(205,221,239,.075); --material-border:rgba(235,242,255,.10);
- --material-frost:blur(3px) saturate(112%); --material-shadow:0 10px 30px rgba(0,0,0,.10);
- --material-radius:24px; --material-control-radius:16px;
+ --material-fill:rgba(205,221,239,.052); --material-border:rgba(235,242,255,.09);
+ --material-frost:blur(2.5px) saturate(115%); --material-shadow:0 10px 30px rgba(0,0,0,.08);
+ --material-clear-fill:rgba(215,231,255,.018); --material-clear-frost:blur(3px) saturate(106%) brightness(1);
+ --material-radius:44px; --material-control-radius:999px;
 }
 :root[data-theme="light"] {
- --material-fill:rgba(255,255,255,.075); --material-border:rgba(255,255,255,.24);
- --material-frost:blur(2.5px) saturate(112%); --material-shadow:0 10px 30px rgba(30,40,55,.05);
+ --material-fill:rgba(255,255,255,.052); --material-border:rgba(255,255,255,.09);
+ --material-frost:blur(2.2px) saturate(115%); --material-shadow:0 10px 30px rgba(30,40,55,.045);
+ --material-clear-fill:rgba(255,255,255,.018); --material-clear-frost:blur(3px) saturate(102%) brightness(1.025);
 }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"] {
  background:var(--material-fill) !important; background-image:none !important;
@@ -15,27 +17,89 @@ html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]
  backdrop-filter:var(--material-frost) !important; -webkit-backdrop-filter:var(--material-frost) !important;
  box-shadow:var(--material-shadow) !important;
 }
-html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"]:is(.top-action,.liquid-button,.chapter-menu-trigger,.mobile-rail-toggle,.tool-strip a) { border-radius:var(--material-control-radius) !important; }
-html:root body [data-liquid-glass][data-glass-layer="embedded"],
-html:root body [data-liquid-glass][data-glass-layer="plain"] {
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"]:is(.top-action,.liquid-button,.chapter-menu-trigger,.mobile-rail-toggle,.tool-strip a,.glass-toolbar .brand,.glass-toolbar .chapter-title,.glass-toolbar .header-center,.glass-toolbar .header-link) { border-radius:var(--material-control-radius) !important; }
+/* Compact chrome and derivations are almost clear: typography stays opaque. */
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"]:is(.site-header,.header-wrapper,.top-action,.liquid-button,.chapter-menu-trigger,.mobile-rail-toggle,.derivation,.formula-card,.derivation-controls,.brand,.chapter-title,.header-center,.header-link) {
+ background:var(--material-clear-fill) !important;
+ backdrop-filter:var(--material-clear-frost) !important;
+ -webkit-backdrop-filter:var(--material-clear-frost) !important;
+}
+html:root[data-theme] body .tool-strip a[data-liquid-glass][data-glass-layer="surface"] {
+ background:var(--material-clear-fill) !important;
+ backdrop-filter:var(--material-clear-frost) !important;
+ -webkit-backdrop-filter:var(--material-clear-frost) !important;
+}
+/* Formula copy stays clear while nearby crystal lines are gently softened. */
+html:root[data-theme="light"] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"]:is(.derivation,.formula-card) {
+ backdrop-filter:blur(6px) saturate(82%) brightness(1.06) !important;
+ -webkit-backdrop-filter:blur(6px) saturate(82%) brightness(1.06) !important;
+}
+html:root[data-theme="dark"] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"]:is(.derivation,.formula-card) {
+ backdrop-filter:blur(8px) saturate(84%) brightness(.86) !important;
+ -webkit-backdrop-filter:blur(8px) saturate(84%) brightness(.86) !important;
+}
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="embedded"],
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="plain"] {
  background:transparent !important; background-image:none !important; border-color:transparent !important;
  box-shadow:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
 }
 html:root body [data-glass-layer="embedded"]:is(.liquid-button,.top-action,.chapter-menu-trigger,.tool-strip a) {
- background:rgba(128,128,128,.06) !important; border:1px solid var(--material-border) !important; border-radius:16px !important;
+ background:rgba(128,128,128,.025) !important; border:1px solid var(--material-border) !important; border-radius:var(--material-control-radius) !important;
 }
 html:root body [data-glass-layer="embedded"].primary { background:rgba(88,154,214,.10) !important; }
+/* A button may have its own lens rim inside a reading panel, but never adds
+   another backdrop blur to the already diffused reading surface. */
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="control"] {
+ background:var(--material-clear-fill) !important; background-image:none !important;
+ border:1px solid var(--material-border) !important;
+ border-radius:var(--material-control-radius) !important;
+ backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+ box-shadow:0 3px 12px rgba(12,28,45,.035) !important;
+}
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]:is(.liquid-button,.top-action,.chapter-menu-trigger,.mobile-rail-toggle,.brand) {
+ color:var(--text) !important; min-height:52px; border-radius:999px !important;
+}
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass].primary {
+ background:rgba(79,151,208,.035) !important;
+ color:var(--accent) !important;
+}
+html:root[data-theme] body .glass-toolbar[data-liquid-glass] {
+ background:transparent !important; border:0 !important; box-shadow:none !important;
+ backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+ overflow:visible !important; isolation:auto !important;
+}
+html:root[data-theme] body .glass-toolbar::before,
+html:root[data-theme] body .glass-toolbar::after { content:none !important; display:none !important; }
+html:root[data-theme] body :is(.chapter-rail .rail-item,.chapter-menu-group a,.drawer-close,.chapter-menu-heading button,.segmented button,.derivation-controls button,.exercise-actions button,.mechanism-toggles button) {
+ border-radius:999px !important; min-height:44px;
+}
+html:root[data-theme] body :is(.choice-grid button,.search-results > button) { border-radius:28px !important; }
 html:root body .rail-item.is-active { background:rgba(128,128,128,.10) !important; }
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="embedded"].rail-item.is-active {
+ background:rgba(128,128,128,.10) !important;
+}
+/* Floating chrome can pass over equations or black atom markers. Diffuse
+   those details enough to keep the label clear while retaining 2% fill. */
+html:root[data-theme] body .glass-toolbar [data-glass-layer="surface"],
+html:root[data-theme] body .mobile-rail-toggle[data-glass-layer="surface"] {
+ --material-clear-frost:blur(10px) saturate(104%) brightness(.96);
+}
+html:root[data-theme="light"] body .glass-toolbar [data-glass-layer="surface"],
+html:root[data-theme="light"] body .mobile-rail-toggle[data-glass-layer="surface"] {
+ --material-clear-frost:blur(10px) saturate(98%) brightness(1.04);
+}
+html:root[data-theme="light"] body .mobile-rail-toggle > span { text-shadow:0 1px 3px rgba(255,255,255,.8); }
+html:root[data-theme="dark"] body .mobile-rail-toggle > span { text-shadow:0 1px 3px rgba(8,16,24,.65); }
 /* Legacy painted hero sheen competed with the sampled optical rim. */
 html:root body .hero-module::before,
 html:root body .hero-module::after { content:none !important; display:none !important; }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass].chapter-menu { backdrop-filter:blur(28px) saturate(105%) !important; -webkit-backdrop-filter:blur(28px) saturate(105%) !important; }
 html:root[data-theme="dark"] body :is(#overview,[data-liquid-glass])[data-liquid-glass].chapter-menu { backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important; -webkit-backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important; }
-html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]:is(.site-header,.header-wrapper) { border-radius:22px !important; }
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]:is(.site-header,.header-wrapper) { border-radius:30px !important; }
 .lattice-atmosphere { position:fixed; inset:0 !important; width:100vw !important; height:100dvh !important; z-index:0; pointer-events:none; }
 .studio-glass-shared-canvas { position:fixed; inset:0; width:100vw !important; height:100dvh !important; z-index:620; pointer-events:none; background:transparent; }
 /* Preserve the current page's native DOM frost while geometry is scrolling. */
-@media(max-width:700px){:root{--material-radius:20px}}
+@media(max-width:700px){:root{--material-radius:36px;--material-control-radius:999px}}
 @media(max-width:900px){
  html:root[data-theme="light"] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"].chapter-rail.is-open { background:rgba(255,255,255,.10) !important; }
  html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass].chapter-rail.is-open { backdrop-filter:blur(20px) saturate(108%) !important; -webkit-backdrop-filter:blur(20px) saturate(108%) !important; }

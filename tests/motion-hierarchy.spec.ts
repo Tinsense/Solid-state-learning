@@ -28,7 +28,7 @@ test("阅读与推导只有一层主要玻璃，嵌套内容不再重复模糊",
  expect(await page.locator('[data-glass-layer="surface"]').evaluateAll(elements=>elements.some(element=>!!element.parentElement?.closest('[data-glass-layer="surface"]')))).toBe(false);
 });
 
-test("连续滚动时折射始终可见，移动模块逐帧对齐且折射限制在窄边缘",async({page})=>{
+test("连续滚动时折射逐帧对齐，加宽透镜仍不覆盖正文中心",async({page})=>{
  await page.goto("/?chapter=6");
  const canvas=page.locator(".studio-glass-shared-canvas");
  await expect(canvas).toBeVisible();
@@ -57,7 +57,7 @@ test("连续滚动时折射始终可见，移动模块逐帧对齐且折射限�
   for(const sample of frames){
    expect(sample.visibility).toBe("visible");
    expect(sample.error).toBeLessThan(.3);
-   expect(sample.range).toBeLessThanOrEqual(8);
+   expect(sample.range).toBeLessThanOrEqual(page.viewportSize()!.width<=700?16:22);
   }
  }
  const values=await page.evaluate(()=>{
@@ -65,7 +65,7 @@ test("连续滚动时折射始终可见，移动模块逐帧对齐且折射限�
   const gl=canvas.getContext("webgl2")!;
   const program=gl.getParameter(gl.CURRENT_PROGRAM);
   const rects=gl.getUniform(program,gl.getUniformLocation(program,"u_rects[0]"));
-  const header=document.querySelector(".site-header")!.getBoundingClientRect();
+  const header=document.querySelector(".chapter-menu-trigger")!.getBoundingClientRect();
   const bounds=canvas.getBoundingClientRect();
   return {shader:Array.from(rects as Float32Array).slice(0,4),dom:[header.left,header.top,header.width,header.height],origin:[bounds.left,bounds.top]};
  });
