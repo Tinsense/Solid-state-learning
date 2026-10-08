@@ -8,7 +8,7 @@ fs.mkdirSync("tmp",{recursive:true});const result=[];
 try{
  for(const width of [390,1440]){
   const page=await browser.newPage({viewport:{width,height:900}});
-  for(const [name,url] of [["course",course],["portal",portal],["tool",portal+"metal-bde/"]]){
+  for(const [name,url] of [["course",course],["portal",portal],["tool",portal+"metal-bde/"],["map",portal+"metal-bde-square/"]]){
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
    await page.goto(url,{waitUntil:"networkidle"});
    await page.waitForFunction(()=>document.querySelector(".studio-glass-shared-canvas")?.dataset.opticsVersion);
