@@ -1,6 +1,6 @@
 import {chromium} from "@playwright/test";
 import fs from "node:fs";
-const base=process.env.COURSE_URL||"http://127.0.0.1:5173/Solid-state-learning/";
+const base=process.env.COURSE_URL||"http://127.0.0.1:4173/Solid-state-learning/";
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||"C:/Program Files/Google/Chrome/Application/chrome.exe"});
 const results=[];
 fs.mkdirSync("tmp",{recursive:true});
@@ -18,9 +18,9 @@ try {
     const canvas=document.querySelector(".studio-glass-shared-canvas"),gl=canvas.getContext("webgl2"),program=gl.getParameter(gl.CURRENT_PROGRAM);
     const count=gl.getUniform(program,gl.getUniformLocation(program,"u_count"));
     const rects=Array.from({length:count},(_,i)=>Array.from(gl.getUniform(program,gl.getUniformLocation(program,`u_rects[${i}]`))));
-    const panels=[...document.querySelectorAll('[data-glass-layer="surface"]')].filter(el=>!["fixed","sticky"].includes(getComputedStyle(el).position)).map(el=>el.getBoundingClientRect()).filter(r=>r.width>3&&r.height>3&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth);
-    const errors=panels.map(r=>Math.min(...rects.map(rect=>Math.max(...[r.left,r.top,r.width,r.height].map((value,i)=>Math.abs(value-rect[i]))))));
-    window.opticsFrames.push({y:scrollY,hidden:getComputedStyle(canvas).visibility!=="visible",error:Math.max(0,...errors)});
+    const panels=[...document.querySelectorAll('[data-glass-layer="surface"]')].filter(el=>!["fixed","sticky"].includes(getComputedStyle(el).position)).map(el=>({el,r:el.getBoundingClientRect()})).filter(({r})=>r.width>3&&r.height>3&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth);
+    const errors=panels.map(({el,r})=>{const local=el.querySelector(':scope > .studio-glass-optics')?.getBoundingClientRect();return local?Math.max(Math.abs(r.left-local.left),Math.abs(r.top-local.top),Math.abs(r.width-local.width)):Infinity;});
+    window.opticsFrames.push({y:scrollY,globalOverlay:getComputedStyle(canvas).visibility==="visible",error:Math.max(0,...errors),missing:panels.filter(({el})=>!el.querySelector(':scope > .studio-glass-optics')).map(({el})=>el.className)});
     requestAnimationFrame(sample);
    };requestAnimationFrame(sample);
   });
@@ -39,10 +39,10 @@ try {
   }
   await page.screenshot({path:`tmp/scroll-${width}-${theme}-${driver}.png`});
   const frames=await page.evaluate(()=>{window.opticsRecording=false;return window.opticsFrames;});
-  const result={width,theme,driver,frames:frames.length,positions:new Set(frames.map(x=>x.y)).size,hidden:frames.filter(x=>x.hidden).length,maxError:Math.max(...frames.map(x=>x.error))};
+  const result={width,theme,driver,frames:frames.length,positions:new Set(frames.map(x=>x.y)).size,globalOverlay:frames.filter(x=>x.globalOverlay).length,maxError:Math.max(...frames.map(x=>x.error)),missing:[...new Set(frames.flatMap(x=>x.missing))]};
   results.push(result);await page.close();
  }
  fs.writeFileSync("tmp/scroll-optics.json",JSON.stringify(results,null,2));
- const failed=results.filter(item=>item.hidden||item.maxError>.5||item.positions<4);
+ const failed=results.filter(item=>item.globalOverlay||item.maxError>.5||item.positions<4);
  console.log(JSON.stringify({checks:results.length,failed,results},null,2));if(failed.length)process.exitCode=1;
 } finally {await browser.close();}

@@ -31,7 +31,7 @@ test("阅读与推导只有一层主要玻璃，嵌套内容不再重复模糊",
 test("连续滚动时折射逐帧对齐，加宽透镜仍不覆盖正文中心",async({page})=>{
  await page.goto("/?chapter=6");
  const canvas=page.locator(".studio-glass-shared-canvas");
- await expect(canvas).toBeVisible();
+ await expect(canvas).toHaveAttribute("data-presentation","native-backdrop");
  await expect(page.locator(".hero-module")).toBeVisible();
  for(const reducedMotion of ["no-preference","reduce"] as const){
   await page.emulateMedia({reducedMotion});
@@ -46,17 +46,19 @@ test("连续滚动时折射逐帧对齐，加宽透镜仍不覆盖正文中心",
     const count=gl.getUniform(program,gl.getUniformLocation(program,"u_count"));
     const rects=Array.from({length:count},(_,i)=>Array.from(gl.getUniform(program,gl.getUniformLocation(program,`u_rects[${i}]`)) as Float32Array)).flat();
     const optics=Array.from({length:count},(_,i)=>Array.from(gl.getUniform(program,gl.getUniformLocation(program,`u_optics[${i}]`)) as Float32Array)).flat();
-    const rect=document.querySelector(".hero-module")!.getBoundingClientRect();
+    const hero=document.querySelector(".hero-module")!;
+    const rect=hero.getBoundingClientRect();
     const expected=[rect.left,rect.top,rect.width,rect.height];
     let error=Infinity;
-    for(let i=0;i<count;i++)error=Math.min(error,Math.max(...expected.map((value,j)=>Math.abs(value-rects[4*i+j]))));
+    const local=hero.querySelector(":scope > .studio-glass-optics")!.getBoundingClientRect();
+    error=Math.max(...expected.map((value,j)=>Math.abs(value-[local.left,local.top,local.width,local.height][j])));
     samples.push({error,visibility:getComputedStyle(canvas).visibility,range:Math.max(...optics.filter((_,i)=>i%4===1)),y:rect.top});
    }
    return samples;
   });
   expect(frames.at(-1)!.y).toBeLessThan(frames[0].y-100);
   for(const sample of frames){
-   expect(sample.visibility).toBe("visible");
+   expect(sample.visibility).toBe("hidden");
    expect(sample.error).toBeLessThan(.3);
    expect(sample.range).toBeLessThanOrEqual(page.viewportSize()!.width<=700?16:22);
   }

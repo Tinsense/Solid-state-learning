@@ -97,7 +97,17 @@ html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]
 html:root[data-theme="dark"] body :is(#overview,[data-liquid-glass])[data-liquid-glass].chapter-menu { backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important; -webkit-backdrop-filter:blur(36px) saturate(105%) brightness(.72) !important; }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]:is(.site-header,.header-wrapper) { border-radius:30px !important; }
 .lattice-atmosphere { position:fixed; inset:0 !important; width:100vw !important; height:100dvh !important; z-index:0; pointer-events:none; }
-.studio-glass-shared-canvas { position:fixed; inset:0; width:100vw !important; height:100dvh !important; z-index:620; pointer-events:none; background:transparent; }
+.studio-glass-shared-canvas { position:fixed; inset:0; width:100vw !important; height:100dvh !important; visibility:hidden !important; pointer-events:none; background:transparent; }
+/* Optical layers belong to their controls, never to a global foreground plane.
+   Negative local z keeps copy/icons opaque, with native modal occlusion. */
+html:root body :is([data-glass-layer="surface"],[data-glass-layer="control"]) { isolation:isolate; }
+html:root body [data-liquid-glass] > .studio-glass-optics { position:absolute !important; inset:-1px; border-radius:inherit; overflow:hidden; pointer-events:none; z-index:-1 !important; display:block; padding:0; margin:0; }
+html:root body .studio-glass-optics > .studio-glass-surface-canvas { position:absolute !important; inset:0; width:100%; height:100%; pointer-events:none; display:block; }
+.studio-glass-filter-defs { position:absolute; width:0; height:0; pointer-events:none; }
+html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer][data-native-lens="true"][data-native-lens] {
+ backdrop-filter:var(--glass-native-frost) var(--glass-native-lens) !important;
+ -webkit-backdrop-filter:var(--glass-native-frost) var(--glass-native-lens) !important;
+}
 /* Preserve the current page's native DOM frost while geometry is scrolling. */
 @media(max-width:700px){:root{--material-radius:36px;--material-control-radius:999px}}
 @media(max-width:900px){

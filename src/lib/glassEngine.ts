@@ -10,6 +10,8 @@
  * Fresnel rim, compact directional glare and restrained chromatic dispersion.
  */
 
+import {NativeBackdrop,supportsNativeBackdrop} from "./nativeBackdrop";
+
 const SURFACE_SELECTOR = [
   ".site-header",
   ".chapter-rail",
@@ -71,6 +73,8 @@ out vec4 fragColor;
 uniform vec2 u_viewport;
 uniform float u_dpr;
 uniform int u_count;
+// 0 is the combined diagnostic pass; positive indices draw one local layer.
+uniform int u_surfaceIndex;
 uniform vec4 u_rects[MAX_SURFACES];
 uniform float u_radii[MAX_SURFACES];
 uniform vec4 u_optics[MAX_SURFACES];
@@ -134,6 +138,7 @@ void main() {
 
   for (int i = 0; i < MAX_SURFACES; i++) {
     if (i >= u_count) break;
+    if (u_surfaceIndex > 0 && i != u_surfaceIndex - 1) continue;
     float d = surfaceSDF(cssPoint, u_rects[i], u_radii[i]);
     if (d <= 0.75) {
       float score = abs(d);
@@ -403,11 +408,14 @@ class SharedGlassRenderer {
   private pointerY = window.innerHeight * 0.18;
   private backgroundFrame = "";
   private backgroundCanvas: HTMLCanvasElement | null = null;
+  private native = supportsNativeBackdrop() ? new NativeBackdrop() : null;
+  private layers = new Map<HTMLElement,{host:HTMLSpanElement;canvas:HTMLCanvasElement;ctx:CanvasRenderingContext2D}>();
 
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "crystal-glass-12";
+    canvas.dataset.opticsVersion = "crystal-glass-13";
+    canvas.dataset.presentation = this.native ? "native-backdrop" : "element-attached";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
     this.canvas = canvas;
@@ -476,7 +484,10 @@ class SharedGlassRenderer {
     this.pointerY = y;
   }
 
+  invalidateMaterial(){this.native?.invalidate();}
+
   render(elements: HTMLElement[], time: number) {
+    this.native?.beginFrame();
     const gl = this.gl;
     const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     const width = Math.max(1, Math.round(window.innerWidth * dpr));
@@ -489,10 +500,11 @@ class SharedGlassRenderer {
     }
 
     const visible = elements
-      .map((element) => ({ element, rect: element.getBoundingClientRect() }))
+      .map((element) => ({ element, rect: element.getBoundingClientRect(), style:getComputedStyle(element) }))
       .filter(({ rect }) =>
         rect.width > 3 && rect.height > 3 &&
-        rect.bottom > -40 && rect.top < window.innerHeight + 40 &&
+        // Bake local native maps before a fast fling reaches the next unit.
+        rect.bottom > -window.innerHeight && rect.top < window.innerHeight * 2 &&
         rect.right > -40 && rect.left < window.innerWidth + 40
       )
       .slice(0, MAX_SURFACES);
@@ -503,12 +515,12 @@ class SharedGlassRenderer {
     const frostData = new Float32Array(MAX_SURFACES * 3);
     const flagData = new Float32Array(MAX_SURFACES);
 
-    visible.forEach(({ element, rect }, index) => {
+    visible.forEach(({ element, rect, style }, index) => {
       rectData[index * 4] = rect.left;
       rectData[index * 4 + 1] = rect.top;
       rectData[index * 4 + 2] = rect.width;
       rectData[index * 4 + 3] = rect.height;
-      const cssRadius = Number.parseFloat(getComputedStyle(element).borderRadius) || 18;
+      const cssRadius = Number.parseFloat(style.borderRadius) || 18;
       radiusData[index] = Math.max(2, Math.min(cssRadius, rect.width * 0.5, rect.height * 0.5));
       // Embedded buttons inherit the outer panel's already-applied frost.
       const materialElement = element.dataset.glassLayer === "control"
@@ -555,7 +567,11 @@ class SharedGlassRenderer {
       opticsData[index * 4 + 2] = fresnelRange;
       opticsData[index * 4 + 3] = glareRange;
       flagData[index] = element.matches(".chapter-menu") ? 5 : element.matches(".search-panel") ? 4 : element.matches(".liquid-button,.top-action,.brand,.chapter-title,.chapter-menu-trigger,.mobile-rail-toggle,.header-center,.header-link,.tool-strip a") ? 3 : element.matches(".chapter-rail") ? 2 : element.matches(".site-header,.header-wrapper") ? 1 : 0;
+      if(this.native){
+        this.native.update(element,element.offsetWidth,element.offsetHeight,radiusData[index],refractionPx,refractionRange,style.backdropFilter);
+      }
     });
+    this.native?.retain(new Set(visible.map(({element})=>element)));
 
     /*
      * Upload the actual full-screen lattice/background canvas as a texture.
@@ -569,7 +585,7 @@ class SharedGlassRenderer {
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.backgroundTexture);
     if (
-      backgroundCanvas &&
+      !this.native && backgroundCanvas &&
       backgroundCanvas !== this.canvas &&
       backgroundCanvas.width > 1 &&
       backgroundCanvas.height > 1
@@ -619,11 +635,44 @@ class SharedGlassRenderer {
       uniform(gl, this.program, "u_theme"),
       document.documentElement.dataset.theme === "light" ? 1 : 0
     );
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    if(!this.native){
+      // Present each lens INSIDE its actual DOM surface. The browser scrolls,
+      // clips, transforms and occludes this layer together with its button,
+      // even when the JS thread cannot keep up with asynchronous touch scroll.
+      gl.enable(gl.SCISSOR_TEST);
+      const retained=new Set(visible.map(({element})=>element));
+      for(const [element,layer]of this.layers)if(!retained.has(element)){layer.host.remove();this.layers.delete(element);}
+      visible.forEach(({element,rect,style},index)=>{
+        const x=Math.max(0,Math.floor(rect.left*dpr)),y=Math.max(0,Math.floor(rect.top*dpr));
+        const right=Math.min(width,Math.ceil(rect.right*dpr)),bottom=Math.min(height,Math.ceil(rect.bottom*dpr));
+        if(right<=x||bottom<=y)return;
+        gl.scissor(x,height-bottom,right-x,bottom-y);gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform1i(uniform(gl,this.program,"u_surfaceIndex"),index+1);
+        gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+        let layer=this.layers.get(element);
+        if(!layer){
+          const host=document.createElement("span");host.className="studio-glass-optics";host.setAttribute("aria-hidden","true");
+          const canvas=document.createElement("canvas");canvas.className="studio-glass-surface-canvas";host.append(canvas);
+          const ctx=canvas.getContext("2d")!;layer={host,canvas,ctx};this.layers.set(element,layer);element.append(host);
+          element.dataset.refractionSource="wallpaper-fallback";
+        }
+        const sx=rect.width/element.offsetWidth,sy=rect.height/element.offsetHeight;
+        layer.host.style.left=`-${parseFloat(style.borderLeftWidth)||0}px`;layer.host.style.top=`-${parseFloat(style.borderTopWidth)||0}px`;
+        layer.host.style.width=`${element.offsetWidth}px`;layer.host.style.height=`${element.offsetHeight}px`;
+        if(layer.canvas.width!==right-x)layer.canvas.width=right-x;
+        if(layer.canvas.height!==bottom-y)layer.canvas.height=bottom-y;
+        Object.assign(layer.canvas.style,{left:`${(x/dpr-rect.left)/sx}px`,top:`${(y/dpr-rect.top)/sy}px`,width:`${(right-x)/dpr/sx}px`,height:`${(bottom-y)/dpr/sy}px`});
+        layer.ctx.clearRect(0,0,right-x,bottom-y);
+        layer.ctx.drawImage(this.canvas,x,y,right-x,bottom-y,0,0,right-x,bottom-y);
+      });
+      gl.disable(gl.SCISSOR_TEST);
+    }
+    gl.uniform1i(uniform(gl,this.program,"u_surfaceIndex"),0);
     gl.bindVertexArray(null);
   }
 
   dispose() {
+    this.native?.dispose();for(const layer of this.layers.values())layer.host.remove();this.layers.clear();
     const gl = this.gl;
     gl.deleteProgram(this.program.program);
     gl.deleteBuffer(this.buffer);
@@ -784,6 +833,7 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
     };
 
     const schedule = () => {
+      renderer?.invalidateMaterial();
       syncElements();
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(render);
@@ -792,10 +842,9 @@ export function startGlassSystem(selector = SURFACE_SELECTOR) {
     const onScroll = () => {
       const now = performance.now();
       scrollActiveUntil = now + 180;
-      // Synchronize before this scroll event's paint. Do not hide the lens or
-      // debounce until scrolling stops; keep sampling DOM bounds each frame.
-      if (!document.hidden) renderer?.render(elements, motion.matches ? 0 : now / 1000);
-      lastPaint = now;
+      // Only schedule once per display frame. The DOM-attached/native lens
+      // already moves with the compositor, so a second synchronous GPU pass
+      // in every scroll event adds latency without improving alignment.
       if (!frame) frame = requestAnimationFrame(render);
     };
 
