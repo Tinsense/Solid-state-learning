@@ -11,6 +11,7 @@
  */
 
 import {NativeBackdrop,supportsNativeBackdrop} from "./nativeBackdrop";
+import {LENS_PROFILE_GLSL} from "./lensProfile";
 
 const SURFACE_SELECTOR = [
   ".site-header",
@@ -105,7 +106,9 @@ vec2 safeNormalize(vec2 v) {
   return l > 0.0001 ? v / l : vec2(1.0, 0.0);
 }
 
-/* Blur the scene BEFORE bending it. The rim and the central DOM material
+${LENS_PROFILE_GLSL}
+
+/* Sample the same frost aperture everywhere. The rim and the central material
    share the same CSS blur/saturation/brightness, not clear vs frosted glass. */
 vec4 frostSample(vec2 uv, vec3 frost) {
   float textureScale = float(textureSize(u_background, 0).x) / max(u_viewport.x, 1.0);
@@ -123,6 +126,41 @@ vec4 frostSample(vec2 uv, vec3 frost) {
   float luma = dot(sampleValue.rgb, vec3(0.2126, 0.7152, 0.0722));
   sampleValue.rgb = clamp(mix(vec3(luma), sampleValue.rgb, frost.y) * frost.z, 0.0, 1.0);
   return sampleValue;
+}
+
+/* Scatter in OUTPUT/screen space after refraction. Blurring around an already
+   warped UV is source-space frost and stretches its radius at the shoulder. */
+vec4 bentTexel(vec2 point, vec2 uv, vec4 rect, float radius, vec4 optics) {
+  vec2 local = point-rect.xy-rect.zw*0.5;
+  vec2 q = abs(local)-rect.zw*0.5+radius;
+  vec2 outer = max(q,0.0);
+  vec2 normal = length(outer)>0.0001 ? normalize(outer)
+      : (q.x>q.y ? vec2(1.0,0.0) : vec2(0.0,1.0));
+  normal *= sign(local);
+  float depth = max(-roundedRectSDF(local,rect.zw*0.5,radius),0.0);
+  vec2 pxToUV = vec2(1.0,-1.0)/max(u_viewport,vec2(1.0));
+  vec2 offset = lensDisplacement(local,rect.zw,depth,optics.x,optics.y,normal)*pxToUV;
+  float shoulder = pow(1.0-smoothstep(0.0,max(optics.y,2.0),depth),0.88);
+  vec2 dispersion = normal*min(0.95,optics.x*0.065)*shoulder*pxToUV;
+  vec4 r = textureLod(u_background,clamp(uv+offset*1.035+dispersion,vec2(0.001),vec2(0.999)),0.0);
+  vec4 g = textureLod(u_background,clamp(uv+offset,vec2(0.001),vec2(0.999)),0.0);
+  vec4 b = textureLod(u_background,clamp(uv+offset*0.965-dispersion,vec2(0.001),vec2(0.999)),0.0);
+  return vec4(r.r,g.g,b.b,max(r.a,max(g.a,b.a)));
+}
+
+vec4 bentFrostSample(vec2 point,vec2 uv,vec4 rect,float radius,vec4 optics,vec3 frost) {
+  // Separable 3x3 binomial kernel: output variance is frost.x squared.
+  float aperture = 1.41421356*frost.x;
+  vec2 pxToUV = vec2(1.0,-1.0)/max(u_viewport,vec2(1.0));
+  vec4 value = vec4(0.0);
+  for(int y=-1;y<=1;y++) for(int x=-1;x<=1;x++) {
+    vec2 shift = vec2(float(x),float(y))*aperture;
+    float weight = (x==0?0.5:0.25)*(y==0?0.5:0.25);
+    value += bentTexel(point+shift,uv+shift*pxToUV,rect,radius,optics)*weight;
+  }
+  float luma = dot(value.rgb,vec3(0.2126,0.7152,0.0722));
+  value.rgb = clamp(mix(vec3(luma),value.rgb,frost.y)*frost.z,0.0,1.0);
+  return value;
 }
 
 void main() {
@@ -178,8 +216,6 @@ void main() {
   float opticalEdgeMask = 1.0;
 
   vec2 center = rect.xy + rect.zw * 0.5;
-  vec2 centerDir = safeNormalize(cssPoint - center);
-  vec2 bendDir = safeNormalize(mix(centerDir, normal, 0.78));
 
   float normalAngle = atan(normal.y, normal.x);
   float pointerAngle = atan(center.y - u_pointer.y, u_pointer.x - center.x);
@@ -201,20 +237,6 @@ void main() {
   float glare = (diagonalGlint + farGlint) * (0.86 + 0.14 * pointerGlint);
   glare *= (1.0 - smoothstep(0.0, max(optics.w, 0.25), depth)) * opticalEdgeMask;
 
-  /* The shoulder smoothly joins the full-area lens field. */
-  float refractField = 1.0 - smoothstep(0.0, max(optics.y, 2.0), depth);
-  refractField = pow(refractField, 0.88) * opticalEdgeMask;
-
-  float refractionPx = optics.x * refractField;
-  /* DOM/SDF y points down; the uploaded texture's UV y points up.
-     Use the same conversion for bend, dispersion and the scatter aperture. */
-  vec2 pxToUV = vec2(1.0 / max(u_viewport.x, 1.0), -1.0 / max(u_viewport.y, 1.0));
-  vec2 refractionUV = bendDir * refractionPx * pxToUV;
-  vec2 local = (cssPoint - center) / rect.zw;
-  vec2 body = optics.x * vec2(-0.64*sin(PI*local.x)+0.18*sin(2.0*PI*local.y),
-                            -0.64*sin(PI*local.y)+0.12*sin(2.0*PI*local.x)) + vec2(2.0,-1.5);
-  refractionUV = mix(body * pxToUV, refractionUV, refractField);
-
   /*
    * Canvas texture is uploaded with UNPACK_FLIP_Y_WEBGL=true,
    * therefore gl_FragCoord-normalized UV aligns directly to the viewport.
@@ -234,18 +256,9 @@ void main() {
      * background positions, so the split is visible on lattice lines/atoms
      * without creating a synthetic coloured outline around empty glass.
      */
-    float dispersionPx = min(0.95, optics.x * 0.065) * refractField;
-    vec2 dispersionUV = bendDir * dispersionPx * pxToUV;
-
-    vec2 uvR = clamp(baseUV + refractionUV * 1.035 + dispersionUV, vec2(0.001), vec2(0.999));
-    vec2 uvG = clamp(baseUV + refractionUV,                  vec2(0.001), vec2(0.999));
-    vec2 uvB = clamp(baseUV + refractionUV * 0.965 - dispersionUV, vec2(0.001), vec2(0.999));
-
-    vec4 sampleR = frostSample(uvR, frost);
-    vec4 sampleG = frostSample(uvG, frost);
+    vec4 scattered = bentFrostSample(cssPoint,baseUV,rect,radius,optics,frost);
     environment = frostSample(baseUV, frost).rgb;
-    vec4 sampleB = frostSample(uvB, frost);
-    sampledAlpha = max(max(sampleR.a, sampleG.a), sampleB.a);
+    sampledAlpha = scattered.a;
 
     /*
      * Do NOT premultiply the separated RGB by sampledAlpha here.
@@ -253,9 +266,7 @@ void main() {
      * Premultiplying twice was suppressing chromatic separation on the
      * semi-transparent lattice lines / atom halos.
      */
-    vec3 separatedRGB = vec3(sampleR.r, sampleG.g, sampleB.b);
-
-    refracted = separatedRGB;
+    refracted = scattered.rgb;
   }
 
   /*
@@ -408,7 +419,7 @@ class SharedGlassRenderer {
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "crystal-glass-15";
+    canvas.dataset.opticsVersion = "crystal-glass-16";
     canvas.dataset.presentation = this.native ? "native-backdrop" : "element-attached";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
@@ -526,7 +537,8 @@ class SharedGlassRenderer {
         if (!value) return fallback;
         return Number.parseFloat(value) / (value.includes("%") ? 100 : 1);
       };
-      frostData.set([filterValue("blur", 0), filterValue("saturate", 1), filterValue("brightness", 1)], index * 3);
+      const nativeBlur=Number.parseFloat(getComputedStyle(materialElement).getPropertyValue("--glass-native-blur"))||0;
+      frostData.set([filterValue("blur",nativeBlur), filterValue("saturate", 1), filterValue("brightness", 1)], index * 3);
 
       /*
        * Optical hierarchy:

@@ -21,21 +21,27 @@ test("真实目录与阅读卡片内部均折射，保留相同的后置模糊",
   // synthetic button. Comparing to the SAME frost excludes blur-only passes.
   await page.evaluate(selector=>{(document.querySelector('.lattice-atmosphere') as HTMLElement).style.visibility='hidden';document.querySelector('#optical-dom-grid')?.remove();const grid=document.createElement('div');grid.id='optical-dom-grid';const pattern=selector==='.chapter-rail'?'repeating-linear-gradient(110deg,#172b3e 0,#eff5fa 80px,#172b3e 160px)':'repeating-linear-gradient(110deg,#172b3e 0 20px,#eff5fa 20px 40px)';grid.style.cssText=`position:fixed;inset:0;z-index:0;pointer-events:none;background:${pattern}`;document.getElementById('root')!.prepend(grid)},selector);
   await page.waitForTimeout(160);const bent=await target.screenshot({path:`tmp/panel-${selector.slice(1)}-${info.project.name}-bent.png`});
-  const frost=await target.evaluate(el=>{const s=getComputedStyle(el).backdropFilter;expectOrder(s);return s.replace(/url\([^)]*\)/g,'').trim();function expectOrder(s:string){if(!s.startsWith('url('))throw new Error('Frost must follow displacement')}});
-  await target.evaluate((el,frost)=>(el as HTMLElement).style.setProperty('backdrop-filter',frost,'important'),frost);
+  const scale=await target.evaluate(el=>{
+   const s=getComputedStyle(el).backdropFilter,id=s.match(/#([^"\)]+)/)![1],filter=document.getElementById(id)!;
+   const blur=filter.querySelector('feGaussianBlur')!,bend=filter.querySelector('feDisplacementMap')!;
+   if(blur.previousElementSibling!==bend||blur.getAttribute('in')!=='bent-backdrop'||Number(blur.getAttribute('stdDeviation'))<=0)throw new Error('One Gaussian must follow displacement');
+   const scale=bend.getAttribute('scale')!;bend.setAttribute('scale','0');return scale;
+  });
   const flat=await target.screenshot({path:`tmp/panel-${selector.slice(1)}-${info.project.name}-flat.png`});const changes=await opticalDifference(page,bent,flat);
   // Strong drawer frost intentionally suppresses high-frequency contrast.
   // Use a smooth low-frequency source and retain the exact same frost in
   // both screenshots; a zero-displacement filter still measures zero here.
-  const threshold=selector==='.chapter-rail'?1:3;
+  // The drawer's centre now deliberately has much less deformation than its
+  // edge, but must still differ from the identical zero-displacement frost.
+  const threshold=selector==='.chapter-rail'?.5:3;
   expect(changes[1],`${selector} centre actual pixel displacement`).toBeGreaterThan(threshold);
   expect(changes.filter(value=>value>threshold).length,`${selector} full-area displacement`).toBe(3);
-  await target.evaluate(el=>(el as HTMLElement).style.removeProperty('backdrop-filter'));
+  await target.evaluate((el,scale)=>{const id=getComputedStyle(el).backdropFilter.match(/#([^"\)]+)/)![1];document.getElementById(id)!.querySelector('feDisplacementMap')!.setAttribute('scale',scale)},scale);
   await page.evaluate(()=>document.querySelector('#optical-dom-grid')?.remove());
  }
 });
 
-test("真实顶栏折射下方玻璃卡片中的动态DOM，不只是壁纸",async({page})=>{
+test("真实顶栏及章节标题胶囊折射下方玻璃卡片中的动态DOM，不只是壁纸",async({page},info)=>{
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');
  const brand=page.locator('.glass-toolbar .brand');await expect(brand).toHaveAttribute('data-native-lens','true');
  expect(await page.locator('main').evaluate(el=>getComputedStyle(el).viewTransitionName)).toBe('none');
@@ -46,12 +52,16 @@ test("真实顶栏折射下方玻璃卡片中的动态DOM，不只是壁纸",asy
   const content=document.createElement('span');content.id='live-card-content';content.style.cssText='position:absolute;inset:0;background:repeating-linear-gradient(90deg,#081f35 0 24px,#f4f8ff 24px 48px);color:#ba4162;font:700 48px sans-serif';content.textContent='LIVE DOM 123456789';card.append(content);
  });
  await page.waitForTimeout(160);
+ for(const selector of info.project.name==='desktop'?['.glass-toolbar .brand','.glass-toolbar .chapter-title']:['.glass-toolbar .brand']){
+ const target=page.locator(selector);await expect(target).toHaveAttribute('data-native-lens','true');
  for(const shift of [0,13]){
   await page.evaluate(shift=>(document.querySelector('#live-card-content') as HTMLElement).style.backgroundPosition=shift+'px 0',shift);
-  const bent=await brand.screenshot();const scale=await brand.evaluate(el=>{const id=getComputedStyle(el).backdropFilter.match(/#([^"\)]+)/)![1],displace=document.getElementById(id)!.querySelector('feDisplacementMap')!;const scale=displace.getAttribute('scale')!;displace.setAttribute('scale','0');return scale});
-  const flat=await brand.screenshot();const changes=await opticalDifference(page,bent,flat);
-  expect(changes[1],`real toolbar at DOM phase ${shift}`).toBeGreaterThan(3);
-  await brand.evaluate((el,scale)=>{const id=getComputedStyle(el).backdropFilter.match(/#([^"\)]+)/)![1];document.getElementById(id)!.querySelector('feDisplacementMap')!.setAttribute('scale',scale)},scale);
+  const bent=await target.screenshot({path:`tmp/chrome-${selector.includes('chapter-title')?'title':'brand'}-${info.project.name}-bent.png`});const scale=await target.evaluate(el=>{const id=getComputedStyle(el).backdropFilter.match(/#([^"\)]+)/)![1],displace=document.getElementById(id)!.querySelector('feDisplacementMap')!;const scale=displace.getAttribute('scale')!;displace.setAttribute('scale','0');return scale});
+  const flat=await target.screenshot({path:`tmp/chrome-${selector.includes('chapter-title')?'title':'brand'}-${info.project.name}-flat.png`});const changes=await opticalDifference(page,bent,flat);
+  expect(changes[1],`${selector} centre at DOM phase ${shift}`).toBeGreaterThan(3);
+  expect(changes[0],`${selector} curved edge at DOM phase ${shift}`).toBeGreaterThan(5);
+  await target.evaluate((el,scale)=>{const id=getComputedStyle(el).backdropFilter.match(/#([^"\)]+)/)![1];document.getElementById(id)!.querySelector('feDisplacementMap')!.setAttribute('scale',scale)},scale);
+ }
  }
 });
 
@@ -102,10 +112,10 @@ test("目录没有全屏前景折射，文字覆盖本地高光并遮挡正文�
   const gl=document.querySelector(".studio-glass-shared-canvas")!;
   const optical=el.querySelector(".studio-glass-optics")!;
   const styles=getComputedStyle(optical);
-  return{global:getComputedStyle(gl).visibility,localZ:styles.zIndex,clipped:styles.overflow,filter:getComputedStyle(el).backdropFilter,
+  return{global:getComputedStyle(gl).visibility,localZ:styles.zIndex,clipped:styles.overflow,filter:getComputedStyle(el).backdropFilter,blur:Number(getComputedStyle(el).getPropertyValue('--glass-native-blur')),
    lenses:[...el.querySelectorAll(".rail-item .studio-glass-optics")].length,main:document.querySelector<HTMLElement>("main")!.inert};
  });
- expect(result).toMatchObject({global:"hidden",localZ:"-1",clipped:"hidden",lenses:0,main:true});expect(result.filter).toContain("url(");expect(result.filter).toContain("blur(20px)");
+ expect(result).toMatchObject({global:"hidden",localZ:"-1",clipped:"hidden",lenses:0,main:true,blur:20});expect(result.filter).toContain("url(");
  await page.screenshot({path:`tmp/native-directory-${testInfo.project.name}.png`});
 });
 

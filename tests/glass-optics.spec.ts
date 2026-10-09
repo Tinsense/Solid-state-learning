@@ -1,8 +1,43 @@
 import { test, expect } from "@playwright/test";
+import {lensDisplacement} from "../src/lib/lensProfile";
+
+test("折射从边缘连续递减至中央，等深度圆角比直边更强",()=>{
+ const magnitudes=Array.from({length:40},(_,i)=>{
+  const depth=1+i*2,offset=lensDisplacement(-100+depth,0,200,160,depth,26,11,-1,0);
+  return Math.hypot(offset[0]-1.5,offset[1]+1);
+ });
+ expect(magnitudes.every((value,i)=>!i||value<magnitudes[i-1])).toBe(true);
+ expect(magnitudes[0]).toBeGreaterThan(magnitudes[20]*3);
+ expect(magnitudes.at(-1)!).toBeLessThan(1);
+ const root=Math.SQRT1_2,depth=4;
+ const corner=lensDisplacement(-60-(40-depth)*root,-40-(40-depth)*root,200,160,depth,26,11,-root,-root);
+ const straight=lensDisplacement(-100+depth,0,200,160,depth,26,11,-1,0);
+ expect(Math.hypot(corner[0]-1.5,corner[1]+1)/Math.hypot(straight[0]-1.5,straight[1]+1)).toBeCloseTo(1.28,5);
+});
+
+test("实际原生位移图随深度衰减，圆角增强不截断",async({page})=>{
+ await page.goto('/');const target=page.locator('.glass-toolbar .brand');await expect(target).toHaveAttribute('data-native-lens','true');
+ const result=await target.evaluate(async el=>{
+  const id=getComputedStyle(el).backdropFilter.match(/#([^"\)]+)/)![1],filter=document.getElementById(id)!;
+  const scale=Number(filter.querySelector('feDisplacementMap')!.getAttribute('scale'));
+  const image=filter.querySelector('feImage')!,im=new Image();im.src=image.getAttribute('href')!;await im.decode();
+  const canvas=document.createElement('canvas');canvas.width=im.width;canvas.height=im.height;
+  const ctx=canvas.getContext('2d')!;ctx.drawImage(im,0,0);
+  const mapScale=im.width/Number(image.getAttribute('width')),pad=-Number(image.getAttribute('x'));
+  const magnitude=(x:number,y:number)=>{const p=ctx.getImageData(Math.round((x+pad)*mapScale),Math.round((y+pad)*mapScale),1,1).data;return Math.hypot((p[0]/255-.5)*scale-1.5,(p[1]/255-.5)*scale+1)};
+  const height=(el as HTMLElement).offsetHeight,mid=(el as HTMLElement).offsetWidth*.5,radius=height*.5,edge=2;
+  const corner=radius-(radius-edge)*Math.SQRT1_2;
+  return {depths:[edge,height*.2,height*.35,height*.49].map(y=>magnitude(mid,y)),corner:magnitude(corner,corner),scale};
+ });
+ expect(result.depths.every((value,i)=>!i||value<result.depths[i-1])).toBe(true);
+ expect(result.depths.at(-1)!).toBeLessThan(2);
+ expect(result.corner).toBeGreaterThan(result.depths[0]*1.18);
+ expect(result.scale).toBeGreaterThan(26*2*1.28);
+});
 
 test("卡片和按钮整面连续折射，圆角外保持透明", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-15");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-16");
   const result = await page.evaluate(() => {
     const live = document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!.getContext("webgl2")!;
     const current = live.getParameter(live.CURRENT_PROGRAM) as WebGLProgram;
@@ -94,7 +129,35 @@ test("卡片和按钮整面连续折射，圆角外保持透明", async ({ page 
       });
       return Math.max(...grey)-Math.min(...grey);
     };
-    return {...samples,shoulder,fullCentre,clearContrast:contrast(0),frostedContrast:contrast(8)};
+    const clearContrast=contrast(0),frostedContrast=contrast(8);
+    // Encode a source-space grating that becomes a uniform SCREEN-space
+    // grating after bending. The same output blur must attenuate it equally
+    // near the shoulder and at the centre, despite different magnification.
+    gl.uniform4fv(uniform("u_rects[0]"),[40,60,160,80]);
+    gl.uniform1f(uniform("u_radii[0]"),25);
+    gl.uniform4fv(uniform("u_optics[0]"),[12,8,1.4,1]);
+    const smooth=(t:number)=>{const v=Math.max(0,Math.min(1,t));return v*v*(3-2*v)};
+    const sourceAt=(y:number)=>{
+      const local=y-100,depth=Math.max(0,40-Math.abs(local)),normal=Math.sign(local);
+      const envelope=.025+.975*Math.pow(1-smooth(depth/40),1.35),body=smooth((depth-8)/32);
+      return y+12*envelope*(normal+(local/40-normal)*body)-1;
+    };
+    for(let row=0;row<220;row++){
+      const sourceY=220-row-.5;let low=35,high=165;
+      for(let i=0;i<24;i++){const mid=(low+high)/2;if(sourceAt(mid)<sourceY)low=mid;else high=mid}
+      const grey=Math.round(128+100*Math.cos(((low+high)/2-70)*2*Math.PI/48));
+      for(let x=0;x<240;x++){const index=(row*240+x)*4;pixels[index]=pixels[index+1]=pixels[index+2]=grey}
+    }
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,240,220,0,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+    gl.generateMipmap(gl.TEXTURE_2D);gl.uniform3fv(uniform("u_frost[0]"),[4,1,1]);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    const attenuation=.5+.5*Math.cos(2*Math.PI/48*Math.SQRT2*4);
+    const uniformBlurErrors=[72,76,80,84,96,100,104,108,124,128].map(y=>{
+      const value=new Uint8Array(4);gl.readPixels(120,219-y,1,1,gl.RGBA,gl.UNSIGNED_BYTE,value);
+      const expected=(128+100*attenuation*Math.cos((y+.5-70)*2*Math.PI/48))/255;
+      return Math.abs(value[1]/value[3]-expected);
+    });
+    return {...samples,shoulder,fullCentre,clearContrast,frostedContrast,uniformBlurErrors};
   });
   expect(result.left.dx).toBeLessThan(-.02);
   expect(result.right.dx).toBeGreaterThan(.02);
@@ -112,11 +175,12 @@ test("卡片和按钮整面连续折射，圆角外保持透明", async ({ page 
   expect(result.shoulder.every(value=>value.alpha>.8)).toBe(true);
   expect(Math.max(...result.shoulder.slice(1).map((value,i)=>Math.abs(value.dx-result.shoulder[i].dx)))).toBeLessThan(.035);
   expect(result.frostedContrast).toBeLessThan(result.clearContrast*.45);
+  expect(Math.max(...result.uniformBlurErrors)).toBeLessThan(.035);
 });
 
 test("小控件全表面折射，同时保持统一的散射参数和不透明文字",async({page})=>{
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-15");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-16");
   for(const theme of ["light","dark"]){
     await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
     await page.waitForTimeout(120);
@@ -133,10 +197,11 @@ test("小控件全表面折射，同时保持统一的散射参数和不透明�
       if(match<0)throw new Error("Header lens not rendered");
       return {frost:Array.from(gl.getUniform(p,gl.getUniformLocation(p,`u_frost[${match}]`)) as Float32Array),
         optics:Array.from(gl.getUniform(p,gl.getUniformLocation(p,`u_optics[${match}]`)) as Float32Array),
-        filter:getComputedStyle(button).backdropFilter,height:rect.height};
+        filter:getComputedStyle(button).backdropFilter,blur:Number(getComputedStyle(button).getPropertyValue('--glass-native-blur')),height:rect.height};
     });
     expect(values.frost[0]).toBe(6);
-    expect(values.filter).toContain("blur(6px)");
+    expect(values.blur).toBe(6);
+    expect(values.filter).not.toContain("blur(");
     expect(values.optics[0]).toBeGreaterThanOrEqual(26);
     expect(values.optics[1]).toBeGreaterThanOrEqual(10);
     expect(values.height-2*values.optics[1]).toBeGreaterThan(28);

@@ -86,7 +86,7 @@ test("晶格场、正文模块与任务栏使用共享 Studio WebGL2 玻璃", as
   await segmented.scrollIntoViewIfNeeded();
   const figure = segmented.locator("xpath=ancestor::figure");
   await expect(figure).toHaveAttribute("data-liquid-glass", "shared-webgl2");
-  expect(await figure.evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(");
+  expect(await figure.evaluate((element) => Number(getComputedStyle(element).getPropertyValue('--glass-native-blur')))).toBeGreaterThan(0);
   const metrics = await segmented.evaluate((element) => ({
     overflowX: getComputedStyle(element).overflowX,
     scrollWidth: element.scrollWidth,
@@ -234,7 +234,9 @@ test("手机目录打开后保持页面亮度并增强目录可读性", async ({
   test.skip(testInfo.project.name !== "mobile", "仅验证手机目录交互");
   await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
   await page.goto("/?chapter=2");
-  expect(await page.locator("#bragg .prose").evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(4px)");
+  await page.locator("#bragg .prose").scrollIntoViewIfNeeded();
+  await expect(page.locator("#bragg .prose")).toHaveAttribute('data-native-lens','true');
+  expect(await page.locator("#bragg .prose").evaluate((element) => Number(getComputedStyle(element).getPropertyValue('--glass-native-blur')))).toBe(4);
   await page.getByRole("button", { name: "章节目录" }).click();
 
   const scrim = page.locator(".rail-scrim");
@@ -242,12 +244,12 @@ test("手机目录打开后保持页面亮度并增强目录可读性", async ({
   await expect(rail).toHaveClass(/is-open/);
   const optics = await rail.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
-    blur: getComputedStyle(element).backdropFilter,
+    blur: Number(getComputedStyle(element).getPropertyValue('--glass-native-blur')),
     color: getComputedStyle(element.querySelector<HTMLElement>(".rail-item")!).color
   }));
   expect(await scrim.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
   expect(optics.background).toBe("rgba(255, 255, 255, 0.1)");
-  expect(optics.blur).toContain("blur(20px)");
+  expect(optics.blur).toBe(20);
   expect(optics.color).not.toBe("rgba(0, 0, 0, 0)");
 });
 
