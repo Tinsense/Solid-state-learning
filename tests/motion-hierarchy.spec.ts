@@ -28,7 +28,7 @@ test("阅读与推导只有一层主要玻璃，嵌套内容不再重复模糊",
  expect(await page.locator('[data-glass-layer="surface"]').evaluateAll(elements=>elements.some(element=>!!element.parentElement?.closest('[data-glass-layer="surface"]')))).toBe(false);
 });
 
-test("连续滚动时折射逐帧对齐，加宽透镜仍不覆盖正文中心",async({page})=>{
+test("连续滚动时整面背景透镜对齐，前景正文不参与位移",async({page})=>{
  await page.goto("/?chapter=6");
  const canvas=page.locator(".studio-glass-shared-canvas");
  await expect(canvas).toHaveAttribute("data-presentation","native-backdrop");
@@ -60,7 +60,7 @@ test("连续滚动时折射逐帧对齐，加宽透镜仍不覆盖正文中心",
   for(const sample of frames){
    expect(sample.visibility).toBe("hidden");
    expect(sample.error).toBeLessThan(.3);
-   expect(sample.range).toBeLessThanOrEqual(page.viewportSize()!.width<=700?16:22);
+   expect(sample.range).toBeLessThanOrEqual(page.viewportSize()!.width<=700?28:38);
   }
  }
  const values=await page.evaluate(()=>{

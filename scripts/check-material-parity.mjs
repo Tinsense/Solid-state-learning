@@ -30,6 +30,6 @@ try{
   }
   await page.close();
  }
- const failures=result.filter(item=>item.errors.length||item.overflow>1||item.version!=="crystal-glass-14"||item.source!=="dom-backdrop"||item.presentation!=="native-backdrop"||item.wallpaper!=="orbital-point-cloud-12"||["blur","fill","radius","shader"].some(key=>item[key]!==result.find(other=>other.name==="course"&&other.width===item.width&&other.theme===item.theme)[key]));
+ const failures=result.filter(item=>item.errors.length||item.overflow>1||item.version!=="crystal-glass-15"||item.source!=="dom-backdrop"||item.presentation!=="native-backdrop"||item.wallpaper!=="orbital-point-cloud-12"||["blur","fill","radius","shader"].some(key=>item[key]!==result.find(other=>other.name==="course"&&other.width===item.width&&other.theme===item.theme)[key]));
  fs.writeFileSync("tmp/material-parity.json",JSON.stringify(result,null,2));console.log(JSON.stringify({checks:result.length,failures},null,2));if(failures.length)process.exitCode=1;
 }finally{await browser.close();}

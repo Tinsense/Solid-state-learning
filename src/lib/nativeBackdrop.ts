@@ -1,6 +1,5 @@
 const NS="http://www.w3.org/2000/svg";
 type Lens={filter:SVGFilterElement;image:SVGFEImageElement;layer:HTMLSpanElement;shine:HTMLCanvasElement;key:string};
-const FULL_LENS_SELECTOR=".liquid-button,.top-action,.brand,.chapter-title,.chapter-menu-trigger,.mobile-rail-toggle,.header-center,.header-link,.tool-strip a,.segmented,.derivation-controls";
 const svgNode=<K extends keyof SVGElementTagNameMap>(name:K,attrs:Record<string,string>={})=>{
  const node=document.createElementNS(NS,name);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,value);return node;
 };
@@ -16,8 +15,7 @@ export class NativeBackdrop {
  private defs=svgNode("defs");private lenses=new Map<HTMLElement,Lens>();private sequence=0;private invalidated=false;
  constructor(){this.svg.classList.add("studio-glass-filter-defs");this.svg.append(this.defs);document.body.append(this.svg);}
  update(element:HTMLElement,width:number,height:number,radius:number,strength:number,range:number,filter:string){
-  const fullLens=element.matches(FULL_LENS_SELECTOR);
-  element.dataset.lensCoverage=fullLens?"full":"shoulder";
+  element.dataset.lensCoverage="full";
   let lens=this.lenses.get(element);
   if(!lens){
    const id=`studio-native-lens-${++this.sequence}`;
@@ -31,7 +29,7 @@ export class NativeBackdrop {
    element.style.setProperty("--glass-native-lens",`url("#${id}")`);
   }
   // Coordinates are local border-box coordinates; they do not change on scroll.
-  const key=[width,height,radius,strength,range,Number(fullLens)].map(v=>v.toFixed(1)).join(":");
+  const key=[width,height,radius,strength,range].map(v=>v.toFixed(1)).join(":");
   if(lens.key!==key){
    lens.key=key;
    lens.filter.setAttribute("width",String(width));lens.filter.setAttribute("height",String(height));
@@ -49,11 +47,11 @@ export class NativeBackdrop {
     let nx=length?ox/length:qx>qy?1:0,ny=length?oy/length:qy>=qx?1:0;
     nx*=Math.sign(px);ny*=Math.sign(py);
     const t=Math.min(1,depth/range),bend=Math.pow(1-t*t*(3-2*t),.88);
-    // Convex lens throughout the body: magnification plus a small prismatic
-    // shift. Continuous interpolation to the curved shoulder removes the
-    // former large neutral/flat centre without distorting foreground labels.
-    const bodyX=fullLens?Math.max(-24,Math.min(24,-px*.35))+2:0;
-    const bodyY=fullLens?Math.max(-15,Math.min(15,-py*.40))-1.5:0;
+    // Continuous lens over every surface. Normalized sinusoids retain a
+    // changing optical gradient across tall drawers and wide cards: clamped
+    // linear offsets produced a second, translated but flat central region.
+    const bodyX=strength*(-.64*Math.sin(Math.PI*px/width)+.18*Math.sin(2*Math.PI*py/height))+2;
+    const bodyY=strength*(-.64*Math.sin(Math.PI*py/height)+.12*Math.sin(2*Math.PI*px/width))-1.5;
     const displacementX=nx*strength*bend+bodyX*(1-bend);
     const displacementY=ny*strength*bend+bodyY*(1-bend);
     const offset=(y*w+x)*4;

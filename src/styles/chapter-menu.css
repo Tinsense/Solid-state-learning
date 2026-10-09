@@ -45,8 +45,10 @@
 /* Capture only chapter UI. Wallpaper and optical canvas stay live and are
    not duplicated into an outgoing fullscreen screenshot. No moving masks. */
 :root { view-transition-name:none; }
-main { view-transition-name:chapter-content; }
-.site-header { view-transition-name:chapter-toolbar; }
+/* Only the cover participates: naming main/header would isolate all child
+   backdrop filters from the wallpaper/content below those containers. */
+.hero-module { view-transition-name:chapter-content; }
+main,.site-header { view-transition-name:none; }
 .chapter-rail { view-transition-name:chapter-index; }
 ::view-transition-group(*) { animation-duration:220ms; }
 ::view-transition-old(chapter-content) { animation:chapter-content-out 85ms ease-in both; }

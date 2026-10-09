@@ -1,13 +1,13 @@
 /* Canonical material: imported by the course and built into every other site. */
 :root {
  --material-fill:rgba(205,221,239,.052); --material-border:rgba(235,242,255,.09);
- --material-frost:blur(2.5px) saturate(115%); --material-shadow:0 10px 30px rgba(0,0,0,.08);
+ --material-frost:blur(4px) saturate(115%); --material-shadow:0 10px 30px rgba(0,0,0,.08);
  --material-clear-fill:rgba(215,231,255,.018); --material-clear-frost:blur(3px) saturate(106%) brightness(1);
  --material-radius:44px; --material-control-radius:999px;
 }
 :root[data-theme="light"] {
  --material-fill:rgba(255,255,255,.052); --material-border:rgba(255,255,255,.09);
- --material-frost:blur(2.2px) saturate(115%); --material-shadow:0 10px 30px rgba(30,40,55,.045);
+ --material-frost:blur(4px) saturate(115%); --material-shadow:0 10px 30px rgba(30,40,55,.045);
  --material-clear-fill:rgba(255,255,255,.018); --material-clear-frost:blur(3px) saturate(102%) brightness(1.025);
 }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer="surface"] {
@@ -107,9 +107,14 @@ html:root body [data-liquid-glass] > .studio-glass-optics { position:absolute !i
 html:root body .studio-glass-optics > .studio-glass-surface-canvas { position:absolute !important; inset:0; width:100%; height:100%; pointer-events:none; display:block; }
 .studio-glass-filter-defs { position:absolute; width:0; height:0; pointer-events:none; }
 html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass][data-glass-layer][data-native-lens="true"][data-native-lens] {
- backdrop-filter:var(--glass-native-frost) var(--glass-native-lens) !important;
- -webkit-backdrop-filter:var(--glass-native-frost) var(--glass-native-lens) !important;
+ /* Scatter AFTER deformation. Otherwise magnification enlarges the blur at
+    the shoulder while the centre keeps a different apparent blur radius. */
+ backdrop-filter:var(--glass-native-lens) var(--glass-native-frost) !important;
+ -webkit-backdrop-filter:var(--glass-native-lens) var(--glass-native-frost) !important;
 }
+/* Named view-transition containers are backdrop roots even while idle.
+   Keep layout ancestors unnamed so descendant lenses can reach live DOM. */
+html:root body :is(main,.glass-toolbar) { view-transition-name:none !important; }
 /* Preserve the current page's native DOM frost while geometry is scrolling. */
 @media(max-width:700px){:root{--material-radius:36px;--material-control-radius:999px}}
 @media(max-width:900px){

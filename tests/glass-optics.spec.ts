@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 
-test("圆角玻璃在四个方向连续折射同一背景，内部与外部保持透明", async ({ page }) => {
+test("卡片和按钮整面连续折射，圆角外保持透明", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-14");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-15");
   const result = await page.evaluate(() => {
     const live = document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!.getContext("webgl2")!;
     const current = live.getParameter(live.CURRENT_PROGRAM) as WebGLProgram;
@@ -67,10 +67,10 @@ test("圆角玻璃在四个方向连续折射同一背景，内部与外部保�
       top:sample(120,41),bottom:sample(120,178),
       topLeft:sample(49,49),bottomRight:sample(190,170),
       centre:sample(120,110),outsideCorner:sample(42,42)};
-    // Wider shoulders smoothly reach zero without a hard optical seam.
+    // Wider shoulders join a non-flat central lens without an alpha seam.
     gl.uniform4fv(uniform("u_optics[0]"), [26,22,1.4,1]);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-    const shoulder = Array.from({length:24},(_,i)=>sample(42+i,110).alpha);
+    const shoulder = Array.from({length:24},(_,i)=>sample(42+i,110));
     gl.uniform1f(uniform("u_flags[0]"),3);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     const fullCentre=sample(120,110);
@@ -104,19 +104,19 @@ test("圆角玻璃在四个方向连续折射同一背景，内部与外部保�
   expect(result.topLeft.dy).toBeGreaterThan(.01);
   expect(result.bottomRight.dx).toBeGreaterThan(.01);
   expect(result.bottomRight.dy).toBeLessThan(-.01);
-  expect(result.centre.alpha).toBe(0);
+  expect(result.centre.alpha).toBeGreaterThan(.8);
+  expect(result.centre.dx).toBeGreaterThan(.003);
   expect(result.fullCentre.alpha).toBeGreaterThan(.8);
   expect(result.fullCentre.dx).toBeGreaterThan(.003);
   expect(result.outsideCorner.alpha).toBe(0);
-  expect(result.shoulder[0]).toBeGreaterThan(.2);
-  expect(result.shoulder.at(-1)).toBe(0);
-  expect(Math.max(...result.shoulder.slice(1).map((value,i)=>Math.abs(value-result.shoulder[i])))).toBeLessThan(.15);
+  expect(result.shoulder.every(value=>value.alpha>.8)).toBe(true);
+  expect(Math.max(...result.shoulder.slice(1).map((value,i)=>Math.abs(value.dx-result.shoulder[i].dx)))).toBeLessThan(.035);
   expect(result.frostedContrast).toBeLessThan(result.clearContrast*.45);
 });
 
 test("小控件全表面折射，同时保持统一的散射参数和不透明文字",async({page})=>{
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-14");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-15");
   for(const theme of ["light","dark"]){
     await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
     await page.waitForTimeout(120);

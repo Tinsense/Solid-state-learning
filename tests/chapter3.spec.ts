@@ -72,7 +72,11 @@ test("晶格场、正文模块与任务栏使用共享 Studio WebGL2 玻璃", as
   const header = page.locator(".site-header");
   await expect(header).toHaveAttribute("data-liquid-glass", "shared-webgl2");
   const canvas = page.locator(".studio-glass-shared-canvas");
-  await expect(canvas).toBeVisible();
+  // The shared canvas is a hidden shader/fallback work surface, not a global
+  // overlay. Native DOM lenses and local optical layers remain visible.
+  await expect(canvas).toHaveCSS("visibility","hidden");
+  await expect(canvas).toHaveAttribute("data-presentation","native-backdrop");
+  await expect(page.locator(".hero-module")).toHaveAttribute("data-native-lens","true");
   expect(await canvas.evaluate((element: HTMLCanvasElement) => element.width * element.height)).toBeGreaterThan(1);
 
   const primary = page.getByRole("button", { name: /开始学习/ });
@@ -230,7 +234,7 @@ test("手机目录打开后保持页面亮度并增强目录可读性", async ({
   test.skip(testInfo.project.name !== "mobile", "仅验证手机目录交互");
   await page.addInitScript(() => localStorage.setItem("kittel-theme", "light"));
   await page.goto("/?chapter=2");
-  expect(await page.locator("#bragg .prose").evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(2.2px)");
+  expect(await page.locator("#bragg .prose").evaluate((element) => getComputedStyle(element).backdropFilter)).toContain("blur(4px)");
   await page.getByRole("button", { name: "章节目录" }).click();
 
   const scrim = page.locator(".rail-scrim");
