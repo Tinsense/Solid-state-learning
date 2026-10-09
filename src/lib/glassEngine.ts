@@ -139,7 +139,7 @@ vec4 bentTexel(vec2 point, vec2 uv, vec4 rect, float radius, vec4 optics) {
   normal *= sign(local);
   float depth = max(-roundedRectSDF(local,rect.zw*0.5,radius),0.0);
   vec2 pxToUV = vec2(1.0,-1.0)/max(u_viewport,vec2(1.0));
-  vec2 offset = lensDisplacement(local,rect.zw,depth,optics.x,optics.y,normal)*pxToUV;
+  vec2 offset = lensDisplacement(local,rect.zw,depth,optics.x,optics.y,normal,radius)*pxToUV;
   float shoulder = pow(1.0-smoothstep(0.0,max(optics.y,2.0),depth),0.88);
   vec2 dispersion = normal*min(0.95,optics.x*0.065)*shoulder*pxToUV;
   vec4 r = textureLod(u_background,clamp(uv+offset*1.035+dispersion,vec2(0.001),vec2(0.999)),0.0);
@@ -419,7 +419,7 @@ class SharedGlassRenderer {
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "crystal-glass-16";
+    canvas.dataset.opticsVersion = "crystal-glass-17";
     canvas.dataset.presentation = this.native ? "native-backdrop" : "element-attached";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);

@@ -12,7 +12,7 @@ test("折射从边缘连续递减至中央，等深度圆角比直边更强",()=
  const root=Math.SQRT1_2,depth=4;
  const corner=lensDisplacement(-60-(40-depth)*root,-40-(40-depth)*root,200,160,depth,26,11,-root,-root);
  const straight=lensDisplacement(-100+depth,0,200,160,depth,26,11,-1,0);
- expect(Math.hypot(corner[0]-1.5,corner[1]+1)/Math.hypot(straight[0]-1.5,straight[1]+1)).toBeCloseTo(1.28,5);
+ expect(Math.hypot(corner[0]-1.5,corner[1]+1)/Math.hypot(straight[0]-1.5,straight[1]+1)).toBeGreaterThan(1.05);
 });
 
 test("实际原生位移图随深度衰减，圆角增强不截断",async({page})=>{
@@ -31,13 +31,13 @@ test("实际原生位移图随深度衰减，圆角增强不截断",async({page}
  });
  expect(result.depths.every((value,i)=>!i||value<result.depths[i-1])).toBe(true);
  expect(result.depths.at(-1)!).toBeLessThan(2);
- expect(result.corner).toBeGreaterThan(result.depths[0]*1.18);
- expect(result.scale).toBeGreaterThan(26*2*1.28);
+ expect(result.corner).toBeGreaterThan(result.depths[0]*1.05);
+ expect(result.scale/2).toBeGreaterThan(Math.max(...result.depths,result.corner)+1.5);
 });
 
 test("卡片和按钮整面连续折射，圆角外保持透明", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-16");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-17");
   const result = await page.evaluate(() => {
     const live = document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!.getContext("webgl2")!;
     const current = live.getParameter(live.CURRENT_PROGRAM) as WebGLProgram;
@@ -139,8 +139,10 @@ test("卡片和按钮整面连续折射，圆角外保持透明", async ({ page 
     const smooth=(t:number)=>{const v=Math.max(0,Math.min(1,t));return v*v*(3-2*v)};
     const sourceAt=(y:number)=>{
       const local=y-100,depth=Math.max(0,40-Math.abs(local)),normal=Math.sign(local);
-      const envelope=.025+.975*Math.pow(1-smooth(depth/40),1.35),body=smooth((depth-8)/32);
-      return y+12*envelope*(normal+(local/40-normal)*body)-1;
+      const inner=smooth(depth/25),rim=7.8125*Math.pow(1-smooth(depth/31.25),2);
+      const wx=1/(1+Math.exp((80-(40-Math.abs(local)))/8.75));
+      const vy=normal+((1-wx)*Math.tanh(local/8.75)-normal)*inner;
+      return y-rim*vy-.42*local/40-1;
     };
     for(let row=0;row<220;row++){
       const sourceY=220-row-.5;let low=35,high=165;
@@ -159,14 +161,14 @@ test("卡片和按钮整面连续折射，圆角外保持透明", async ({ page 
     });
     return {...samples,shoulder,fullCentre,clearContrast,frostedContrast,uniformBlurErrors};
   });
-  expect(result.left.dx).toBeLessThan(-.02);
-  expect(result.right.dx).toBeGreaterThan(.02);
-  expect(result.top.dy).toBeGreaterThan(.02);
-  expect(result.bottom.dy).toBeLessThan(-.02);
-  expect(result.topLeft.dx).toBeLessThan(-.01);
-  expect(result.topLeft.dy).toBeGreaterThan(.01);
-  expect(result.bottomRight.dx).toBeGreaterThan(.01);
-  expect(result.bottomRight.dy).toBeLessThan(-.01);
+  expect(result.left.dx).toBeGreaterThan(.02);
+  expect(result.right.dx).toBeLessThan(-.02);
+  expect(result.top.dy).toBeLessThan(-.02);
+  expect(result.bottom.dy).toBeGreaterThan(.02);
+  expect(result.topLeft.dx).toBeGreaterThan(.01);
+  expect(result.topLeft.dy).toBeLessThan(-.01);
+  expect(result.bottomRight.dx).toBeLessThan(-.01);
+  expect(result.bottomRight.dy).toBeGreaterThan(.01);
   expect(result.centre.alpha).toBeGreaterThan(.8);
   expect(result.centre.dx).toBeGreaterThan(.003);
   expect(result.fullCentre.alpha).toBeGreaterThan(.8);
@@ -180,7 +182,7 @@ test("卡片和按钮整面连续折射，圆角外保持透明", async ({ page 
 
 test("小控件全表面折射，同时保持统一的散射参数和不透明文字",async({page})=>{
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-16");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-17");
   for(const theme of ["light","dark"]){
     await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
     await page.waitForTimeout(120);

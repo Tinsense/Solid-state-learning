@@ -39,7 +39,8 @@ export class NativeBackdrop {
   if(lens.key!==key){
    lens.key=key;
    // Reserve encoding headroom for stronger corner bends; never clip channels.
-   const mapStrength=strength*1.35+2;
+   const bevel=Math.min(Math.min(width,height)*.5,Math.max(range*2.2,radius*1.25));
+   const mapStrength=Math.min(strength*.75,bevel*.25,radius*.40)*1.22+.035*strength+2;
    // A lens needs real backdrop beyond its border. Clipping its source there
    // makes Gaussian alpha fade and leaks the sharp, unfiltered scene through.
    const pad=Math.ceil(mapStrength+blurRadius*3+2),mapWidth=width+pad*2,mapHeight=height+pad*2;
@@ -48,7 +49,7 @@ export class NativeBackdrop {
     node.setAttribute("width",String(mapWidth));node.setAttribute("height",String(mapHeight));
    }
    lens.filter.querySelector("feDisplacementMap")!.setAttribute("scale",String(mapStrength*2));
-   const scale=Math.min(1,512/mapWidth,2048/mapHeight),w=Math.max(1,Math.ceil(mapWidth*scale)),h=Math.max(1,Math.ceil(mapHeight*scale));
+   const scale=Math.min(1,1024/mapWidth,2048/mapHeight),w=Math.max(1,Math.ceil(mapWidth*scale)),h=Math.max(1,Math.ceil(mapHeight*scale));
    const map=document.createElement("canvas");map.width=w;map.height=h;
    const ctx=map.getContext("2d")!,pixels=ctx.createImageData(w,h);
    const glow=lens.shine;glow.width=w;glow.height=h;const glowCtx=glow.getContext("2d")!,lights=glowCtx.createImageData(w,h);
@@ -60,7 +61,7 @@ export class NativeBackdrop {
     const distance=Math.min(Math.max(qx,qy),0)+length-radius,depth=Math.max(0,-distance);
     let nx=length?ox/length:qx>qy?1:0,ny=length?oy/length:qy>=qx?1:0;
     nx*=Math.sign(px);ny*=Math.sign(py);
-    const [displacementX,displacementY]=lensDisplacement(px,py,width,height,depth,strength,range,nx,ny);
+    const [displacementX,displacementY]=lensDisplacement(px,py,width,height,depth,strength,range,nx,ny,radius);
     const offset=(y*w+x)*4;
     // Neutral value is 128/255, so compensate for its half-code bias in scale.
     pixels.data[offset]=Math.round(127.5+127.5*displacementX/mapStrength);
@@ -70,7 +71,7 @@ export class NativeBackdrop {
     const far=Math.pow(Math.max(0,(nx+ny)/Math.SQRT2),8)*.13;
     const edge=Math.max(0,1-depth/1.6),coverage=Math.max(0,Math.min(1,.5-distance));
     lights.data[offset]=lights.data[offset+1]=lights.data[offset+2]=255;
-    lights.data[offset+3]=Math.round(255*coverage*(.018*Math.pow(edge,2)+.16*(diagonal+far)*edge));
+    lights.data[offset+3]=Math.round(255*coverage*(.025*Math.pow(edge,2)+.24*(diagonal+far)*edge));
    }
    ctx.putImageData(pixels,0,0);lens.image.setAttribute("href",map.toDataURL());glowCtx.putImageData(lights,0,0);
   }
