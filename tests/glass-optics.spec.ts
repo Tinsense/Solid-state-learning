@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("圆角玻璃在四个方向连续折射同一背景，内部与外部保持透明", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-13");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version", "crystal-glass-14");
   const result = await page.evaluate(() => {
     const live = document.querySelector<HTMLCanvasElement>(".studio-glass-shared-canvas")!.getContext("webgl2")!;
     const current = live.getParameter(live.CURRENT_PROGRAM) as WebGLProgram;
@@ -71,6 +71,10 @@ test("圆角玻璃在四个方向连续折射同一背景，内部与外部保�
     gl.uniform4fv(uniform("u_optics[0]"), [26,22,1.4,1]);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     const shoulder = Array.from({length:24},(_,i)=>sample(42+i,110).alpha);
+    gl.uniform1f(uniform("u_flags[0]"),3);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    const fullCentre=sample(120,110);
+    gl.uniform1f(uniform("u_flags[0]"),0);
     // A high-frequency texture verifies the *rendered* rim is diffused,
     // rather than merely checking that the DOM has backdrop-filter set.
     for(let y=0;y<220;y++)for(let x=0;x<240;x++){
@@ -90,7 +94,7 @@ test("圆角玻璃在四个方向连续折射同一背景，内部与外部保�
       });
       return Math.max(...grey)-Math.min(...grey);
     };
-    return {...samples,shoulder,clearContrast:contrast(0),frostedContrast:contrast(8)};
+    return {...samples,shoulder,fullCentre,clearContrast:contrast(0),frostedContrast:contrast(8)};
   });
   expect(result.left.dx).toBeLessThan(-.02);
   expect(result.right.dx).toBeGreaterThan(.02);
@@ -101,6 +105,8 @@ test("圆角玻璃在四个方向连续折射同一背景，内部与外部保�
   expect(result.bottomRight.dx).toBeGreaterThan(.01);
   expect(result.bottomRight.dy).toBeLessThan(-.01);
   expect(result.centre.alpha).toBe(0);
+  expect(result.fullCentre.alpha).toBeGreaterThan(.8);
+  expect(result.fullCentre.dx).toBeGreaterThan(.003);
   expect(result.outsideCorner.alpha).toBe(0);
   expect(result.shoulder[0]).toBeGreaterThan(.2);
   expect(result.shoulder.at(-1)).toBe(0);
@@ -108,9 +114,9 @@ test("圆角玻璃在四个方向连续折射同一背景，内部与外部保�
   expect(result.frostedContrast).toBeLessThan(result.clearContrast*.45);
 });
 
-test("小控件保留清晰中心，折射区使用与模块中央相同的模糊参数",async({page})=>{
+test("小控件全表面折射，同时保持统一的散射参数和不透明文字",async({page})=>{
   await page.goto("/");
-  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-13");
+  await expect(page.locator(".studio-glass-shared-canvas")).toHaveAttribute("data-optics-version","crystal-glass-14");
   for(const theme of ["light","dark"]){
     await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
     await page.waitForTimeout(120);
@@ -129,9 +135,9 @@ test("小控件保留清晰中心，折射区使用与模块中央相同的模�
         optics:Array.from(gl.getUniform(p,gl.getUniformLocation(p,`u_optics[${match}]`)) as Float32Array),
         filter:getComputedStyle(button).backdropFilter,height:rect.height};
     });
-    expect(values.frost[0]).toBe(10);
-    expect(values.filter).toContain("blur(10px)");
-    expect(values.optics[0]).toBeGreaterThanOrEqual(18);
+    expect(values.frost[0]).toBe(6);
+    expect(values.filter).toContain("blur(6px)");
+    expect(values.optics[0]).toBeGreaterThanOrEqual(26);
     expect(values.optics[1]).toBeGreaterThanOrEqual(10);
     expect(values.height-2*values.optics[1]).toBeGreaterThan(28);
   }

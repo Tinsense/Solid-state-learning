@@ -23,7 +23,8 @@ test("顶部玻璃对实际 DOM 条纹产生位移，不只是采样壁纸",asyn
   };
   return{edge:region(43,178,8,12),centre:region(115,178,30,12)};
  },{bent:bent.toString("base64"),flat:flat.toString("base64")});
- expect(difference.edge).toBeGreaterThan(30);expect(difference.centre).toBeLessThan(12);
+ expect(difference.edge).toBeGreaterThan(30);expect(difference.centre).toBeGreaterThan(30);
+ await expect(button).toHaveAttribute("data-lens-coverage","full");
 });
 
 test("即使渲染线程暂不更新，折射边界仍和按钮同层滚动",async({page})=>{

@@ -82,14 +82,16 @@ html:root[data-theme] body :is(#overview,[data-liquid-glass])[data-liquid-glass]
    those details enough to keep the label clear while retaining 2% fill. */
 html:root[data-theme] body .glass-toolbar [data-glass-layer="surface"],
 html:root[data-theme] body .mobile-rail-toggle[data-glass-layer="surface"] {
- --material-clear-frost:blur(10px) saturate(104%) brightness(.96);
+ --material-clear-frost:blur(6px) saturate(104%) brightness(.96);
 }
 html:root[data-theme="light"] body .glass-toolbar [data-glass-layer="surface"],
 html:root[data-theme="light"] body .mobile-rail-toggle[data-glass-layer="surface"] {
- --material-clear-frost:blur(10px) saturate(98%) brightness(1.04);
+ --material-clear-frost:blur(6px) saturate(98%) brightness(1.04);
 }
 html:root[data-theme="light"] body .mobile-rail-toggle > span { text-shadow:0 1px 3px rgba(255,255,255,.8); }
 html:root[data-theme="dark"] body .mobile-rail-toggle > span { text-shadow:0 1px 3px rgba(8,16,24,.65); }
+html:root[data-theme="dark"] body :is(.liquid-button,.top-action,.chapter-menu-trigger,.glass-toolbar .brand,.glass-toolbar .header-link)[data-liquid-glass] { text-shadow:0 1px 3px rgba(4,8,12,.85); }
+html:root[data-theme="light"] body :is(.liquid-button,.top-action,.chapter-menu-trigger,.glass-toolbar .brand,.glass-toolbar .header-link)[data-liquid-glass] { text-shadow:0 1px 2px rgba(255,255,255,.75); }
 /* Legacy painted hero sheen competed with the sampled optical rim. */
 html:root body .hero-module::before,
 html:root body .hero-module::after { content:none !important; display:none !important; }

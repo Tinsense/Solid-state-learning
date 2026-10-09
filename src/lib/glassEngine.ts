@@ -164,7 +164,8 @@ void main() {
   float surfaceFlag = u_flags[chosen];
   float depth = max(-chosenDistance, 0.0);
   // Keep the whole reading area untouched, not just almost transparent.
-  if (depth > optics.y) { fragColor = vec4(0.0); return; }
+  bool fullLens = surfaceFlag == 3.0;
+  if (!fullLens && depth > optics.y) { fragColor = vec4(0.0); return; }
 
   /* SDF normal. */
   float eps = 0.8;
@@ -212,6 +213,10 @@ void main() {
      Use the same conversion for bend, dispersion and the scatter aperture. */
   vec2 pxToUV = vec2(1.0 / max(u_viewport.x, 1.0), -1.0 / max(u_viewport.y, 1.0));
   vec2 refractionUV = bendDir * refractionPx * pxToUV;
+  if (fullLens) {
+    vec2 body = clamp(-(cssPoint - center) * vec2(0.35, 0.40), vec2(-24.0,-15.0), vec2(24.0,15.0)) + vec2(2.0,-1.5);
+    refractionUV = mix(body * pxToUV, refractionUV, refractField);
+  }
 
   /*
    * Canvas texture is uploaded with UNPACK_FLIP_Y_WEBGL=true,
@@ -267,7 +272,9 @@ void main() {
   /* A strong sampled lens when a real line moves; nearly absent over a flat
      scene. Constant high alpha overlaid raw wallpaper on the DOM material
      and caused a dark inset outline around controls. */
-  float refractedAlpha = min(0.92, u_hasBackground * refractField * sampledAlpha * mix(0.12, 0.92, displacedDetail));
+  float coverageField = fullLens ? 1.0 : refractField;
+  float response = fullLens ? 0.92 : mix(0.12, 0.92, displacedDetail);
+  float refractedAlpha = min(0.92, u_hasBackground * coverageField * sampledAlpha * response);
 
   vec3 cool = vec3(0.42, 0.69, 1.00);
   vec3 warm = vec3(1.00, 0.80, 0.48);
@@ -414,7 +421,7 @@ class SharedGlassRenderer {
   constructor() {
     const canvas = document.createElement("canvas");
     canvas.className = "studio-glass-shared-canvas";
-    canvas.dataset.opticsVersion = "crystal-glass-13";
+    canvas.dataset.opticsVersion = "crystal-glass-14";
     canvas.dataset.presentation = this.native ? "native-backdrop" : "element-attached";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
@@ -550,7 +557,7 @@ class SharedGlassRenderer {
         fresnelRange = 1.10;
         glareRange = 1.15;
       } else if (element.matches(".rail-item, .top-action, .liquid-button, .text-button, .segmented, .derivation-controls, .brand, .chapter-title, .chapter-menu-trigger, .mobile-rail-toggle, .header-center, .header-link, .tool-strip a")) {
-        refractionPx = 18.0;
+        refractionPx = 26.0;
         refractionRange = 11.0;
         fresnelRange = 1.60;
         glareRange = 1.60;
@@ -566,7 +573,7 @@ class SharedGlassRenderer {
       opticsData[index * 4 + 1] = refractionRange;
       opticsData[index * 4 + 2] = fresnelRange;
       opticsData[index * 4 + 3] = glareRange;
-      flagData[index] = element.matches(".chapter-menu") ? 5 : element.matches(".search-panel") ? 4 : element.matches(".liquid-button,.top-action,.brand,.chapter-title,.chapter-menu-trigger,.mobile-rail-toggle,.header-center,.header-link,.tool-strip a") ? 3 : element.matches(".chapter-rail") ? 2 : element.matches(".site-header,.header-wrapper") ? 1 : 0;
+      flagData[index] = element.matches(".chapter-menu") ? 5 : element.matches(".search-panel") ? 4 : element.matches(".liquid-button,.top-action,.brand,.chapter-title,.chapter-menu-trigger,.mobile-rail-toggle,.header-center,.header-link,.tool-strip a,.segmented,.derivation-controls") ? 3 : element.matches(".chapter-rail") ? 2 : element.matches(".site-header,.header-wrapper") ? 1 : 0;
       if(this.native){
         this.native.update(element,element.offsetWidth,element.offsetHeight,radiusData[index],refractionPx,refractionRange,style.backdropFilter);
       }
